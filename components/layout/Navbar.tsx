@@ -40,7 +40,7 @@ export function Navbar() {
     { name: 'Home', href: '/' },
     { name: 'Prompt Library', href: '/prompt-library' },
     { name: 'AI Directory', href: '/ai-directory' },
-    { name: 'AI Models', href: '/ai-models' },
+    { name: 'Agent Builder', href: '/agent-builder' },
   ];
 
   const openLogin = () => setAuthModal({ open: true, view: 'login' });
@@ -192,17 +192,17 @@ export function Navbar() {
           </div>
 
           {/* Mobile Toggle */}
-          <button className="md:hidden text-muted hover:text-primary" onClick={() => setMobileOpen(true)}>
-            <Menu size={24} />
+          <button type="button" className="md:hidden relative z-50 p-2 -mr-2 text-muted hover:text-primary" onClick={(e) => { e.stopPropagation(); setMobileOpen(true); }}>
+            <Menu size={28} />
           </button>
         </div>
       </nav>
 
       {/* Mobile Drawer */}
       {mobileOpen && (
-        <div className="fixed inset-0 z-50 flex justify-end">
-          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setMobileOpen(false)} />
-          <div className="relative w-64 h-full border-l p-6 shadow-2xl animate-in slide-in-from-right fade-in duration-300"
+        <div className="fixed inset-0 z-[100] flex justify-end">
+          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={(e) => { e.stopPropagation(); setMobileOpen(false); }} />
+          <div className="relative w-64 h-full border-l p-6 shadow-2xl overflow-y-auto transition-transform duration-300"
             style={{ background: 'var(--bg-surface)', borderColor: 'var(--border)' }}>
             <button className="absolute top-4 right-4 text-muted hover:text-primary" onClick={() => setMobileOpen(false)}>
               <X size={24} />

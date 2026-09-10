@@ -6,30 +6,40 @@ import { UseCases } from "@/components/home/UseCases";
 import { AIImagePrompts } from "@/components/home/AIImagePrompts";
 import { AIPromptWorkspace } from "@/components/home/AIPromptWorkspace";
 import { FAQ } from "@/components/home/FAQ";
+import { ScrollReveal } from "@/components/ui/ScrollReveal";
 
 export default function Home() {
   return (
     <div className="flex flex-col items-center w-full">
       <HeroSection />
-      <VibeCarousel />
-      <div className="w-full">
+      
+      <ScrollReveal className="w-full">
+        <VibeCarousel />
+      </ScrollReveal>
+
+      <ScrollReveal className="w-full" delay={0.1}>
         <UseCases />
-      </div>
-      <div className="w-full">
+      </ScrollReveal>
+
+      <ScrollReveal className="w-full" delay={0.2}>
         <AIImagePrompts />
-      </div>
-      <div className="w-full">
+      </ScrollReveal>
+
+      <ScrollReveal className="w-full" delay={0.1}>
         <LatestModels />
-      </div>
-      <div className="w-full">
+      </ScrollReveal>
+
+      <ScrollReveal className="w-full" delay={0.2}>
         <AIPromptWorkspace />
-      </div>
-      <div className="w-full">
+      </ScrollReveal>
+
+      <ScrollReveal className="w-full" delay={0.1}>
         <ModelAwareWorkflows />
-      </div>
-      <div className="w-full">
+      </ScrollReveal>
+
+      <ScrollReveal className="w-full" delay={0.2}>
         <FAQ />
-      </div>
+      </ScrollReveal>
     </div>
   );
 }

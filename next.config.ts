@@ -1,6 +1,8 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  // @ts-ignore
+  allowedDevOrigins: ['10.215.133.223'],
   images: {
     remotePatterns: [
       // Unsplash (used in mock data)

@@ -20,8 +20,8 @@ export function LatestModels() {
         >
           Latest AI Models
         </h2>
-        <Link href="/ai-models" className="text-muted text-sm hover:text-primary transition-colors">
-          More &rarr;
+        <Link href="/agent-builder" className="text-muted text-sm hover:text-primary transition-colors">
+          View all agents &rarr;
         </Link>
       </div>
 

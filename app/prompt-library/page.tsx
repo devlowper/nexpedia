@@ -8,6 +8,7 @@ import { PromptCard, Prompt } from "@/components/prompts/PromptCard";
 import { DesignPromptCard } from "@/components/prompts/DesignPromptCard";
 import { SkeletonCard } from "@/components/ui/SkeletonCard";
 import { PromptEnhancer } from "@/components/home/PromptEnhancer";
+import { ScrollReveal } from "@/components/ui/ScrollReveal";
 
 const MARQUEE_TOOLS = [
   { name: "ChatGPT", logo: "https://www.google.com/s2/favicons?domain=chatgpt.com&sz=128", color: "#10a37f" },
@@ -69,7 +70,7 @@ function useSearchPrompts(query: string) {
 
 function renderDesignSection(category: string, prompts: Prompt[]) {
   return (
-    <section key={category} className="space-y-6 pt-10">
+    <ScrollReveal key={category} variant="slide-up" duration={0.6} className="space-y-6 pt-10">
       <div className="flex flex-col md:flex-row md:items-end justify-between border-b border-border/50 pb-4 gap-3">
         <div>
           <h2 className="text-3xl font-bold text-primary mb-1">
@@ -93,7 +94,7 @@ function renderDesignSection(category: string, prompts: Prompt[]) {
           </div>
         ))}
       </div>
-    </section>
+    </ScrollReveal>
   );
 }
 
@@ -101,7 +102,7 @@ function renderDesignSection(category: string, prompts: Prompt[]) {
 
 function renderStandardSection(category: string, prompts: Prompt[], description: string) {
   return (
-    <section key={category} className="space-y-6 pt-10">
+    <ScrollReveal key={category} variant="slide-up" duration={0.6} className="space-y-6 pt-10">
       <div className="flex flex-col md:flex-row items-start md:items-end justify-between border-b border-border/50 pb-4 gap-4">
         <div>
           <h2 className="text-2xl font-bold text-primary flex items-center gap-2 mb-1">
@@ -123,7 +124,7 @@ function renderStandardSection(category: string, prompts: Prompt[], description:
           <PromptCard key={p.slug} prompt={p} index={i} />
         ))}
       </div>
-    </section>
+    </ScrollReveal>
   );
 }
 
@@ -154,9 +155,9 @@ function PromptLibraryContent() {
     <div className="max-w-7xl mx-auto px-4 py-12 relative overflow-hidden">
 
       {/* ── Prompt Enhancer ── */}
-      <div className="w-full mb-12 relative z-10">
+      <ScrollReveal variant="fade" className="w-full mb-12 relative z-10">
         <PromptEnhancer />
-      </div>
+      </ScrollReveal>
 
       {/* ── Hero header ── */}
       <div className="flex flex-col items-center text-center mb-10 gap-3 relative z-10">

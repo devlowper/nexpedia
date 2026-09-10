@@ -1,7 +1,17 @@
+"use client";
+
 import React from 'react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 export function Footer() {
+  const pathname = usePathname();
+
+  // Hide footer on agent-builder page for full-screen experience
+  if (pathname?.startsWith('/agent-builder')) {
+    return null;
+  }
+
   return (
     <footer className="bg-[#FCFCFC] dark:bg-[#0A0A0A] border-t border-gray-100 dark:border-zinc-900 pt-16 pb-8 mt-20">
       <div className="max-w-7xl mx-auto px-4 md:px-8">

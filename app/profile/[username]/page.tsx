@@ -11,6 +11,8 @@ import {
 import { notFound } from 'next/navigation';
 import { api } from '@/lib/apiClient';
 
+import { ScrollReveal } from '@/components/ui/ScrollReveal';
+
 export default function PublicProfilePage({ params }: { params: { username: string } }) {
   const [activeTab, setActiveTab] = useState('Prompts');
   const [profileUser, setProfileUser] = useState<any>(null);
@@ -78,7 +80,7 @@ export default function PublicProfilePage({ params }: { params: { username: stri
   ];
 
   return (
-    <div className="max-w-[1000px] mx-auto px-4 py-12 animate-in fade-in duration-500">
+    <ScrollReveal variant="fade" duration={0.6} className="max-w-[1000px] mx-auto px-4 py-12">
       {/* Notice isOwner is false */}
       <ProfileHeader user={mappedProfileUser} isOwner={false} />
       
@@ -146,6 +148,6 @@ export default function PublicProfilePage({ params }: { params: { username: stri
           </div>
         )}
       </div>
-    </div>
+    </ScrollReveal>
   );
 }

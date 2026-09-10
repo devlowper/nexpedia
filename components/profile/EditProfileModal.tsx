@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { X, Upload, Camera } from 'lucide-react';
+import { X, Upload, Camera, Loader2, Check, XCircle } from 'lucide-react';
 import { api } from '@/lib/apiClient';
 import { useAuth } from '@/hooks/useAuth';
 
@@ -14,6 +14,9 @@ export function EditProfileModal({ isOpen, onClose, user }: EditProfileModalProp
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [avatarPreview, setAvatarPreview] = useState<string>('');
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const [usernameAvailable, setUsernameAvailable] = useState<boolean | null>(null);
+  const [checkingUsername, setCheckingUsername] = useState(false);
 
   const [formData, setFormData] = useState({
     name: '',
@@ -39,8 +42,44 @@ export function EditProfileModal({ isOpen, onClose, user }: EditProfileModalProp
         }
       });
       setAvatarPreview(user.avatar || '');
+      setUsernameAvailable(null);
     }
   }, [user, isOpen]);
+
+  // Debounced Username Availability Check
+  useEffect(() => {
+    if (!isOpen) return;
+    
+    if (!formData.username) {
+      setUsernameAvailable(null);
+      return;
+    }
+    
+    const currentUsername = user?.username || user?.email?.split('@')[0];
+    if (formData.username === currentUsername) {
+      setUsernameAvailable(true);
+      return;
+    }
+
+    const checkAvailability = async () => {
+      setCheckingUsername(true);
+      try {
+        const res = await api.get<{available: boolean}>(`/api/users/check-username?username=${formData.username}`);
+        setUsernameAvailable(res.available);
+      } catch (err) {
+        setUsernameAvailable(null);
+      } finally {
+        setCheckingUsername(false);
+      }
+    };
+
+    const delayDebounceFn = setTimeout(() => {
+      checkAvailability();
+    }, 400); // 400ms debounce for instagram-like feel
+
+    return () => clearTimeout(delayDebounceFn);
+  }, [formData.username, user, isOpen]);
+
 
   const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -60,6 +99,10 @@ export function EditProfileModal({ isOpen, onClose, user }: EditProfileModalProp
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (usernameAvailable === false) {
+      alert("Please choose an available username before saving.");
+      return;
+    }
     setIsSubmitting(true);
     try {
       await api.put('/api/users/profile', {
@@ -83,6 +126,8 @@ export function EditProfileModal({ isOpen, onClose, user }: EditProfileModalProp
   const updateSocial = (field: string, value: string) => {
     setFormData(prev => ({ ...prev, socials: { ...prev.socials, [field]: value } }));
   };
+
+  const currentUsername = user?.username || user?.email?.split('@')[0];
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
@@ -169,10 +214,25 @@ export function EditProfileModal({ isOpen, onClose, user }: EditProfileModalProp
                   required
                   type="text" 
                   value={formData.username}
-                  onChange={(e) => updateField('username', e.target.value)}
-                  className="w-full bg-surface border border-border rounded-md pl-9 pr-4 py-2.5 text-primary focus:border-accent/50 outline-none transition-colors"
+                  onChange={(e) => {
+                    const val = e.target.value.toLowerCase().replace(/[^a-z0-9_.]/g, '');
+                    updateField('username', val);
+                    setUsernameAvailable(null);
+                  }}
+                  className={`w-full bg-surface border rounded-md pl-9 pr-10 py-2.5 text-primary outline-none transition-colors ${
+                    usernameAvailable === false ? 'border-red-500 focus:border-red-500' : 
+                    (usernameAvailable === true && formData.username !== currentUsername) ? 'border-green-500 focus:border-green-500' : 'border-border focus:border-accent/50'
+                  }`}
                 />
+                <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center">
+                  {checkingUsername && <Loader2 size={16} className="animate-spin text-muted" />}
+                  {!checkingUsername && usernameAvailable === true && formData.username && formData.username !== currentUsername && <Check size={16} className="text-green-500 animate-in zoom-in" />}
+                  {!checkingUsername && usernameAvailable === false && <XCircle size={16} className="text-red-500 animate-in zoom-in" />}
+                </div>
               </div>
+              {usernameAvailable === false && !checkingUsername && (
+                <p className="text-red-500 text-xs mt-1 font-medium animate-in slide-in-from-top-1">This username is already taken.</p>
+              )}
             </div>
           </div>
 
@@ -259,8 +319,8 @@ export function EditProfileModal({ isOpen, onClose, user }: EditProfileModalProp
           </button>
           <button 
             onClick={handleSubmit}
-            disabled={isSubmitting}
-            className="px-6 py-2.5 bg-accent text-black rounded-md text-sm font-bold hover:bg-accent-hover transition-colors disabled:opacity-50 flex items-center gap-2"
+            disabled={isSubmitting || usernameAvailable === false}
+            className="px-6 py-2.5 bg-accent text-black rounded-md text-sm font-bold hover:bg-accent-hover transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
           >
             {isSubmitting ? 'Saving...' : 'Save Changes'}
           </button>

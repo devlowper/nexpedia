@@ -78,7 +78,8 @@ export default function AIDetailsPage() {
   useEffect(() => {
     const fetchTool = async () => {
       try {
-        const res = await fetch(`http://localhost:5000/api/directory/${params.slug}`);
+        const API = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:5000';
+        const res = await fetch(`${API}/api/directory/${params.slug}`);
         if (!res.ok) throw new Error('Failed to fetch tool details');
         const data = await res.json();
         if (data.success) {

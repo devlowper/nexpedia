@@ -36,9 +36,9 @@ export default function RootLayout({
       <body className={`${inter.className} ${bricolage.variable} overflow-x-hidden w-full max-w-[100vw]`}>
         <AuthProvider>
           <ThemeProvider>
-            <div className="relative z-10">
+            <div className="relative z-10 w-full overflow-x-hidden flex flex-col min-h-screen">
               <Navbar />
-              <main className="min-h-screen pt-[60px]">
+              <main className="flex-1 pt-[60px] w-full max-w-[100vw] overflow-hidden">
                 {children}
               </main>
               <Footer />

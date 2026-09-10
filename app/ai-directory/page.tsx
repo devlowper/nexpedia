@@ -5,6 +5,7 @@ import { Search, Loader2, Sparkles, BadgeCheck, ListFilter, SlidersHorizontal, C
 import { GlassCard } from '@/components/ui/GlassCard';
 import { SkeletonCard } from '@/components/ui/SkeletonCard';
 import { ProductHuntMarquee } from '@/components/ui/ProductHuntMarquee';
+import { ScrollReveal } from '@/components/ui/ScrollReveal';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 
@@ -228,9 +229,10 @@ function AIDirectoryContent() {
       try {
         setLoading(true);
         setError(null);
-        let url = `http://localhost:5000/api/directory?limit=100&search=${encodeURIComponent(searchQuery)}&pricing=${pricingFilter}&badge=${badgeFilter}&verified=${verifiedFilter}&sort=${activeTab}`;
+        const API = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:5000';
+        let url = `${API}/api/directory?limit=100&search=${encodeURIComponent(searchQuery)}&pricing=${pricingFilter}&badge=${badgeFilter}&verified=${verifiedFilter}&sort=${activeTab}`;
         if (category) {
-          url = `http://localhost:5000/api/directory?category=${encodeURIComponent(category)}&page=${currentPage}&limit=12&search=${encodeURIComponent(searchQuery)}&pricing=${pricingFilter}&badge=${badgeFilter}&verified=${verifiedFilter}&sort=${activeTab}`;
+          url = `${API}/api/directory?category=${encodeURIComponent(category)}&page=${currentPage}&limit=12&search=${encodeURIComponent(searchQuery)}&pricing=${pricingFilter}&badge=${badgeFilter}&verified=${verifiedFilter}&sort=${activeTab}`;
         }
           
         const res = await fetch(url);
@@ -652,7 +654,7 @@ function AIDirectoryContent() {
             const Icon = config.icon;
             
             return (
-              <section key={sectionName} id={sectionName.replace(/\s+/g, '-').toLowerCase()} className="flex flex-col pt-4">
+              <ScrollReveal variant="slide-up" duration={0.6} key={sectionName} id={sectionName.replace(/\s+/g, '-').toLowerCase()} className="flex flex-col pt-4">
                 <div className="flex items-center justify-between w-full mb-8 border-b border-black/5 dark:border-white/5 pb-4">
                   <div className="flex items-center gap-4">
                     <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${config?.from || 'from-gray-500'} ${config?.to || 'to-gray-400'} p-[1px] shadow-lg`}>
@@ -686,7 +688,7 @@ function AIDirectoryContent() {
                     <ToolCard key={tool._id} tool={tool} />
                   ))}
                 </div>
-              </section>
+              </ScrollReveal>
             );
           })}
           
