@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { X, Upload, Camera, Loader2, Check, XCircle } from 'lucide-react';
 import { api } from '@/lib/apiClient';
 import { useAuth } from '@/hooks/useAuth';
+import { uploadImageToImgBB } from '@/lib/uploadImage';
 
 interface EditProfileModalProps {
   isOpen: boolean;
@@ -12,6 +13,7 @@ interface EditProfileModalProps {
 export function EditProfileModal({ isOpen, onClose, user }: EditProfileModalProps) {
   const { refreshUser } = useAuth();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isUploadingAvatar, setIsUploadingAvatar] = useState(false);
   const [avatarPreview, setAvatarPreview] = useState<string>('');
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -81,18 +83,28 @@ export function EditProfileModal({ isOpen, onClose, user }: EditProfileModalProp
   }, [formData.username, user, isOpen]);
 
 
-  const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleAvatarChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
-    if (file.size > 2 * 1024 * 1024) {
-      alert('Image must be under 2MB');
+    if (file.size > 10 * 1024 * 1024) {
+      alert('Image must be under 10MB');
       return;
     }
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      setAvatarPreview(reader.result as string);
-    };
-    reader.readAsDataURL(file);
+
+    // Set instant local preview
+    const localUrl = URL.createObjectURL(file);
+    setAvatarPreview(localUrl);
+    setIsUploadingAvatar(true);
+
+    try {
+      const res = await uploadImageToImgBB(file);
+      setAvatarPreview(res.url);
+    } catch (err: any) {
+      alert(err.message || 'Failed to upload photo to ImgBB');
+      setAvatarPreview(user?.avatar || '');
+    } finally {
+      setIsUploadingAvatar(false);
+    }
   };
 
   if (!isOpen) return null;
@@ -101,6 +113,10 @@ export function EditProfileModal({ isOpen, onClose, user }: EditProfileModalProp
     e.preventDefault();
     if (usernameAvailable === false) {
       alert("Please choose an available username before saving.");
+      return;
+    }
+    if (isUploadingAvatar) {
+      alert("Please wait until your avatar finishes uploading.");
       return;
     }
     setIsSubmitting(true);
@@ -149,28 +165,35 @@ export function EditProfileModal({ isOpen, onClose, user }: EditProfileModalProp
             <div className="flex items-center gap-4">
               {/* Avatar preview */}
               <div
-                onClick={() => fileInputRef.current?.click()}
+                onClick={() => !isUploadingAvatar && fileInputRef.current?.click()}
                 className="w-20 h-20 rounded-full bg-surface border-2 border-dashed border-border flex items-center justify-center overflow-hidden cursor-pointer hover:border-accent/50 transition-colors relative group"
               >
-                {avatarPreview ? (
+                {isUploadingAvatar ? (
+                  <div className="flex flex-col items-center justify-center gap-1 text-accent">
+                    <Loader2 size={24} className="animate-spin" />
+                  </div>
+                ) : avatarPreview ? (
                   <img src={avatarPreview} alt="Avatar" className="w-full h-full object-cover" />
                 ) : (
                   <span className="text-2xl font-bold text-muted">{formData.name.charAt(0) || 'U'}</span>
                 )}
                 {/* Hover overlay */}
-                <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center rounded-full">
-                  <Camera size={18} className="text-white" />
-                </div>
+                {!isUploadingAvatar && (
+                  <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center rounded-full">
+                    <Camera size={18} className="text-white" />
+                  </div>
+                )}
               </div>
 
               <div className="flex flex-col gap-2">
                 <button
                   type="button"
+                  disabled={isUploadingAvatar}
                   onClick={() => fileInputRef.current?.click()}
-                  className="flex items-center gap-2 px-4 py-2 bg-accent text-black dark:text-black cta-btn rounded-lg text-sm font-semibold hover:bg-accent-hover transition-colors"
+                  className="flex items-center gap-2 px-4 py-2 bg-accent text-black dark:text-black cta-btn rounded-lg text-sm font-semibold hover:bg-accent-hover transition-colors disabled:opacity-50"
                 >
-                  <Upload size={16} />
-                  Upload Photo
+                  {isUploadingAvatar ? <Loader2 size={16} className="animate-spin" /> : <Upload size={16} />}
+                  {isUploadingAvatar ? 'Uploading to ImgBB...' : 'Upload Photo'}
                 </button>
                 {avatarPreview && avatarPreview !== user?.avatar && (
                   <button
@@ -181,7 +204,7 @@ export function EditProfileModal({ isOpen, onClose, user }: EditProfileModalProp
                     Remove
                   </button>
                 )}
-                <p className="text-xs text-muted">JPG, PNG or WebP. Max 2MB.</p>
+                <p className="text-xs text-muted">JPG, PNG or WebP up to 10MB (Powered by ImgBB).</p>
               </div>
 
               {/* Hidden file input */}

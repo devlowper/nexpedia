@@ -36,6 +36,7 @@ interface AuthContextType {
   logout: () => Promise<void>;
   refreshUser: () => Promise<void>;
   toggleSavedPrompt: (promptId: string) => Promise<void>;
+  isPromptSaved: (promptId: string) => boolean;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -43,6 +44,16 @@ const AuthContext = createContext<AuthContextType | null>(null);
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<AuthUser | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [guestSavedPrompts, setGuestSavedPrompts] = useState<string[]>(() => {
+    if (typeof window !== "undefined") {
+      try {
+        return JSON.parse(localStorage.getItem("guest_saved_prompts") || "[]");
+      } catch {
+        return [];
+      }
+    }
+    return [];
+  });
 
   const fetchUser = async () => {
     try {
@@ -147,19 +158,42 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     await fetchUser();
   };
 
+  const isPromptSaved = useCallback((promptId: string) => {
+    if (!promptId) return false;
+    const norm = String(promptId);
+    if (user?.savedPrompts?.some(id => String(id) === norm)) return true;
+    return guestSavedPrompts.some(id => String(id) === norm);
+  }, [user?.savedPrompts, guestSavedPrompts]);
+
   const toggleSavedPrompt = async (promptId: string) => {
-    if (!user) return;
-    const isSaved = user.savedPrompts?.includes(promptId);
-    
-    // Optimistic update
+    if (!promptId) return;
+    const norm = String(promptId);
+
+    // Guest Wishlist (when not logged in)
+    if (!user) {
+      setGuestSavedPrompts(prev => {
+        const exists = prev.some(id => String(id) === norm);
+        const next = exists ? prev.filter(id => String(id) !== norm) : [...prev, norm];
+        try {
+          localStorage.setItem("guest_saved_prompts", JSON.stringify(next));
+        } catch (e) {
+          console.warn("Could not save to localStorage", e);
+        }
+        return next;
+      });
+      return;
+    }
+
+    // Logged in user: optimistic update + sync
+    const isSaved = user.savedPrompts?.some(id => String(id) === norm);
     const newSavedPrompts = isSaved 
-      ? (user.savedPrompts || []).filter(id => id !== promptId) 
-      : [...(user.savedPrompts || []), promptId];
+      ? (user.savedPrompts || []).filter(id => String(id) !== norm) 
+      : [...(user.savedPrompts || []), norm];
     
     setUser({ ...user, savedPrompts: newSavedPrompts });
 
     try {
-      await api.toggleSavePrompt(promptId);
+      await api.toggleSavePrompt(norm);
     } catch (error) {
       console.error("Failed to toggle save", error);
       // Revert optimistic update on failure
@@ -169,7 +203,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   return (
     <AuthContext.Provider
-      value={{ user, isLoggedIn: !!user, isLoading, login, register, loginWithGoogle, logout, refreshUser, toggleSavedPrompt }}
+      value={{ user, isLoggedIn: !!user, isLoading, login, register, loginWithGoogle, logout, refreshUser, toggleSavedPrompt, isPromptSaved }}
     >
       {children}
     </AuthContext.Provider>

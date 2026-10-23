@@ -39,7 +39,7 @@ export function UseCases() {
             Typical use cases of Nexpedia
           </h2>
           <p className="text-black/60 dark:text-white/60 text-sm max-w-xl mx-auto">
-            See how Nexpedia can improve your design efficiency.
+            See how Nexpedia powers your creative workflow with precision prompts.
           </p>
         </div>
 

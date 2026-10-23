@@ -16,6 +16,7 @@ interface ScrollRevealProps {
   delay?: number;
   duration?: number;
   once?: boolean;
+  id?: string;
 }
 
 export function ScrollReveal({
@@ -25,6 +26,7 @@ export function ScrollReveal({
   delay = 0,
   duration = 0.5,
   once = true,
+  id,
 }: ScrollRevealProps) {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once, margin: "-50px" });
@@ -55,6 +57,7 @@ export function ScrollReveal({
   return (
     <motion.div
       ref={ref}
+      id={id}
       initial="hidden"
       animate={isInView ? "visible" : "hidden"}
       variants={variants[variant]}

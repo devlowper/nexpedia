@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Users, Search, MoreHorizontal, X } from "lucide-react";
+import { Users, Search, MoreHorizontal, X, Bell } from "lucide-react";
 
 const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
 
@@ -26,6 +26,41 @@ export default function AdminUsersPage() {
   const [editingUser, setEditingUser] = useState<User | null>(null);
   const [editForm, setEditForm] = useState({ name: "", username: "", role: "user" });
   const [editLoading, setEditLoading] = useState(false);
+
+  const [broadcastModalOpen, setBroadcastModalOpen] = useState(false);
+  const [broadcastForm, setBroadcastForm] = useState({ title: "", message: "", type: "info" });
+  const [broadcastLoading, setBroadcastLoading] = useState(false);
+
+  const handleBroadcastSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const token = sessionStorage.getItem("admin_token");
+    if (!token) return;
+    
+    setBroadcastLoading(true);
+    try {
+      const res = await fetch(`${API}/api/admin/notifications/broadcast`, {
+        method: "POST",
+        headers: { 
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}` 
+        },
+        body: JSON.stringify(broadcastForm)
+      });
+      const data = await res.json();
+      if (data.success) {
+        setBroadcastModalOpen(false);
+        setBroadcastForm({ title: "", message: "", type: "info" });
+        alert(data.message);
+      } else {
+        alert(data.error || "Failed to broadcast");
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Network error broadcasting notification");
+    } finally {
+      setBroadcastLoading(false);
+    }
+  };
 
   const fetchUsers = async () => {
     const token = sessionStorage.getItem("admin_token");
@@ -128,20 +163,29 @@ export default function AdminUsersPage() {
           <h1 className="text-3xl font-bold font-bricolage mb-2">Users</h1>
           <p className="text-[var(--text-muted)]">Manage all registered users on Nexpedia.</p>
         </div>
-        <div className="relative w-full sm:w-72">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--text-muted)]" size={18} />
-          <input
-            type="text"
-            placeholder="Search users..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 rounded-xl border text-sm transition-all focus:outline-none focus:ring-2 focus:ring-accent/50"
-            style={{
-              background: "var(--glass-bg)",
-              borderColor: "var(--border)",
-              color: "var(--text-primary)",
-            }}
-          />
+        <div className="flex w-full sm:w-auto items-center gap-3">
+          <div className="relative w-full sm:w-72">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--text-muted)]" size={18} />
+            <input
+              type="text"
+              placeholder="Search users..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="w-full pl-10 pr-4 py-2 rounded-xl border text-sm transition-all focus:outline-none focus:ring-2 focus:ring-accent/50"
+              style={{
+                background: "var(--glass-bg)",
+                borderColor: "var(--border)",
+                color: "var(--text-primary)",
+              }}
+            />
+          </div>
+          <button 
+            onClick={() => setBroadcastModalOpen(true)}
+            className="flex items-center gap-2 justify-center h-10 px-4 rounded-xl font-medium text-sm transition-all bg-accent text-black hover:scale-[1.02]"
+          >
+            <Bell size={16} />
+            Send Notification
+          </button>
         </div>
       </div>
 
@@ -310,6 +354,74 @@ export default function AdminUsersPage() {
                   className="px-4 py-2 rounded-xl text-sm font-bold text-white bg-accent hover:opacity-90 disabled:opacity-50"
                 >
                   {editLoading ? 'Saving...' : 'Save Changes'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+      {/* Broadcast Modal */}
+      {broadcastModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+          <div className="w-full max-w-md rounded-2xl border p-6" style={{ background: "var(--bg-base)", borderColor: "var(--border)" }}>
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-xl font-bold">Broadcast Notification</h2>
+              <button onClick={() => setBroadcastModalOpen(false)} className="p-2 rounded-lg hover:bg-black/5 dark:hover:bg-white/5">
+                <X size={20} />
+              </button>
+            </div>
+            
+            <form onSubmit={handleBroadcastSubmit} className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium mb-1">Title</label>
+                <input 
+                  type="text" 
+                  value={broadcastForm.title}
+                  onChange={e => setBroadcastForm({...broadcastForm, title: e.target.value})}
+                  className="w-full px-3 py-2 rounded-xl border focus:outline-none focus:ring-2 focus:ring-accent/50"
+                  style={{ background: "var(--glass-bg)", borderColor: "var(--border)", color: "var(--text-primary)" }}
+                  required
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">Message</label>
+                <textarea 
+                  value={broadcastForm.message}
+                  onChange={e => setBroadcastForm({...broadcastForm, message: e.target.value})}
+                  className="w-full px-3 py-2 rounded-xl border focus:outline-none focus:ring-2 focus:ring-accent/50 min-h-[100px]"
+                  style={{ background: "var(--glass-bg)", borderColor: "var(--border)", color: "var(--text-primary)" }}
+                  required
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">Type</label>
+                <select 
+                  value={broadcastForm.type}
+                  onChange={e => setBroadcastForm({...broadcastForm, type: e.target.value})}
+                  className="w-full px-3 py-2 rounded-xl border focus:outline-none focus:ring-2 focus:ring-accent/50"
+                  style={{ background: "var(--glass-bg)", borderColor: "var(--border)", color: "var(--text-primary)" }}
+                >
+                  <option value="info">Info</option>
+                  <option value="alert">Alert</option>
+                  <option value="success">Success</option>
+                </select>
+              </div>
+              
+              <div className="flex justify-end gap-3 mt-6">
+                <button 
+                  type="button" 
+                  onClick={() => setBroadcastModalOpen(false)}
+                  className="px-4 py-2 rounded-xl text-sm font-bold border hover:bg-black/5 dark:hover:bg-white/5"
+                  style={{ borderColor: "var(--border)" }}
+                >
+                  Cancel
+                </button>
+                <button 
+                  type="submit"
+                  disabled={broadcastLoading}
+                  className="px-4 py-2 rounded-xl text-sm font-bold text-black bg-accent hover:opacity-90 disabled:opacity-50"
+                >
+                  {broadcastLoading ? 'Sending...' : 'Broadcast'}
                 </button>
               </div>
             </form>

@@ -1,226 +1,353 @@
 "use client";
 
-import React, { useRef, useEffect, useState } from 'react';
-import { Film, Package, Share2, Tv, Video, Crosshair, Users, ChevronLeft, ChevronRight, ArrowUp } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ChevronLeft, ChevronRight, Sparkles, ArrowRight } from 'lucide-react';
+import Link from 'next/link';
 
-const baseItems = [
-  { label: 'UGC Ads', icon: Share2, img: 'https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=500&h=800&fit=crop' },
-  { label: 'Product Ads', icon: Package, img: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500&h=800&fit=crop' },
-  { label: 'Film Trailer', icon: Video, img: 'https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=500&h=800&fit=crop' },
-  { label: 'Social Content', icon: Users, img: 'https://images.unsplash.com/photo-1616469829581-73993eb86b02?w=500&h=800&fit=crop' },
-  { label: 'Brand Film', icon: Tv, img: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=500&h=800&fit=crop' },
-  { label: 'Explainer', icon: Crosshair, img: 'https://images.unsplash.com/photo-1518770660439-4636190af475?w=500&h=800&fit=crop' },
-  { label: 'Micro Drama', icon: Film, img: 'https://images.unsplash.com/photo-1485846234645-a62644f84728?w=500&h=800&fit=crop' },
+const showcasePrompts = [
+  {
+    id: 1,
+    slug: 'hyper-realistic-studio-portraits',
+    title: 'Hyper-Realistic Studio Portraits',
+    description: 'Cinematic 85mm portrait, natural skin texture, rim lighting, atmospheric depth of field, 8k resolution.',
+    tag: 'Midjourney v6 & FLUX',
+    category: 'Photography',
+    img: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=800&h=800&fit=crop'
+  },
+  {
+    id: 2,
+    slug: 'cyberpunk-sci-fi-landscapes',
+    title: 'Cyberpunk & Sci-Fi Landscapes',
+    description: 'Anime collectible PVC figurine in deep crimson red gel lighting, dramatic macro photography, 8k.',
+    tag: 'FLUX.1 & Stable Diffusion',
+    category: 'Concept Art',
+    img: 'https://images.unsplash.com/photo-1578632767115-351597cf2477?w=800&h=800&fit=crop'
+  },
+  {
+    id: 3,
+    slug: 'minimalist-3d-product-mockups',
+    title: 'Minimalist 3D Product Mockups',
+    description: 'High-end white smartwatch product render, polished silver lugs, glossy black screen on seamless grey studio.',
+    tag: 'Midjourney v6',
+    category: '3D Render',
+    img: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=800&h=800&fit=crop'
+  },
+  {
+    id: 4,
+    slug: 'vector-logos-mascot-emblems',
+    title: 'Vector Logos & Mascot Emblems',
+    description: 'Abstract 3D wallpaper art, smooth flowing silk-like waves, vivid cyan to violet gradient with peach glow.',
+    tag: 'DALL-E 3 & Midjourney',
+    category: 'Branding',
+    img: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&h=800&fit=crop'
+  },
+  {
+    id: 5,
+    slug: 'ghibli-style-anime-aesthetics',
+    title: 'Ghibli-Style Anime Aesthetics',
+    description: 'Surreal long-exposure astrophotography, sailboat silhouette on mirror-calm water under Milky Way and storm lightning.',
+    tag: 'Niji v6',
+    category: 'Anime & Illustration',
+    img: 'https://images.unsplash.com/photo-1534447677768-be436bb09401?w=800&h=800&fit=crop'
+  }
 ];
 
-// Duplicate items for the seamless infinity loop
-const displayItems = [...baseItems, ...baseItems, ...baseItems, ...baseItems, ...baseItems, ...baseItems];
-
 export function VibeCarousel() {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const imagesTrackRef = useRef<HTMLDivElement>(null);
-  const iconsTrackRef = useRef<HTMLDivElement>(null);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
 
-  const currentXRef = useRef(0);
-  const targetXRef = useRef(0);
-
-  const [itemWidth, setItemWidth] = useState(240);
-  const gap = 4;
-  const stepWidth = itemWidth + gap;
-
-  // Update itemWidth whenever the container resizes
   useEffect(() => {
-    const updateWidth = () => {
-      if (containerRef.current) {
-        const w = containerRef.current.getBoundingClientRect().width;
-        // Mobile: show ~2 cards; tablet: ~3; desktop: ~4-5
-        if (w < 480) setItemWidth(Math.floor(w / 2.2));
-        else if (w < 768) setItemWidth(Math.floor(w / 3));
-        else setItemWidth(240);
-      }
-    };
-    updateWidth();
-    const ro = new ResizeObserver(updateWidth);
-    if (containerRef.current) ro.observe(containerRef.current);
-    return () => ro.disconnect();
+    const handleResize = () => setIsMobile(window.innerWidth < 768);
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
   }, []);
 
+  // Auto-play logic
   useEffect(() => {
-    let animationFrameId: number;
-    const setWidth = baseItems.length * stepWidth;
+    if (isHovered) return;
+    const interval = setInterval(() => {
+      setActiveIndex((prev) => (prev + 1) % showcasePrompts.length);
+    }, 4500);
+    return () => clearInterval(interval);
+  }, [isHovered]);
 
-    const animate = () => {
-      // 1. Auto infinity scroll
-      targetXRef.current -= 0.6;
+  const handleNext = () => setActiveIndex((prev) => (prev + 1) % showcasePrompts.length);
+  const handlePrev = () => setActiveIndex((prev) => (prev - 1 + showcasePrompts.length) % showcasePrompts.length);
 
-      // 2. Smooth interpolation
-      currentXRef.current += (targetXRef.current - currentXRef.current) * 0.1;
+  const getCardProps = (index: number) => {
+    const len = showcasePrompts.length;
+    let dist = (index - activeIndex + len) % len;
+    if (dist > len / 2) dist -= len;
 
-      // 3. Seamless Loop
-      if (currentXRef.current <= -setWidth) {
-        currentXRef.current += setWidth;
-        targetXRef.current += setWidth;
-      }
-      if (currentXRef.current > 0) {
-        currentXRef.current -= setWidth;
-        targetXRef.current -= setWidth;
-      }
+    const isCenter = dist === 0;
 
-      if (imagesTrackRef.current && iconsTrackRef.current && containerRef.current) {
-        imagesTrackRef.current.style.transform = `translateX(${currentXRef.current}px)`;
-        iconsTrackRef.current.style.transform = `translateX(${currentXRef.current}px)`;
+    if (isMobile) {
+      if (isCenter) return { x: 'calc(-50% + 0px)', y: '-50%', scale: 1, zIndex: 10, opacity: 1, isCenter: true };
+      if (dist === 1) return { x: 'calc(-50% + 180px)', y: '-50%', scale: 0.88, zIndex: 5, opacity: 0, isCenter: false };
+      if (dist === -1) return { x: 'calc(-50% - 180px)', y: '-50%', scale: 0.88, zIndex: 5, opacity: 0, isCenter: false };
+      return { x: 'calc(-50% + 0px)', y: '-50%', scale: 0.5, zIndex: 0, opacity: 0, isCenter: false };
+    }
 
-        const containerHeight = containerRef.current.getBoundingClientRect().height;
-        const screenWidth = containerRef.current.getBoundingClientRect().width;
-        const iconElements = iconsTrackRef.current.children;
+    let x = 'calc(-50% + 0px)';
+    let scale = 1;
+    let opacity = 1;
+    let zIndex = 10;
 
-        for (let i = 0; i < iconElements.length; i++) {
-          const el = iconElements[i] as HTMLElement;
-          const innerIcon = el.querySelector('.inner-icon') as HTMLElement;
+    if (isCenter) {
+      x = 'calc(-50% + 0px)';
+      scale = 1;
+      zIndex = 20;
+    } else if (dist === 1) {
+      x = 'calc(-50% + 480px)';
+      scale = 0.86;
+      opacity = 0.85;
+      zIndex = 10;
+    } else if (dist === -1) {
+      x = 'calc(-50% - 480px)';
+      scale = 0.86;
+      opacity = 0.85;
+      zIndex = 10;
+    } else if (dist === 2) {
+      x = 'calc(-50% + 660px)';
+      scale = 0.72;
+      opacity = 0.45;
+      zIndex = 5;
+    } else if (dist === -2) {
+      x = 'calc(-50% - 660px)';
+      scale = 0.72;
+      opacity = 0.45;
+      zIndex = 5;
+    } else {
+      x = dist > 0 ? 'calc(-50% + 780px)' : 'calc(-50% - 780px)';
+      scale = 0.5;
+      opacity = 0;
+      zIndex = 0;
+    }
 
-          if (innerIcon) {
-            const itemCenterX = currentXRef.current + (i * stepWidth) + (itemWidth / 2);
-
-            if (itemCenterX > -300 && itemCenterX < screenWidth + 300) {
-              const t = itemCenterX / screenWidth;
-              const ySvg = 735.3 - 210 * t + 210 * (t * t);
-              const yScreen = ((ySvg - 300) / 480) * containerHeight;
-
-              innerIcon.style.transform = `translate(-50%, -16px) translateY(${yScreen}px)`;
-            }
-          }
-        }
-      }
-      animationFrameId = requestAnimationFrame(animate);
-    };
-
-    animationFrameId = requestAnimationFrame(animate);
-    return () => cancelAnimationFrame(animationFrameId);
-  }, [stepWidth, itemWidth]);
-
-  const handleNext = () => {
-    targetXRef.current -= stepWidth;
-  };
-
-  const handlePrev = () => {
-    targetXRef.current += stepWidth;
+    return { x, y: '-50%', scale, opacity, zIndex, isCenter };
   };
 
   return (
-    <section className="w-full relative flex flex-col items-center">
+    <section className="w-full relative flex flex-col items-center py-20 overflow-hidden bg-[var(--bg-base)]">
+      
+      {/* Clean Background (No pink glow) */}
 
-      <div ref={containerRef} className="relative w-full h-[320px] md:h-[550px] overflow-hidden">
-
-        {/* Title: overlaid on top of the carousel */}
-        <div className="absolute top-0 left-0 w-full flex justify-center pt-4 md:pt-6 z-30 pointer-events-none">
-          <h2
-            className="section-title font-bricolage text-[clamp(1.8rem,5vw,4rem)] font-[900] tracking-[-1px]"
-            style={{ fontFamily: '"Bricolage Grotesque", var(--font-bricolage), sans-serif' }}
-          >
-            <span className="text-transparent bg-clip-text" style={{ backgroundImage: 'var(--brand-gradient)' }}>Vibe Direct Now</span>
-          </h2>
+      {/* Header */}
+      <div className="w-full flex flex-col items-center mb-12 z-10 relative px-4 text-center">
+        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold text-accent bg-accent/10 border border-accent/20 mb-3">
+          <Sparkles size={12} />
+          <span>Trending Styles</span>
         </div>
-
-        {/* Edge fade overlays — hide thin image strips at top/bottom of curve mask */}
-        <div className="absolute top-0 left-0 w-full h-[12%] z-10 pointer-events-none" style={{ background: 'linear-gradient(to bottom, var(--bg-base) 30%, transparent)' }} />
-        <div className="absolute bottom-0 left-0 w-full h-[12%] z-10 pointer-events-none" style={{ background: 'linear-gradient(to top, var(--bg-base) 30%, transparent)' }} />
-
-        {/* Track 1: Images */}
-        <div
-          ref={imagesTrackRef}
-          className="absolute top-0 flex h-full items-center will-change-transform"
-          style={{ gap: `${gap}px` }}
+        <h2 className="section-title font-bricolage text-[clamp(2.2rem,4.5vw,3.8rem)] font-extrabold tracking-[-0.03em] text-black dark:text-white">
+          Explore{' '}
+          <span className="text-transparent bg-clip-text" style={{ backgroundImage: 'var(--brand-gradient)' }}>
+            Featured Prompt Styles
+          </span>
+        </h2>
+        <p 
+          className="vibe-carousel-subtitle text-sm md:text-base mt-2 max-w-lg font-medium text-[#626263] dark:text-white/80"
         >
-          {displayItems.map((item, i) => (
-            <div key={i} className="flex-none h-full relative" style={{ width: `${itemWidth}px` }}>
-              <div className="w-full h-full bg-base overflow-hidden">
-                <img
-                  src={item.img}
-                  alt={item.label}
-                  className="w-full h-full object-cover opacity-60 hover:opacity-100 transition-opacity duration-500"
-                />
-              </div>
-            </div>
-          ))}
-        </div>
+          Master the art of AI prompting across top creative aesthetics and models.
+        </p>
+      </div>
 
-        {/* SVG Mask & Curve Lines */}
-        <svg viewBox="0 300 1920 480" preserveAspectRatio="none" className="absolute top-0 left-0 w-full h-full pointer-events-none z-10">
-          <path
-            d="M0,0 L1920,0 L1920,1080 L0,1080 Z M1920,735.3c-284.7-31.2-602.6-52.1-948.8-52.5c-355-0.5-680.6,20.6-971.2,52.5c0-130.2,0-260.3,0-390.5c293.6,25.8,614,42.1,957.7,42.2c345.5,0.1,667.4-16.2,962.3-42.2C1920,474.9,1920,605.1,1920,735.3z"
-            fill="var(--bg-base)"
-            fillRule="evenodd"
-          />
-          <path
-            d="M0,344.8 c293.6,25.8,614,42.1,957.7,42.2 c345.5,0.1,667.4-16.2,962.3-42.2"
-            fill="none"
-            stroke="url(#orange-grad)"
-            strokeWidth="3"
-          />
-          <path
-            d="M1920,735.3 c-284.7-31.2-602.6-52.1-948.8-52.5 c-355-0.5-680.6,20.6-971.2,52.5"
-            fill="none"
-            stroke="url(#orange-grad)"
-            strokeWidth="3"
-          />
-          <defs>
-            <linearGradient id="orange-grad" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stopColor="var(--bg-base)" />
-              <stop offset="30%" stopColor="var(--brand-solid)" />
-              <stop offset="50%" stopColor="var(--brand-solid)" stopOpacity="0.7" />
-              <stop offset="70%" stopColor="var(--brand-solid)" />
-              <stop offset="100%" stopColor="var(--bg-base)" />
-            </linearGradient>
-          </defs>
-        </svg>
+      {/* Carousel Container */}
+      <div 
+        className="relative w-full h-[520px] md:h-[560px] flex justify-center items-center z-10 max-w-[1400px] mx-auto"
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+      >
+        {showcasePrompts.map((item, idx) => {
+          const { x, y, scale, opacity, zIndex, isCenter } = getCardProps(idx);
 
-        {/* Track 3: Dynamic Icons & Texts */}
-        <div
-          ref={iconsTrackRef}
-          className="absolute top-0 flex h-full pointer-events-none z-20 will-change-transform"
-          style={{ gap: `${gap}px` }}
-        >
-          {displayItems.map((item, i) => (
-            <div key={i} className="flex-none relative h-full" style={{ width: `${itemWidth}px` }}>
-              <div className="inner-icon absolute top-0 left-1/2 flex flex-col items-center pointer-events-auto cursor-pointer group will-change-transform">
-                <div className="w-7 h-7 md:w-8 md:h-8 rounded-full flex items-center justify-center bg-elevated border border-border mb-1 md:mb-2 transition-all">
-                  <item.icon size={14} className="text-primary group-hover:text-accent transition-colors" />
-                </div>
-                <span className="text-primary text-[0.65rem] md:text-xs font-bold whitespace-nowrap group-hover:text-accent transition-colors">{item.label}</span>
-              </div>
-            </div>
-          ))}
-        </div>
+          return (
+            <motion.div
+              key={item.id}
+              initial={false}
+              animate={{ x, y, scale, opacity, zIndex }}
+              transition={{ duration: 0.6, ease: [0.32, 0.72, 0, 1] }}
+              onClick={() => {
+                if (!isCenter) setActiveIndex(idx);
+              }}
+              className={`absolute top-1/2 left-1/2 flex rounded-[28px] overflow-hidden transition-shadow duration-300 ${
+                isCenter 
+                  ? 'w-[95%] max-w-[840px] h-[480px] cursor-default bg-white dark:bg-surface border border-black/10 dark:border-border shadow-2xl' 
+                  : 'w-[220px] h-[420px] cursor-pointer bg-white/95 dark:bg-elevated border border-black/10 dark:border-border/60 hover:border-accent/40 shadow-lg'
+              }`}
+            >
+              <AnimatePresence mode="wait">
+                {isCenter ? (
+                  isMobile ? (
+                    /* Mobile Center Card */
+                    <motion.div
+                      key="mobile-expanded"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      className="w-full h-full flex flex-col justify-between p-5 bg-white dark:bg-surface relative"
+                    >
+                      <div className="relative w-full h-[220px] rounded-[20px] overflow-hidden mb-3 shrink-0">
+                        <img
+                          src={item.img}
+                          alt={item.title}
+                          loading="lazy"
+                          decoding="async"
+                          className="w-full h-full object-cover"
+                        />
+                        <div className="absolute top-3 left-3 flex gap-1.5">
+                          <span className="text-[10px] font-semibold px-2.5 py-1 rounded-md bg-accent text-white shadow-sm">
+                            {item.category}
+                          </span>
+                        </div>
+                      </div>
+                      <div className="flex-1 flex flex-col justify-between">
+                        <div>
+                          <div className="flex items-center gap-2 mb-1.5">
+                            <span className="text-[11px] text-[#626263] dark:text-white/70 font-semibold">
+                              {item.tag}
+                            </span>
+                          </div>
+                          <h3 className="text-xl font-bricolage font-bold text-black dark:text-white mb-2 line-clamp-1">
+                            {item.title}
+                          </h3>
+                          <p className="text-xs text-[#626263] dark:text-white/80 line-clamp-2 mb-3">
+                            "{item.description}"
+                          </p>
+                        </div>
+                        <Link
+                          href={`/prompt-library/${item.slug}`}
+                          className="w-full flex items-center justify-center gap-2 bg-accent hover:opacity-90 text-white font-semibold text-xs py-3 rounded-xl transition-all shadow-md shadow-accent/20"
+                        >
+                          Explore Prompt <ArrowRight size={14} />
+                        </Link>
+                      </div>
+                    </motion.div>
+                  ) : (
+                    /* Desktop Center Expanded Card Content */
+                    <motion.div
+                      key="expanded"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 0.35 }}
+                      className="w-full h-full flex"
+                    >
+                      {/* Left Text Side */}
+                      <div className="w-1/2 p-10 flex flex-col justify-between bg-white dark:bg-surface">
+                        <div>
+                          <div className="flex items-center gap-2 mb-4">
+                            <span className="text-xs font-semibold px-2.5 py-1 rounded-md bg-accent/10 text-accent border border-accent/20">
+                              {item.category}
+                            </span>
+                            <span 
+                              className="text-xs text-[#626263] dark:text-white/70 font-semibold"
+                            >
+                              {item.tag}
+                            </span>
+                          </div>
+                          <h3 
+                            className="text-2xl md:text-3xl font-bricolage font-bold text-black dark:text-white mb-4 leading-tight"
+                          >
+                            {item.title}
+                          </h3>
+                          <p 
+                            className="vibe-carousel-desc text-sm md:text-base font-normal leading-relaxed text-[#626263] dark:text-white/80"
+                          >
+                            "{item.description}"
+                          </p>
+                        </div>
 
-        {/* Arrow buttons — hidden on mobile, visible on md+ */}
+                        <div className="pt-6 border-t border-black/10 dark:border-border">
+                          <Link
+                            href={`/prompt-library/${item.slug}`}
+                            className="inline-flex items-center gap-2 bg-accent hover:opacity-90 text-white font-semibold text-sm px-5 py-2.5 rounded-xl transition-all shadow-md shadow-accent/20 hover:gap-3"
+                          >
+                            Explore Prompt <ArrowRight size={16} />
+                          </Link>
+                        </div>
+                      </div>
+
+                      {/* Right Image Side */}
+                      <div className="w-1/2 h-full p-4 pl-0 bg-white dark:bg-surface">
+                        <div className="w-full h-full rounded-[22px] overflow-hidden border border-black/10 dark:border-border relative">
+                          <img 
+                            src={item.img} 
+                            alt={item.title} 
+                            loading="lazy"
+                            decoding="async"
+                            className="w-full h-full object-cover" 
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none" />
+                        </div>
+                      </div>
+                    </motion.div>
+                  )
+                ) : (
+                  /* Side / Shrunk Card Content */
+                  <motion.div
+                    key="shrunk"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    className="w-full h-full rounded-[28px] overflow-hidden p-2 relative group"
+                  >
+                    <img 
+                      src={item.img} 
+                      alt={item.title} 
+                      loading="lazy"
+                      decoding="async"
+                      className="w-full h-full object-cover rounded-[22px] transition-transform duration-500 group-hover:scale-105" 
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/25 to-transparent pointer-events-none rounded-[28px]" />
+                    <div className="absolute bottom-4 left-4 right-4 text-white pointer-events-none">
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-accent block mb-0.5">
+                        {item.category}
+                      </span>
+                      <p className="text-xs font-semibold line-clamp-2">
+                        {item.title}
+                      </p>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </motion.div>
+          );
+        })}
+
+        {/* Navigation Arrows */}
         <button
           onClick={handlePrev}
-          className="absolute left-3 md:left-6 top-[50%] -translate-y-1/2 z-30 w-9 h-9 md:w-12 md:h-12 rounded-full bg-elevated border border-border text-primary flex items-center justify-center hover:bg-accent hover:text-black hover:border-accent transition-colors shadow-lg pointer-events-auto"
+          aria-label="Previous style"
+          className="absolute left-3 md:left-6 top-1/2 -translate-y-1/2 z-40 w-11 h-11 rounded-full bg-white/90 dark:bg-surface/85 backdrop-blur-md border border-black/10 dark:border-border text-gray-900 dark:text-primary flex items-center justify-center hover:bg-accent hover:text-white transition-all shadow-lg"
         >
-          <ChevronLeft size={20} />
+          <ChevronLeft size={22} />
         </button>
         <button
           onClick={handleNext}
-          className="absolute right-3 md:right-6 top-[50%] -translate-y-1/2 z-30 w-9 h-9 md:w-12 md:h-12 rounded-full bg-elevated border border-border text-primary flex items-center justify-center hover:bg-accent hover:text-black hover:border-accent transition-colors shadow-lg pointer-events-auto"
+          aria-label="Next style"
+          className="absolute right-3 md:right-6 top-1/2 -translate-y-1/2 z-40 w-11 h-11 rounded-full bg-white/90 dark:bg-surface/85 backdrop-blur-md border border-black/10 dark:border-border text-gray-900 dark:text-primary flex items-center justify-center hover:bg-accent hover:text-white transition-all shadow-lg"
         >
-          <ChevronRight size={20} />
+          <ChevronRight size={22} />
         </button>
       </div>
 
-      <div className="w-full flex justify-center mt-4 md:mt-6 px-4 z-30 mb-10">
-        <div className="w-full max-w-[500px] bg-elevated rounded-full p-1.5 flex items-center shadow-[0_0_15px_rgba(0,0,0,0.5)] relative border border-border">
-          <div className="pl-4 pr-2 text-primary">
-            <Video size={20} />
-          </div>
-          <input
-            type="text"
-            className="flex-1 bg-transparent border-none outline-none text-primary text-sm placeholder:text-muted transition-colors"
-            placeholder="A|"
+      {/* Pagination Dots */}
+      <div className="flex items-center gap-2 mt-8 z-10">
+        {showcasePrompts.map((_, idx) => (
+          <button
+            key={idx}
+            onClick={() => setActiveIndex(idx)}
+            aria-label={`Go to slide ${idx + 1}`}
+            className={`transition-all duration-300 rounded-full ${
+              activeIndex === idx 
+                ? 'w-8 h-2.5 bg-accent shadow-sm shadow-accent/40' 
+                : 'w-2.5 h-2.5 bg-black/20 dark:bg-white/20 hover:bg-accent/40'
+            }`}
           />
-          <button className="w-10 h-10 rounded-full bg-accent text-black flex items-center justify-center hover:bg-accent-hover hover:opacity-90 transition-all shadow-lg">
-            <ArrowUp size={20} />
-          </button>
-        </div>
+        ))}
       </div>
     </section>
   );

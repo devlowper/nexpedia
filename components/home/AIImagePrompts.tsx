@@ -5,8 +5,7 @@ import Link from 'next/link';
 import { DesignPromptCard } from '../prompts/DesignPromptCard';
 import { Prompt } from '../prompts/PromptCard';
 import { SkeletonCard } from '../ui/SkeletonCard';
-
-const API = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:5000";
+import { getApiBaseUrl } from '@/lib/apiClient';
 
 export function AIImagePrompts() {
   const [prompts, setPrompts] = useState<Prompt[]>([]);
@@ -16,7 +15,8 @@ export function AIImagePrompts() {
     // Fetch some design/image prompts to show in the masonry grid
     const fetchPrompts = async () => {
       try {
-        const res = await fetch(`${API}/api/prompts?category=Design&limit=14`);
+        const baseUrl = getApiBaseUrl();
+        const res = await fetch(`${baseUrl}/api/prompts?category=Design&limit=14`);
         const json = await res.json();
         if (json.success) {
           setPrompts(json.data);
@@ -40,10 +40,10 @@ export function AIImagePrompts() {
             className="section-title font-bricolage text-4xl font-bold text-primary mb-3"
             style={{ fontFamily: '"Bricolage Grotesque", var(--font-bricolage), sans-serif' }}
           >
-            AI Image Prompts
+            Trendy AI Image Prompts & Img to Prompt
           </h2>
           <p className="text-black/60 dark:text-white/60 text-sm max-w-xl mx-auto italic">
-            Get inspired and discover amazing AI image prompts. One-click copy to start creating.
+            Get inspired by trendy prompts and best image to prompt recipes. Copy prompts with one click and create stunning visuals.
           </p>
         </div>
 

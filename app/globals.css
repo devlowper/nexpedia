@@ -1,13 +1,14 @@
-@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&display=swap');
 @import "tailwindcss";
 @config "../tailwind.config.ts";
+
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 
 /* All Section Titles use Bricolage Grotesque */
 h1,
 h2,
 .font-bricolage,
 .section-title {
-  font-family: 'Bricolage Grotesque', var(--font-bricolage), sans-serif !important;
+  font-family: var(--font-bricolage), 'Bricolage Grotesque', sans-serif !important;
 }
 
 :root {
@@ -23,6 +24,50 @@ h2,
   --brand-solid-hover: #ff0044;
   --brand-gradient: linear-gradient(135deg, #ff3366 0%, #ff007f 100%);
   --brand-gradient-vertical: linear-gradient(180deg, #ff6699 0%, #ff3366 100%);
+}
+
+/* Core Theme Utility Classes */
+.text-primary {
+  color: var(--text-primary);
+}
+
+.text-muted {
+  color: var(--text-muted);
+}
+
+.text-faint {
+  color: var(--text-faint);
+}
+
+.bg-base {
+  background-color: var(--bg-base);
+}
+
+.bg-surface {
+  background-color: var(--bg-surface);
+}
+
+.bg-elevated {
+  background-color: var(--bg-elevated);
+}
+
+.border-border {
+  border-color: var(--border);
+}
+
+.vibe-carousel-desc,
+.vibe-carousel-subtitle {
+  color: var(--text-primary);
+}
+
+[data-theme="light"] .vibe-carousel-desc,
+[data-theme="light"] .vibe-carousel-subtitle {
+  color: #838383 !important;
+}
+
+[data-theme="dark"] .vibe-carousel-desc,
+[data-theme="dark"] .vibe-carousel-subtitle {
+  color: #c0c0c0 !important;
 }
 
 [data-theme="light"] {
@@ -434,7 +479,7 @@ input:checked+.toggle-slider:before {
   height: calc(100% + var(--padding) * 2);
   border-radius: calc(var(--border-radius) + var(--padding));
   pointer-events: none;
-  background-image: linear-gradient(0deg, rgba(0,0,0,0.1), rgba(0,0,0,0.2));
+  background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.2));
 
   z-index: -1;
   transition:
@@ -442,11 +487,12 @@ input:checked+.toggle-slider:before {
     filter var(--transition);
   box-shadow:
     0 -8px 8px -6px transparent inset,
-    1px 1px 1px rgba(255,255,255,0.1),
-    -1px -1px 1px rgba(0,0,0,0.2);
+    1px 1px 1px rgba(255, 255, 255, 0.1),
+    -1px -1px 1px rgba(0, 0, 0, 0.2);
 }
+
 [data-theme="light"] .theme-btn::before {
-  background-image: linear-gradient(0deg, rgba(0,0,0,0.02), rgba(0,0,0,0.05));
+  background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.02), rgba(0, 0, 0, 0.05));
   box-shadow: none;
 }
 
@@ -459,14 +505,12 @@ input:checked+.toggle-slider:before {
   height: 100%;
   border-radius: inherit;
   pointer-events: none;
-  background-image: linear-gradient(
-    0deg,
-    var(--brand-solid),
-    hsl(var(--highlight-color-hue), 100%, 70%),
-    hsla(var(--highlight-color-hue), 100%, 70%, 50%),
-    8%,
-    transparent
-  );
+  background-image: linear-gradient(0deg,
+      var(--brand-solid),
+      hsl(var(--highlight-color-hue), 100%, 70%),
+      hsla(var(--highlight-color-hue), 100%, 70%, 50%),
+      8%,
+      transparent);
   background-position: 0 0;
   opacity: 0;
   transition:
@@ -478,9 +522,11 @@ input:checked+.toggle-slider:before {
   border: solid 1px var(--brand-solid) !important;
   background-color: var(--bg-surface);
 }
+
 .theme-btn.active-theme::after {
   opacity: 0.1;
 }
+
 [data-theme="light"] .theme-btn.active-theme::after {
   opacity: 0.15;
 }
@@ -490,46 +536,17 @@ input:checked+.toggle-slider:before {
   display: inline-block;
   color: var(--text-primary);
   opacity: 0.9;
-  animation: letter-anim 2s ease-in-out infinite;
   transition:
     color var(--transition),
-    text-shadow var(--transition),
     opacity var(--transition);
 }
 
-[data-theme="light"] .theme-btn-letter {
-  animation: letter-anim-light 2s ease-in-out infinite;
-}
-
-@keyframes letter-anim {
-  50% {
-    text-shadow: 0 0 3px rgba(255,255,255,0.3);
-    color: var(--text-primary);
-    opacity: 1;
-  }
-}
-
-@keyframes letter-anim-light {
-  50% {
-    text-shadow: 0 0 3px rgba(0,0,0,0.1);
-    color: var(--text-primary);
-    opacity: 1;
-  }
-}
-
 .theme-btn-svg {
-  animation: flicker 2s linear infinite;
-  animation-delay: 0.5s;
   transition:
     fill var(--transition),
     filter var(--transition),
     opacity var(--transition),
     transform var(--transition);
-}
-@keyframes flicker {
-  50% {
-    opacity: 0.8;
-  }
 }
 
 /* Hover state */
@@ -537,21 +554,23 @@ input:checked+.toggle-slider:before {
   border: solid 1px hsla(var(--highlight-color-hue), 100%, 80%, 40%);
   transform: translateY(-2px);
 }
+
 [data-theme="light"] .theme-btn:hover {
   border-color: var(--brand-solid);
 }
 
 .theme-btn:hover::before {
   box-shadow:
-    0 -8px 8px -6px rgba(255,255,255,0.1) inset,
-    1px 1px 1px rgba(255,255,255,0.1),
-    -1px -1px 1px rgba(0,0,0,0.2);
+    0 -8px 8px -6px rgba(255, 255, 255, 0.1) inset,
+    1px 1px 1px rgba(255, 255, 255, 0.1),
+    -1px -1px 1px rgba(0, 0, 0, 0.2);
 }
 
 .theme-btn:hover::after {
   opacity: 0.2;
   mask-image: linear-gradient(0deg, #fff, transparent);
 }
+
 [data-theme="light"] .theme-btn:hover::after {
   opacity: 0.1;
 }
@@ -568,11 +587,13 @@ input:checked+.toggle-slider:before {
   border: solid 1px hsla(var(--highlight-color-hue), 100%, 80%, 70%);
   transform: scale(0.95);
 }
+
 .theme-btn:active::after {
   opacity: 1;
   mask-image: linear-gradient(0deg, #fff, transparent);
   filter: brightness(200%);
 }
+
 [data-theme="light"] .theme-btn:active::after {
   filter: brightness(100%);
 }
@@ -605,4 +626,22 @@ input:checked+.toggle-slider:before {
   100% {
     transform: rotate(1turn);
   }
+}
+
+/* Particles Component Styles */
+.ptc {
+  position: relative;
+  display: block;
+}
+
+.ptc-canvas {
+  display: block;
+  color: rgba(255, 255, 255, 0.28);
+  cursor: crosshair;
+  touch-action: none;
+  transition: color 0.3s ease;
+}
+
+[data-theme="light"] .ptc-canvas {
+  color: rgba(0, 0, 0, 0.2);
 }

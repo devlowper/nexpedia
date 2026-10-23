@@ -14,27 +14,27 @@ const faqs = [
   {
     id: 'q1',
     question: 'Q1 What is Nexpedia and who is it for?',
-    answer: 'Nexpedia is a comprehensive directory and workspace for exploring the best AI tools, models, and prompts. It is designed for creators, developers, marketers, and anyone looking to boost their productivity by finding the perfect AI solutions for their workflow.'
+    answer: 'Nexpedia is a comprehensive AI prompt library and directory designed for creators, designers, developers, and marketers. It helps you discover the best prompts, trendy prompts, and image to prompt inspirations for tools like Midjourney, ChatGPT, Claude, and Stable Diffusion.'
   },
   {
     id: 'q2',
-    question: 'Q2 How do I find the best AI tool for my specific needs?',
-    answer: 'You can use our structured categories (such as LLMs, AI Image Models, and AI Video Models) or browse curated use cases to discover tools that match your specific requirements. We compare features and capabilities to help you make informed decisions.'
+    question: 'Q2 How does Image to Prompt (Img to Prompt) work on Nexpedia?',
+    answer: 'Our image to prompt guides and templates help you extract visual attributes, lighting styles, camera angles, and art directions from images so you can recreate similar trendy art with AI image generators.'
   },
   {
     id: 'q3',
-    question: 'Q3 Do I need coding skills to use the prompt library?',
-    answer: 'Not at all! Our prompt library is designed to be user-friendly for everyone. You can simply copy, paste, and adapt the provided prompts for various models like ChatGPT, Midjourney, and Claude to get high-quality results immediately.'
+    question: 'Q3 Do I need coding skills to use the Nexpedia prompt library?',
+    answer: 'Not at all! The Nexpedia prompt library is designed for everyone. Simply search for the best prompt or trendy prompt you need, copy with one click, and paste it into ChatGPT, Midjourney, or your favorite AI platform.'
   },
   {
     id: 'q4',
-    question: 'Q4 Can I organize and save my favorite AI models?',
-    answer: 'Yes, Nexpedia allows you to build a personalized AI workspace. You can keep track of your favorite tools, save prompt templates, and organize resources to streamline your daily AI workflows.'
+    question: 'Q4 Can I organize and save my favorite AI prompts?',
+    answer: 'Yes, Nexpedia allows you to build a personalized AI workspace. You can bookmark top prompts, save your favorite models, and organize prompt templates to streamline your creative workflow.'
   },
   {
     id: 'q5',
-    question: 'Q5 How often is the AI directory updated with new models?',
-    answer: 'We continuously monitor the AI industry and update our directory weekly with the newest releases and trending models, ensuring you always have access to state-of-the-art tools like Flux, Veo, and the latest LLMs.'
+    question: 'Q5 How often is the prompt library and AI directory updated?',
+    answer: 'We continuously monitor AI trends and update our library daily with the best prompt collections, trendy prompts, and newest AI models like FLUX, Veo, Claude 3.7, and Sora.'
   }
 ];
 

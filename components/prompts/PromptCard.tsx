@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Eye, Crown, Layers, Briefcase, ShoppingCart, FileText, Code, GraduationCap, HeartPulse, DollarSign, Palette, Sparkles, Heart } from "lucide-react";
@@ -31,6 +31,8 @@ export interface Prompt {
   icon?: string;
   description: string;
   is_premium?: boolean;
+  price?: string;
+  isLatest?: boolean;
   views_count?: number;
   saveCount?: number;
   example_output_image?: string | null;
@@ -43,24 +45,133 @@ export interface Prompt {
   category?: PromptCategory;
   sub_category?: PromptCategory;
   recommended_tools?: RecommendedTool[];
+  aiModel?: string;
 }
 
+export interface DisplayTool {
+  name: string;
+  logo: string | null;
+}
 
-const TOOL_LOGOS: Record<string, string> = {
-  chatgpt: "https://upload.wikimedia.org/wikipedia/commons/0/04/ChatGPT_logo.svg",
-  gemini:  "https://upload.wikimedia.org/wikipedia/commons/8/8a/Google_Gemini_logo.svg",
-  claude:  "https://upload.wikimedia.org/wikipedia/commons/1/14/Anthropic_Claude_Logo.png",
-  grok:    "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Grok_logo.svg/1200px-Grok_logo.svg.png",
-  deepseek: "https://avatars.githubusercontent.com/u/148784381?s=200&v=4",
-  midjourney: "https://upload.wikimedia.org/wikipedia/commons/e/e6/Midjourney_Emblem.svg",
+export const TOOL_LOGOS: Record<string, string> = {
+  chatgpt: "/models/chatgpt.svg",
+  "chat gpt": "/models/chatgpt.svg",
+  openai: "/models/chatgpt.svg",
+  "dall-e": "/models/chatgpt.svg",
+  "dall-e 3": "/models/chatgpt.svg",
+  dalle: "/models/chatgpt.svg",
+  claude: "/models/claude.svg",
+  anthropic: "/models/claude.svg",
+  gemini: "/models/gemini.svg",
+  grok: "/models/grok.svg",
+  deepseek: "/models/deepseek.svg",
+  midjourney: "/models/midjourney.svg",
+  midjourny: "/models/midjourney.svg",
+  runway: "https://www.google.com/s2/favicons?domain=runwayml.com&sz=128",
+  runwayml: "https://www.google.com/s2/favicons?domain=runwayml.com&sz=128",
+  "nano banana": "🍌",
+  "nano banana pro": "🍌",
+  banana: "🍌",
+  flux: "https://www.google.com/s2/favicons?domain=blackforestlabs.ai&sz=128",
+  "flux.1": "https://www.google.com/s2/favicons?domain=blackforestlabs.ai&sz=128",
+  "stable diffusion": "https://www.google.com/s2/favicons?domain=stability.ai&sz=128",
+  stability: "https://www.google.com/s2/favicons?domain=stability.ai&sz=128",
+  sdxl: "https://www.google.com/s2/favicons?domain=stability.ai&sz=128",
+  perplexity: "https://www.google.com/s2/favicons?domain=perplexity.ai&sz=128",
+  mistral: "https://www.google.com/s2/favicons?domain=mistral.ai&sz=128",
+  llama: "https://www.google.com/s2/favicons?domain=llama.meta.com&sz=128",
+  qwen: "https://www.google.com/s2/favicons?domain=qwenlm.github.io&sz=128",
 };
 
-const getToolLogo = (webName: string) => {
-  const name = webName?.toLowerCase();
-  if (name === "nano banana" || name === "nano banana pro") return "🍌";
-  return TOOL_LOGOS[name] ?? null;
+export const getToolLogo = (rawName?: string): string | null => {
+  if (!rawName) return null;
+  const name = rawName.trim().toLowerCase();
+  if (name.includes("banana")) return "🍌";
+  if (name.includes("midjourney") || name.includes("midjourny") || name.includes("mid-journey") || name.includes("mid journey") || name === "mj") {
+    return "/models/midjourney.svg";
+  }
+  if (name.includes("claude") || name.includes("anthropic")) {
+    return "/models/claude.svg";
+  }
+  if (name.includes("chatgpt") || name.includes("chat gpt") || name.includes("gpt") || name.includes("openai") || name.includes("dall") || name.includes("sora")) {
+    return "/models/chatgpt.svg";
+  }
+  if (name.includes("gemini") || name.includes("bard")) {
+    return "/models/gemini.svg";
+  }
+  if (name.includes("grok") || name.includes("xai")) {
+    return "/models/grok.svg";
+  }
+  if (name.includes("deepseek") || name.includes("deep seek")) {
+    return "/models/deepseek.svg";
+  }
+  if (name.includes("flux")) {
+    return "https://www.google.com/s2/favicons?domain=blackforestlabs.ai&sz=128";
+  }
+  if (name.includes("stable") || name.includes("sdxl") || name.includes("diffusion")) {
+    return "https://www.google.com/s2/favicons?domain=stability.ai&sz=128";
+  }
+  if (name.includes("runway")) {
+    return "https://www.google.com/s2/favicons?domain=runwayml.com&sz=128";
+  }
+  if (name.includes("perplexity")) {
+    return "https://www.google.com/s2/favicons?domain=perplexity.ai&sz=128";
+  }
+  if (name.includes("mistral")) {
+    return "https://www.google.com/s2/favicons?domain=mistral.ai&sz=128";
+  }
+  if (name.includes("llama") || name.includes("meta")) {
+    return "https://www.google.com/s2/favicons?domain=llama.meta.com&sz=128";
+  }
+  if (name.includes("qwen") || name.includes("alibaba")) {
+    return "https://www.google.com/s2/favicons?domain=qwenlm.github.io&sz=128";
+  }
+  if (TOOL_LOGOS[name]) return TOOL_LOGOS[name];
+  for (const [key, logo] of Object.entries(TOOL_LOGOS)) {
+    if (name.includes(key) || key.includes(name)) return logo;
+  }
+  const domainGuess = name.replace(/[^a-z0-9]/g, "");
+  return `https://www.google.com/s2/favicons?domain=${domainGuess}.com&sz=128`;
 };
 
+export const getPromptTools = (prompt: Prompt): DisplayTool[] => {
+  const tools: DisplayTool[] = [];
+  const seen = new Set<string>();
+
+  // 1. Check prompt.aiModel first (Admin panel adds this field)
+  if (prompt.aiModel && prompt.aiModel.trim()) {
+    const modelNames = prompt.aiModel.split(/[,/]/).map(m => m.trim()).filter(Boolean);
+    for (const name of modelNames) {
+      const lower = name.toLowerCase();
+      if (!seen.has(lower)) {
+        seen.add(lower);
+        tools.push({
+          name: name,
+          logo: getToolLogo(name)
+        });
+      }
+    }
+  }
+
+  // 2. Check prompt.recommended_tools (legacy / relational data)
+  if (prompt.recommended_tools && Array.isArray(prompt.recommended_tools)) {
+    for (const t of prompt.recommended_tools) {
+      const name = t.recommended_tools_id?.web_name || t.recommended_tools_id?.name;
+      if (name && name.trim()) {
+        const lower = name.trim().toLowerCase();
+        if (!seen.has(lower)) {
+          seen.add(lower);
+          tools.push({
+            name: name.trim(),
+            logo: getToolLogo(name.trim())
+          });
+        }
+      }
+    }
+  }
+
+  return tools;
+};
 
 const getUniqueTools = (tools?: RecommendedTool[]) => {
   if (!tools?.length) return [];
@@ -98,28 +209,37 @@ export const cardVariants: Variants = {
   }),
 };
 
+// Helper to remove any emojis from text
+export const cleanTitle = (title: string) => {
+  if (!title) return "";
+  return title.replace(/[\p{Extended_Pictographic}\uFE0F\u200D]/gu, "").trim();
+};
 
 interface PromptCardProps {
   prompt: Prompt;
   index?: number;
+  imageAspect?: string;
+  className?: string;
 }
 
-export function PromptCard({ prompt, index = 0 }: PromptCardProps) {
-  const { user, toggleSavedPrompt } = useAuth();
+export function PromptCard({ 
+  prompt, 
+  index = 0, 
+  imageAspect = "aspect-[16/9]", 
+  className = "" 
+}: PromptCardProps) {
+  const { toggleSavedPrompt, isPromptSaved } = useAuth();
+  const [views, setViews] = useState(prompt.views_count ?? 0);
   const imageUrl =
     prompt.example_output_image_url ?? prompt.example_output_image ?? null;
-  const uniqueTools = getUniqueTools(prompt.recommended_tools);
+  const tools = getPromptTools(prompt);
   
-  const promptId = prompt._id || prompt.id || '';
-  const isSaved = user?.savedPrompts?.includes(promptId);
+  const promptId = prompt._id || prompt.id || prompt.slug || '';
+  const isSaved = isPromptSaved(promptId) || (prompt.slug ? isPromptSaved(prompt.slug) : false);
 
   const handleSave = async (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    if (!user) {
-      alert("Please log in to save prompts.");
-      return;
-    }
     await toggleSavedPrompt(promptId);
   };
 
@@ -129,10 +249,10 @@ export function PromptCard({ prompt, index = 0 }: PromptCardProps) {
       variants={cardVariants}
       initial="hidden"
       animate="visible"
-      className="group relative flex flex-col rounded-xl bg-surface dark:bg-[#0D1117] border border-black/10 dark:border-white/10 hover:border-accent/60 transition-all duration-300 cursor-pointer overflow-hidden"
+      className={`group relative flex flex-col rounded-xl bg-surface dark:bg-[#0D1117] border border-black/10 dark:border-white/10 hover:border-accent/60 transition-all duration-300 cursor-pointer overflow-hidden ${className}`}
     >
       {/* ── Cover image ── */}
-      <div className="relative w-full aspect-[16/9] overflow-hidden shrink-0 bg-black/5 dark:bg-white/5 border-b border-black/5 dark:border-white/5">
+      <div className={`relative w-full ${imageAspect} overflow-hidden shrink-0 bg-black/5 dark:bg-white/5 border-b border-black/5 dark:border-white/5`}>
         {imageUrl ? (
           <Image
             src={imageUrl}
@@ -156,25 +276,33 @@ export function PromptCard({ prompt, index = 0 }: PromptCardProps) {
 
         {/* Top Badges */}
         <div className="absolute top-3 left-3 right-3 flex items-start justify-between pointer-events-none z-20">
-          <div className="flex flex-col gap-1.5 items-start">
-            {prompt.category ? (
-              <span className="inline-flex items-center gap-1 text-[11px] font-medium text-black/90 dark:text-white/90 bg-white/60 dark:bg-black/60 border border-black/10 dark:border-white/15 backdrop-blur-md px-2.5 py-0.5 rounded-md pointer-events-auto">
-                <Layers size={11} className="text-accent dark:text-accent" />
+          <div className="flex flex-wrap items-center gap-1.5 max-w-[80%] pointer-events-auto">
+            {prompt.category && (
+              <span className="inline-flex items-center gap-1.5 text-[11px] font-semibold text-white/95 bg-black/70 dark:bg-[#12141a]/90 border border-white/15 backdrop-blur-md px-2.5 py-1 rounded-lg shadow-sm">
+                <Layers size={11} className="text-accent" />
                 {prompt.category.name}
               </span>
-            ) : <div />}
+            )}
 
-            {prompt.is_premium && (
-              <span className="flex items-center gap-1 bg-amber-500/20 border border-amber-500/40 text-amber-300 text-[10px] font-bold px-2 py-0.5 rounded-md backdrop-blur-md pointer-events-auto">
-                <Crown size={10} />
-                PRO
+            {prompt.is_premium ? (
+              <span className="inline-flex items-center gap-1 text-[10px] font-bold tracking-wider uppercase text-accent bg-accent/15 border border-accent/40 px-2 py-1 rounded-lg backdrop-blur-md shadow-sm">
+                <Crown size={10} className="text-accent" />
+                {prompt.price || "PRO"}
+              </span>
+            ) : (
+              <span className="inline-flex items-center gap-1 text-[10px] font-bold tracking-wider uppercase text-white/90 dark:text-primary bg-black/70 dark:bg-[#12141a]/90 border border-white/15 px-2 py-1 rounded-lg backdrop-blur-md shadow-sm">
+                FREE
               </span>
             )}
           </div>
           
           <button 
             onClick={handleSave}
-            className={`p-2 rounded-full backdrop-blur-md transition-colors pointer-events-auto shadow-sm ${isSaved ? 'bg-red-500/20 text-red-500 hover:bg-red-500/30' : 'bg-white/60 dark:bg-black/60 text-black/70 dark:text-white/70 hover:bg-white/80 dark:hover:bg-black/80'}`}
+            className={`p-2 rounded-xl backdrop-blur-md transition-colors pointer-events-auto shadow-sm border ${
+              isSaved 
+                ? 'bg-red-500/20 border-red-500/40 text-red-500 hover:bg-red-500/30' 
+                : 'bg-black/60 dark:bg-[#12141a]/90 border-white/15 text-white/80 hover:text-white hover:bg-black/80'
+            }`}
             title={isSaved ? "Remove from Saved" : "Save Prompt"}
           >
             <Heart size={14} fill={isSaved ? "currentColor" : "none"} className={isSaved ? "text-red-500" : ""} />
@@ -186,8 +314,7 @@ export function PromptCard({ prompt, index = 0 }: PromptCardProps) {
       <div className="flex flex-col flex-1 p-4 gap-2.5">
         {/* Title */}
         <h3 className="font-semibold text-primary text-base leading-snug line-clamp-1 group-hover:text-accent transition-colors duration-200">
-          {prompt.icon && <span className="mr-1.5">{prompt.icon}</span>}
-          {prompt.page_name}
+          {cleanTitle(prompt.page_name)}
         </h3>
 
         {/* Description */}
@@ -196,46 +323,53 @@ export function PromptCard({ prompt, index = 0 }: PromptCardProps) {
         </p>
 
         {/* ── Footer row ── */}
-        <div className="flex items-center justify-between pt-3 mt-auto border-t border-black/5 dark:border-white/5">
-          {/* Tool avatars */}
-          <div className="flex items-center -space-x-1.5">
-            {uniqueTools.slice(0, 4).map((t) => {
-              const logo = getToolLogo(t.recommended_tools_id.web_name);
-              return (
-                <div
-                  key={t.recommended_tools_id.id}
-                  title={t.recommended_tools_id.web_name}
-                  className="w-5 h-5 rounded-full border border-black/10 dark:border-white/10 bg-white dark:bg-black/50 overflow-hidden flex items-center justify-center shrink-0 shadow-sm"
-                >
-                  {logo ? (
-                    logo.startsWith("http") ? (
-                      <Image src={logo} alt={t.recommended_tools_id.web_name} width={16} height={16} className="object-contain p-0.5" unoptimized />
+        <div className="flex items-center justify-between pt-3 mt-auto border-t border-black/5 dark:border-white/5 gap-2">
+          {/* Model logos only — no label */}
+          <div className="flex items-center gap-1.5 min-w-0 flex-1 overflow-hidden">
+            {tools.length > 0 ? (
+              <div className="flex items-center gap-1.5">
+                {tools.slice(0, 5).map((t, i) => (
+                  <div
+                    key={i}
+                    title={t.name}
+                    className="w-5.5 h-5.5 rounded-full bg-white dark:bg-white border border-black/10 dark:border-black/20 flex items-center justify-center shrink-0 overflow-hidden shadow-2xs hover:scale-110 transition-transform p-0.5"
+                  >
+                    {t.logo ? (
+                      t.logo.startsWith("http") || t.logo.startsWith("/") ? (
+                        <Image
+                          src={t.logo}
+                          alt={t.name}
+                          width={16}
+                          height={16}
+                          className="object-contain w-3.5 h-3.5 shrink-0"
+                          unoptimized
+                        />
+                      ) : (
+                        <span className="text-xs leading-none select-none">{t.logo}</span>
+                      )
                     ) : (
-                      <span className="text-[10px] leading-none select-none">{logo}</span>
-                    )
-                  ) : (
-                    <span className="text-[8px] font-bold text-muted">
-                      {t.recommended_tools_id.web_name[0]}
-                    </span>
-                  )}
-                </div>
-              );
-            })}
-            {uniqueTools.length === 0 && (
-              <span className="text-faint text-[10px]">—</span>
-            )}
+                      <span className="text-[9px] font-bold text-accent">{t.name[0]}</span>
+                    )}
+                  </div>
+                ))}
+                {tools.length > 5 && (
+                  <span className="text-[10px] text-muted font-medium">+{tools.length - 5}</span>
+                )}
+              </div>
+            ) : null}
           </div>
 
           {/* Views count */}
-          <div className="flex items-center gap-1 text-faint text-[11px] font-medium">
+          <div className="flex items-center gap-1 text-faint text-[11px] font-medium shrink-0 ml-1">
             <Eye size={12} />
-            <span>{(prompt.views_count ?? 0).toLocaleString()}</span>
+            <span>{views.toLocaleString()}</span>
           </div>
         </div>
 
         {/* ── Link overlay ── */}
         <Link
           href={`/prompt-library/${prompt.slug}`}
+          onClick={() => setViews(v => v + 1)}
           className="absolute inset-0 z-10"
           aria-label={`View prompt: ${prompt.page_name}`}
         />

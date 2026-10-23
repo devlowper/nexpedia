@@ -1,38 +1,12 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Eye, Crown, Heart, Share2 } from "lucide-react";
+import { Eye, Crown, Heart, Share2, Layers } from "lucide-react";
 import { motion } from "framer-motion";
-import { Prompt, cardVariants, getCategoryStyle } from "./PromptCard";
+import { Prompt, cardVariants, getCategoryStyle, cleanTitle, getPromptTools } from "./PromptCard";
 import { useAuth } from "@/hooks/useAuth";
-
-const TOOL_LOGOS: Record<string, string> = {
-  chatgpt: "https://upload.wikimedia.org/wikipedia/commons/0/04/ChatGPT_logo.svg",
-  gemini:  "https://upload.wikimedia.org/wikipedia/commons/8/8a/Google_Gemini_logo.svg",
-  claude:  "https://upload.wikimedia.org/wikipedia/commons/1/14/Anthropic_Claude_Logo.png",
-  grok:    "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Grok_logo.svg/1200px-Grok_logo.svg.png",
-  deepseek: "https://avatars.githubusercontent.com/u/148784381?s=200&v=4",
-  midjourney: "https://upload.wikimedia.org/wikipedia/commons/e/e6/Midjourney_Emblem.svg",
-};
-
-const getToolLogo = (webName: string) => {
-  const name = webName?.toLowerCase();
-  if (name === "nano banana" || name === "nano banana pro") return "🍌";
-  return TOOL_LOGOS[name] ?? null;
-};
-
-const getUniqueTools = (tools?: any[]) => {
-  if (!tools?.length) return [];
-  const seen = new Set<string>();
-  return tools.filter((t) => {
-    const key = t.recommended_tools_id?.web_name;
-    if (!key || seen.has(key)) return false;
-    seen.add(key);
-    return true;
-  });
-};
 
 interface DesignPromptCardProps {
   prompt: Prompt;
@@ -41,19 +15,16 @@ interface DesignPromptCardProps {
 }
 
 export function DesignPromptCard({ prompt, index = 0, masonry = false }: DesignPromptCardProps) {
-  const { user, toggleSavedPrompt } = useAuth();
+  const { toggleSavedPrompt, isPromptSaved } = useAuth();
+  const [views, setViews] = useState(prompt.views_count ?? 0);
+  const tools = getPromptTools(prompt);
   const imageUrl = prompt.example_output_image_url ?? prompt.example_output_image ?? null;
-  const uniqueTools = getUniqueTools(prompt.recommended_tools);
-  const promptId = prompt._id || prompt.id || '';
-  const isSaved = user?.savedPrompts?.includes(promptId);
+  const promptId = prompt._id || prompt.id || prompt.slug || '';
+  const isSaved = isPromptSaved(promptId) || (prompt.slug ? isPromptSaved(prompt.slug) : false);
 
   const handleSave = async (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    if (!user) {
-      alert("Please log in to save prompts.");
-      return;
-    }
     await toggleSavedPrompt(promptId);
   };
 
@@ -71,6 +42,8 @@ export function DesignPromptCard({ prompt, index = 0, masonry = false }: DesignP
           <img
             src={imageUrl}
             alt={prompt.page_name}
+            loading="lazy"
+            decoding="async"
             className="w-full h-auto block object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
           />
         ) : (
@@ -98,13 +71,25 @@ export function DesignPromptCard({ prompt, index = 0, masonry = false }: DesignP
       {/* ── Gradient Overlay for Text Readability ── */}
       <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-black/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
 
-      {/* ── Premium badge ── */}
-      {prompt.is_premium && (
-        <span className="absolute top-4 left-4 z-20 flex items-center gap-1 bg-amber-400/20 border border-amber-400/40 text-amber-300 text-[10px] font-bold px-2 py-0.5 rounded-full backdrop-blur-md opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-          <Crown size={10} />
-          PRO
-        </span>
-      )}
+      {/* ── Top Left Badges (Category & Pricing) ── */}
+      <div className="absolute top-4 left-4 z-20 flex items-center gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+        {prompt.category && (
+          <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-white/95 bg-black/60 border border-white/15 px-2 py-0.5 rounded-lg backdrop-blur-md">
+            <Layers size={10} className="text-accent" />
+            {prompt.category.name}
+          </span>
+        )}
+        {prompt.is_premium ? (
+          <span className="flex items-center gap-1 text-[10px] font-bold tracking-wider uppercase text-accent bg-accent/15 border border-accent/40 px-2 py-0.5 rounded-lg backdrop-blur-md shadow-sm">
+            <Crown size={10} className="text-accent" />
+            PRO
+          </span>
+        ) : (
+          <span className="flex items-center gap-1 text-[10px] font-bold tracking-wider uppercase text-white/90 dark:text-primary bg-black/70 dark:bg-[#12141a]/90 border border-white/15 px-2 py-0.5 rounded-lg backdrop-blur-md shadow-sm">
+            FREE
+          </span>
+        )}
+      </div>
 
       {/* ── Content (Visible only on hover) ── */}
       <div className="absolute inset-0 z-20 p-5 flex flex-col justify-between opacity-0 group-hover:opacity-100 translate-y-4 group-hover:translate-y-0 transition-all duration-300">
@@ -127,28 +112,39 @@ export function DesignPromptCard({ prompt, index = 0, masonry = false }: DesignP
         <div className="flex flex-col gap-2">
           {/* Title */}
           <h3 className="font-bold text-white text-lg leading-tight line-clamp-2 drop-shadow-md">
-            {prompt.icon && <span className="mr-2">{prompt.icon}</span>}
-            {prompt.page_name}
+            {cleanTitle(prompt.page_name)}
           </h3>
 
           {/* Footer row (Tools & Views) */}
           <div className="flex items-center justify-between mt-1">
-            {/* Tool tags */}
-            <div className="flex flex-wrap items-center gap-1.5">
-              {uniqueTools.slice(0, 3).map((t: any) => (
-                <span
-                  key={t.recommended_tools_id?.web_name}
-                  className="text-[10px] font-semibold text-white/90 bg-white/10 px-2 py-1 rounded-md backdrop-blur-sm border border-white/10"
+            {/* Tool logos only */}
+            <div className="flex items-center gap-1.5">
+              {tools.slice(0, 4).map((t: any, idx: number) => (
+                <div
+                  key={idx}
+                  title={t.name}
+                  className="w-6 h-6 rounded-full bg-white dark:bg-white border border-black/10 flex items-center justify-center shrink-0 overflow-hidden shadow-sm hover:scale-110 transition-transform p-0.5"
                 >
-                  {t.recommended_tools_id.web_name}
-                </span>
+                  {t.logo ? (
+                    t.logo.startsWith("http") || t.logo.startsWith("/") ? (
+                      <Image src={t.logo} alt={t.name} width={16} height={16} className="object-contain w-4 h-4 shrink-0" unoptimized />
+                    ) : (
+                      <span className="text-xs">{t.logo}</span>
+                    )
+                  ) : (
+                    <span className="text-[10px] font-bold text-accent">{t.name[0]}</span>
+                  )}
+                </div>
               ))}
+              {tools.length > 4 && (
+                <span className="text-[10px] text-white/80 font-medium">+{tools.length - 4}</span>
+              )}
             </div>
 
             {/* Views */}
-            <span className="flex items-center gap-1.5 text-white/80 text-xs font-medium bg-white/10 px-2 py-1 rounded-full backdrop-blur-sm border border-white/10">
+            <span className="flex items-center gap-1.5 text-white/90 text-xs font-medium bg-black/40 px-2.5 py-1 rounded-lg backdrop-blur-sm border border-white/15 shadow-sm">
               <Eye size={12} />
-              {(prompt.views_count ?? 0).toLocaleString()}
+              {views.toLocaleString()}
             </span>
           </div>
         </div>
@@ -157,6 +153,7 @@ export function DesignPromptCard({ prompt, index = 0, masonry = false }: DesignP
       {/* ── Hover CTA overlay ── */}
       <Link
         href={`/prompt-library/${prompt.slug}`}
+        onClick={() => setViews(v => v + 1)}
         className="absolute inset-0 z-30"
         aria-label={`View prompt: ${prompt.page_name}`}
       />

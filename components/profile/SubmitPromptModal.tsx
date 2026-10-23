@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X } from 'lucide-react';
+import { X, Crown, Sparkles, DollarSign } from 'lucide-react';
 import { api } from '@/lib/apiClient';
 
 interface SubmitPromptModalProps {
@@ -15,6 +15,8 @@ export function SubmitPromptModal({ isOpen, onClose }: SubmitPromptModalProps) {
   const [category, setCategory] = useState('Marketing');
   const [tags, setTags] = useState('');
   const [exampleOutput, setExampleOutput] = useState('');
+  const [pricingType, setPricingType] = useState<'free' | 'paid'>('free');
+  const [price, setPrice] = useState('Paid');
 
   if (!isOpen) return null;
 
@@ -22,13 +24,15 @@ export function SubmitPromptModal({ isOpen, onClose }: SubmitPromptModalProps) {
     e.preventDefault();
     setIsSubmitting(true);
     try {
-      await api.post('/api/submissions', {
+      await api.post('/api/submissions/submit', {
         title,
         description,
         content,
         category,
         tags: tags.split(',').map(t => t.trim()).filter(Boolean),
-        exampleOutput
+        exampleOutput,
+        is_premium: pricingType === 'paid',
+        price: pricingType === 'paid' ? (price || 'Paid') : 'Free',
       });
       // Optionally trigger a refresh or show success toast here
       setTitle('');
@@ -36,6 +40,8 @@ export function SubmitPromptModal({ isOpen, onClose }: SubmitPromptModalProps) {
       setContent('');
       setTags('');
       setExampleOutput('');
+      setPricingType('free');
+      setPrice('Paid');
       onClose();
     } catch (error) {
       console.error(error);
@@ -119,6 +125,58 @@ export function SubmitPromptModal({ isOpen, onClose }: SubmitPromptModalProps) {
                 <option value="Business">Business</option>
               </select>
             </div>
+          </div>
+
+          {/* Pricing Model (Free vs Paid PRO) */}
+          <div className="space-y-2">
+            <label className="block text-sm font-medium text-muted">Pricing Model</label>
+            <div className="grid grid-cols-2 gap-3">
+              <button
+                type="button"
+                onClick={() => setPricingType('free')}
+                className={`flex items-center justify-center gap-2 p-3 rounded-xl border text-sm font-semibold transition-all ${
+                  pricingType === 'free'
+                    ? 'bg-accent/15 border-accent/40 text-accent shadow-sm'
+                    : 'bg-surface border-border text-muted hover:border-border/80'
+                }`}
+              >
+                <Sparkles size={16} />
+                <span>Free Prompt</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setPricingType('paid')}
+                className={`flex items-center justify-center gap-2 p-3 rounded-xl border text-sm font-semibold transition-all ${
+                  pricingType === 'paid'
+                    ? 'bg-accent/15 border-accent/40 text-accent shadow-sm'
+                    : 'bg-surface border-border text-muted hover:border-border/80'
+                }`}
+              >
+                <Crown size={16} />
+                <span>Paid (PRO)</span>
+              </button>
+            </div>
+
+            {pricingType === 'paid' && (
+              <div className="pt-2 animate-in fade-in duration-200">
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted">
+                    <DollarSign size={15} />
+                  </div>
+                  <input
+                    type="text"
+                    value={price}
+                    onChange={(e) => setPrice(e.target.value)}
+                    placeholder="e.g. $4.99 or Paid / PRO"
+                    className="w-full bg-surface border border-accent/40 rounded-md pl-9 pr-4 py-2.5 text-sm text-primary focus:border-accent outline-none transition-colors"
+                  />
+                </div>
+                <p className="text-[11px] text-muted mt-1">
+                  PRO prompts show an exclusive PRO badge in the Prompt Library.
+                </p>
+              </div>
+            )}
           </div>
 
           <div>

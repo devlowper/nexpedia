@@ -6,6 +6,7 @@ import { GlassCard } from '@/components/ui/GlassCard';
 import { SkeletonCard } from '@/components/ui/SkeletonCard';
 import { ProductHuntMarquee } from '@/components/ui/ProductHuntMarquee';
 import { ScrollReveal } from '@/components/ui/ScrollReveal';
+import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 
@@ -383,15 +384,15 @@ function AIDirectoryContent() {
 
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-12">
-      <div className="text-center mb-10">
+    <div className="max-w-7xl mx-auto px-4 py-12 relative">
+      <ScrollReveal className="text-center mb-10 relative z-10">
         <h1 className="text-3xl md:text-4xl font-bold mb-4 text-primary">AI Directory</h1>
         <p className="text-muted max-w-2xl mx-auto">
           Explore the most comprehensive directory of creative AI tools, models, and platforms.
         </p>
-      </div>
+      </ScrollReveal>
 
-      <div className="flex flex-col items-center gap-6 mb-12 w-full">
+      <ScrollReveal delay={0.1} className="flex flex-col items-center gap-6 mb-12 w-full">
         <div className="w-full max-w-[500px] bg-surface border border-border rounded-full p-2 flex items-center shadow-lg transition-all focus-within:border-accent/30">
           <div className="pl-4 pr-2 text-muted">
             <Search size={20} />
@@ -419,7 +420,7 @@ function AIDirectoryContent() {
             ))}
           </div>
         </div>
-      </div>
+      </ScrollReveal>
 
       <ProductHuntMarquee />
 

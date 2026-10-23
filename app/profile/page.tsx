@@ -112,7 +112,7 @@ export default function ProfileDashboard() {
 
   useEffect(() => {
     if (user) {
-      api.get<any[]>('/api/submissions/me').then(setSubmissions).catch(console.error);
+      api.get<any[]>('/api/submissions/my-submissions').then(setSubmissions).catch(console.error);
       api.getSavedPrompts<any[]>().then(setSavedPrompts).catch(console.error);
     }
   }, [user?.id]);
@@ -172,7 +172,7 @@ export default function ProfileDashboard() {
       <aside className="w-full md:w-[280px] shrink-0 border-r border-border bg-surface/50 p-6 flex flex-col min-h-screen">
 
         <div className="mb-8 px-2 flex items-center gap-3">
-          <div className="w-8 h-8 rounded bg-accent flex items-center justify-center text-black font-black text-lg">N</div>
+          <div className="w-8 h-8 rounded-lg bg-accent flex items-center justify-center text-black font-black text-lg">N</div>
           <span className="font-bold text-lg">Nexpedia</span>
         </div>
 
@@ -361,7 +361,7 @@ export default function ProfileDashboard() {
 
                 <h3 className="text-2xl font-bold relative z-10 text-black dark:text-white">{profileUser.name}</h3>
                 <div className="mt-2 inline-flex items-center px-3 py-1 bg-accent/10 text-accent text-[11px] font-bold tracking-wider rounded-md border border-accent/10 relative z-10">
-                  #USER-10001
+                  @{profileUser.username || profileUser.email?.split('@')[0] || 'user'}
                 </div>
               </div>
 
@@ -418,9 +418,8 @@ export default function ProfileDashboard() {
                     <button className="w-10 h-10 rounded-full border border-border flex items-center justify-center hover:border-accent hover:text-accent transition-colors">
                       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
                     </button>
-                    <button className="w-10 h-10 rounded-full border border-accent/30 bg-accent/5 flex items-center justify-center text-accent"><Globe size={18} /></button>
-                    <button className="w-10 h-10 rounded-full border border-dashed border-border flex items-center justify-center hover:border-accent hover:text-accent transition-colors"><Plus size={18} /></button>
-                    <span className="text-xs font-medium text-muted ml-1">Add More</span>
+                    <button onClick={() => setIsEditModalOpen(true)} className="w-10 h-10 rounded-full border border-accent/30 bg-accent/5 flex items-center justify-center text-accent hover:bg-accent/10 transition-colors"><Globe size={18} /></button>
+                    <button onClick={() => setIsEditModalOpen(true)} className="w-10 h-10 rounded-full border border-dashed border-accent flex items-center justify-center text-accent hover:bg-accent/10 transition-colors"><Plus size={18} /></button>
                   </div>
                 </div>
 

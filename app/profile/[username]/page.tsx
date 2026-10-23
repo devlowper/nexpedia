@@ -13,7 +13,10 @@ import { api } from '@/lib/apiClient';
 
 import { ScrollReveal } from '@/components/ui/ScrollReveal';
 
-export default function PublicProfilePage({ params }: { params: { username: string } }) {
+export default function PublicProfilePage({ params }: { params: Promise<{ username: string }> }) {
+  const unwrappedParams = React.use(params);
+  const username = unwrappedParams.username;
+
   const [activeTab, setActiveTab] = useState('Prompts');
   const [profileUser, setProfileUser] = useState<any>(null);
   const [userPrompts, setUserPrompts] = useState<any[]>([]);
@@ -25,11 +28,11 @@ export default function PublicProfilePage({ params }: { params: { username: stri
       try {
         setLoading(true);
         // Fetch public profile
-        const profileResponse = await api.get<any>(`/api/users/profile/${params.username}`);
+        const profileResponse = await api.get<any>(`/api/users/profile/${username}`);
         setProfileUser(profileResponse);
 
         // Fetch prompts by author
-        const promptsResponse = await api.get<any>(`/api/prompts?author=${params.username}`);
+        const promptsResponse = await api.get<any>(`/api/prompts?author=${username}`);
         if (promptsResponse && promptsResponse.data) {
           setUserPrompts(promptsResponse.data);
         }
@@ -41,7 +44,7 @@ export default function PublicProfilePage({ params }: { params: { username: stri
       }
     };
     fetchData();
-  }, [params.username]);
+  }, [username]);
 
   if (loading) {
     return <div className="max-w-[1000px] mx-auto px-4 py-32 flex justify-center"><div className="animate-pulse flex items-center gap-2 font-semibold">Loading profile...</div></div>;
@@ -58,7 +61,7 @@ export default function PublicProfilePage({ params }: { params: { username: stri
 
   const mappedProfileUser = {
     name: profileUser.name || 'Guest User',
-    username: profileUser.username || params.username,
+    username: profileUser.username || username,
     bio: profileUser.bio || 'AI Creator & Prompt Engineer',
     location: profileUser.location || 'United States',
     website: profileUser.website || '',

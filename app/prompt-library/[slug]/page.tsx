@@ -9,23 +9,24 @@ import {
   BookOpen, Wrench, ChevronRight, Layers, Sparkles, Share2, Heart
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Prompt, PromptCard, cardVariants } from "@/components/prompts/PromptCard";
+import { Prompt, PromptCard, cardVariants, cleanTitle, getPromptTools } from "@/components/prompts/PromptCard";
 import { useAuth } from "@/hooks/useAuth";
+import { getApiBaseUrl } from "@/lib/apiClient";
 
 const API = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:5000";
 
 
-function BulletList({ text }: { text: string }) {
+function BulletList({ text, bulletColor = "text-accent" }: { text: string; bulletColor?: string }) {
   const lines = text
     .split(/\n+/)
     .map((l) => l.trim().replace(/^●\s*/, ""))
     .filter(Boolean);
 
   return (
-    <ul className="space-y-2">
+    <ul className="space-y-2.5">
       {lines.map((line, i) => (
-        <li key={i} className="flex gap-2 text-muted text-sm leading-relaxed">
-          <span className="text-accent mt-0.5 shrink-0">●</span>
+        <li key={i} className="flex gap-2.5 text-muted text-sm leading-relaxed">
+          <span className={`${bulletColor} mt-0.5 shrink-0 select-none`}>●</span>
           <span>{line}</span>
         </li>
       ))}
@@ -38,23 +39,26 @@ function SectionCard({
   icon: Icon,
   title,
   children,
-  accent,
+  iconBg = "bg-accent/10",
+  iconBorder = "border-accent/25",
+  iconColor = "text-accent",
 }: {
   icon: React.ElementType;
   title: string;
   children: React.ReactNode;
-  accent?: string;
+  iconBg?: string;
+  iconBorder?: string;
+  iconColor?: string;
 }) {
   return (
-    <div className="details-card p-5 flex flex-col gap-4">
-      <div className="flex items-center gap-2.5">
+    <div className="details-card p-5 md:p-6 flex flex-col gap-4">
+      <div className="flex items-center gap-3">
         <div
-          className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
-          style={{ background: accent ?? "rgba(204,255,0,0.12)", border: "1px solid rgba(204,255,0,0.2)" }}
+          className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 border ${iconBg} ${iconBorder}`}
         >
-          <Icon size={15} style={{ color: "var(--brand-solid)" }} />
+          <Icon size={16} className={iconColor} />
         </div>
-        <h2 className="font-semibold text-primary text-sm tracking-wide">{title}</h2>
+        <h2 className="font-bold text-primary text-sm tracking-wide">{title}</h2>
       </div>
       {children}
     </div>
@@ -155,16 +159,12 @@ function ShareButton({ title }: { title: string }) {
 }
 
 function SaveButton({ promptId }: { promptId: string }) {
-  const { user, toggleSavedPrompt } = useAuth();
-  const isSaved = user?.savedPrompts?.includes(promptId);
+  const { toggleSavedPrompt, isPromptSaved } = useAuth();
+  const isSaved = isPromptSaved(promptId);
 
   const handleSave = async (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    if (!user) {
-      alert("Please log in to save prompts.");
-      return;
-    }
     await toggleSavedPrompt(promptId);
   };
 
@@ -184,12 +184,7 @@ function SaveButton({ promptId }: { promptId: string }) {
 }
 
 
-const TOOL_LOGOS: Record<string, string> = {
-  chatgpt: "https://upload.wikimedia.org/wikipedia/commons/0/04/ChatGPT_logo.svg",
-  gemini:  "https://upload.wikimedia.org/wikipedia/commons/8/8a/Google_Gemini_logo.svg",
-  claude:  "https://upload.wikimedia.org/wikipedia/commons/1/14/Anthropic_Claude_Logo.png",
-  grok:    "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Grok_logo.svg/1200px-Grok_logo.svg.png",
-};
+
 
 
 function DetailSkeleton() {
@@ -219,9 +214,10 @@ export default function PromptDetailPage() {
     if (!slug) return;
     setLoading(true);
 
+    const baseUrl = getApiBaseUrl();
     Promise.all([
-      fetch(`${API}/api/prompts/${slug}`).then(r => r.json()),
-      fetch(`${API}/api/prompts/${slug}/related`).then(r => r.json()),
+      fetch(`${baseUrl}/api/prompts/${slug}`).then(r => r.json()),
+      fetch(`${baseUrl}/api/prompts/${slug}/related`).then(r => r.json()),
     ])
       .then(([pRes, rRes]) => {
         if (pRes.success)  setPrompt(pRes.data);
@@ -247,15 +243,7 @@ export default function PromptDetailPage() {
 
   const imageUrl = prompt.example_output_image_url ?? prompt.example_output_image ?? null;
 
-  const uniqueTools = (() => {
-    const seen = new Set<string>();
-    return (prompt.recommended_tools ?? []).filter(t => {
-      const k = t.recommended_tools_id?.web_name;
-      if (!k || seen.has(k)) return false;
-      seen.add(k);
-      return true;
-    });
-  })();
+  const tools = getPromptTools(prompt);
 
   return (
     <motion.div
@@ -284,16 +272,12 @@ export default function PromptDetailPage() {
       {/* ── Hero ── */}
       <div className="details-card overflow-hidden mb-6">
         {imageUrl && (
-          <div className="relative w-full h-64 md:h-80 overflow-hidden">
-            <Image
+          <div className="relative w-full aspect-video bg-black/5 dark:bg-white/5 flex items-center justify-center border-b border-border">
+            <img
               src={imageUrl}
               alt={prompt.page_name}
-              fill
-              className="object-cover"
-              unoptimized
-              priority
+              className="w-full h-full object-contain"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-elevated)] via-transparent to-transparent" />
           </div>
         )}
 
@@ -301,109 +285,179 @@ export default function PromptDetailPage() {
           {/* Badges row */}
           <div className="flex flex-wrap items-center gap-2 mb-4">
             {prompt.category && (
-              <span className="flex items-center gap-1 text-[10px] font-bold uppercase tracking-widest text-accent bg-accent/10 border border-accent/20 px-2.5 py-1 rounded-full">
-                <Layers size={9} /> {prompt.category.name}
+              <span className="inline-flex items-center gap-1.5 text-[11px] font-semibold text-accent bg-accent/10 border border-accent/25 px-2.5 py-1 rounded-lg">
+                <Layers size={11} /> {prompt.category.name}
               </span>
             )}
             {prompt.sub_category && (
-              <span className="text-[10px] font-semibold text-muted bg-black/5 dark:bg-white/5 border border-border px-2.5 py-1 rounded-full">
+              <span className="inline-flex items-center text-[11px] font-medium text-muted bg-black/20 dark:bg-white/5 border border-border px-2.5 py-1 rounded-lg">
                 {prompt.sub_category.name}
               </span>
             )}
-            {prompt.is_premium && (
-              <span className="flex items-center gap-1 text-[10px] font-bold text-amber-300 bg-amber-400/10 border border-amber-400/30 px-2.5 py-1 rounded-full">
-                <Crown size={9} /> PRO
+            {prompt.is_premium ? (
+              <span className="inline-flex items-center gap-1.5 text-[11px] font-bold tracking-wider uppercase text-accent bg-accent/15 border border-accent/35 px-2.5 py-1 rounded-lg shadow-sm">
+                <Crown size={11} className="text-accent" /> {prompt.price || "PRO"}
+              </span>
+            ) : (
+              <span className="inline-flex items-center gap-1.5 text-[11px] font-bold tracking-wider uppercase text-muted bg-black/5 dark:bg-white/5 border border-border px-2.5 py-1 rounded-lg shadow-sm">
+                FREE
               </span>
             )}
-            <span className="flex items-center gap-1 text-[10px] text-faint ml-auto">
-              <Eye size={11} />
+            <span className="flex items-center gap-1 text-[11px] text-faint ml-auto">
+              <Eye size={12} />
               {(prompt.views_count ?? 0).toLocaleString()} views
             </span>
           </div>
 
           {/* Title */}
           <h1 className="text-2xl md:text-3xl font-bold text-primary mb-3 leading-tight">
-            {prompt.icon && <span className="mr-2">{prompt.icon}</span>}
-            {prompt.page_name}
+            {cleanTitle(prompt.page_name)}
           </h1>
 
           {/* Description */}
           <p className="text-muted text-base leading-relaxed mb-6">{prompt.description}</p>
 
-          {/* Tools + CTA */}
-          <div className="flex flex-wrap items-center gap-4">
-            {/* Recommended tools */}
-            {uniqueTools.length > 0 && (
-              <div className="flex items-center gap-2">
-                <span className="text-xs text-faint">Works with:</span>
-                {uniqueTools.map(t => {
-                  const logo = TOOL_LOGOS[t.recommended_tools_id.web_name?.toLowerCase()];
-                  return (
-                    <div
-                      key={t.recommended_tools_id.id}
-                      title={t.recommended_tools_id.name}
-                      className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-black/5 dark:bg-white/5 border border-border text-xs text-muted"
-                    >
-                      {logo && (
-                        <Image src={logo} alt="" width={14} height={14} className="object-contain" unoptimized />
-                      )}
-                      {t.recommended_tools_id.web_name}
-                    </div>
-                  );
-                })}
-              </div>
-            )}
-
-            {/* Copy button */}
-            {prompt.prompt_body && (
-              <div className="ml-auto flex items-center gap-2 sm:gap-3">
-                <SaveButton promptId={prompt._id || prompt.id || ''} />
-                <ShareButton title={prompt.page_name} />
-                <CopyButton text={prompt.prompt_body} />
-              </div>
-            )}
-          </div>
+          {/* Action buttons */}
+          {prompt.prompt_body && (
+            <div className="flex items-center justify-end gap-2 sm:gap-3">
+              <SaveButton promptId={prompt._id || prompt.id || ''} />
+              <ShareButton title={prompt.page_name} />
+              <CopyButton text={prompt.prompt_body} />
+            </div>
+          )}
         </div>
       </div>
 
       {/* ── Info sections ── */}
       <div className="grid grid-cols-1 gap-4 mb-6">
+        {/* Works with small card */}
+        {tools.length > 0 && (
+          <div className="details-card p-4 md:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div className="flex flex-wrap items-center gap-3.5">
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-xl flex items-center justify-center bg-accent/10 border border-accent/25 shadow-2xs">
+                  <Wrench size={15} className="text-accent" />
+                </div>
+                <span className="text-xs font-bold text-primary tracking-wide uppercase">
+                  Works with:
+                </span>
+              </div>
+              <div className="flex flex-wrap items-center gap-2">
+                {tools.map((t, idx) => (
+                  <div
+                    key={idx}
+                    className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-black/5 dark:bg-white/5 border border-border text-xs font-semibold text-primary shadow-xs hover:border-accent/40 transition-colors"
+                  >
+                    {t.logo && (
+                      t.logo.startsWith("http") || t.logo.startsWith("/") ? (
+                        <Image
+                          src={t.logo}
+                          alt={t.name}
+                          width={16}
+                          height={16}
+                          className="object-contain w-4 h-4 shrink-0 rounded-xs"
+                          unoptimized
+                        />
+                      ) : (
+                        <span className="text-sm leading-none">{t.logo}</span>
+                      )
+                    )}
+                    <span>{t.name}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
         {prompt.what_this_prompt_does && (
-          <SectionCard icon={Sparkles} title="What This Prompt Does">
-            <BulletList text={prompt.what_this_prompt_does} />
+          <SectionCard
+            icon={Sparkles}
+            title="What This Prompt Does"
+            iconBg="bg-accent/10"
+            iconBorder="border-accent/25"
+            iconColor="text-accent"
+          >
+            <BulletList text={prompt.what_this_prompt_does} bulletColor="text-accent" />
           </SectionCard>
         )}
 
         {prompt.tips && (
-          <SectionCard icon={Lightbulb} title="Tips for This Prompt" accent="rgba(250,204,21,0.12)">
-            <BulletList text={prompt.tips} />
+          <SectionCard
+            icon={Lightbulb}
+            title="Tips for This Prompt"
+            iconBg="bg-amber-500/10"
+            iconBorder="border-amber-500/25"
+            iconColor="text-amber-400"
+          >
+            <BulletList text={prompt.tips} bulletColor="text-amber-400" />
           </SectionCard>
         )}
 
         {prompt.how_to_use_the_prompt && (
-          <SectionCard icon={BookOpen} title="How to Use the Prompt" accent="rgba(96,165,250,0.12)">
-            <BulletList text={prompt.how_to_use_the_prompt} />
+          <SectionCard
+            icon={BookOpen}
+            title="How to Use the Prompt"
+            iconBg="bg-blue-500/10"
+            iconBorder="border-blue-500/25"
+            iconColor="text-blue-400"
+          >
+            <BulletList text={prompt.how_to_use_the_prompt} bulletColor="text-blue-400" />
           </SectionCard>
         )}
       </div>
 
       {/* ── Prompt body ── */}
-      {prompt.prompt_body && (
-        <div className="details-card p-5 mb-10">
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-accent/10 border border-accent/20">
-                <Wrench size={15} className="text-accent" />
+      {prompt.prompt_body && (() => {
+        const hasNegative = /negative\s+prompt\s*:/i.test(prompt.prompt_body);
+        let positivePrompt = prompt.prompt_body;
+        let negativePrompt = "";
+
+        if (hasNegative) {
+          const parts = prompt.prompt_body.split(/negative\s+prompt\s*:\s*/i);
+          positivePrompt = parts[0]?.trim();
+          negativePrompt = parts[1]?.trim();
+        }
+
+        return (
+          <div className="space-y-4 mb-10">
+            <div className="details-card p-5 md:p-6">
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-9 h-9 rounded-xl flex items-center justify-center bg-accent/10 border border-accent/25">
+                    <Wrench size={16} className="text-accent" />
+                  </div>
+                  <h2 className="font-bold text-primary text-sm">The Prompt</h2>
+                </div>
+                <CopyButton text={positivePrompt} />
               </div>
-              <h2 className="font-semibold text-primary text-sm">The Prompt</h2>
+              <pre className="text-muted text-xs leading-relaxed whitespace-pre-wrap font-mono overflow-x-auto bg-black/20 p-4 rounded-xl border border-border max-h-96 overflow-y-auto">
+                {positivePrompt}
+              </pre>
             </div>
-            <CopyButton text={prompt.prompt_body} />
+
+            {negativePrompt && (
+              <div className="details-card p-5 md:p-6 border-red-500/20">
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-9 h-9 rounded-xl flex items-center justify-center bg-red-500/10 border border-red-500/25">
+                      <span className="text-red-400 text-xs font-bold font-mono">NEG</span>
+                    </div>
+                    <div>
+                      <h2 className="font-bold text-primary text-sm">Negative Prompt</h2>
+                      <p className="text-[11px] text-muted">What to avoid / exclude from generation</p>
+                    </div>
+                  </div>
+                  <CopyButton text={negativePrompt} />
+                </div>
+                <pre className="text-red-300/80 text-xs leading-relaxed whitespace-pre-wrap font-mono overflow-x-auto bg-red-950/20 p-4 rounded-xl border border-red-500/20 max-h-60 overflow-y-auto">
+                  {negativePrompt}
+                </pre>
+              </div>
+            )}
           </div>
-          <pre className="text-muted text-xs leading-relaxed whitespace-pre-wrap font-mono overflow-x-auto bg-black/20 p-4 rounded-lg border border-border max-h-96 overflow-y-auto">
-            {prompt.prompt_body}
-          </pre>
-        </div>
-      )}
+        );
+      })()}
 
       {/* ── Related prompts ── */}
       {related.length > 0 && (

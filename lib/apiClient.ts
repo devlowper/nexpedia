@@ -1,4 +1,17 @@
-export const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+export const getApiBaseUrl = (): string => {
+  if (typeof window !== 'undefined') {
+    const hostname = window.location.hostname;
+    if (hostname && hostname !== 'localhost' && hostname !== '127.0.0.1') {
+      const configured = process.env.NEXT_PUBLIC_API_URL;
+      if (!configured || configured.includes('localhost') || configured.includes('127.0.0.1')) {
+        return `http://${hostname}:5000`;
+      }
+    }
+  }
+  return process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+};
+
+export const API_BASE_URL = getApiBaseUrl();
 
 class ApiClient {
   private getHeaders(): HeadersInit {
@@ -18,7 +31,8 @@ class ApiClient {
   }
 
   async get<T>(endpoint: string): Promise<T> {
-    const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+    const baseUrl = getApiBaseUrl();
+    const response = await fetch(`${baseUrl}${endpoint}`, {
       method: 'GET',
       headers: this.getHeaders(),
     });
@@ -26,7 +40,8 @@ class ApiClient {
   }
 
   async post<T>(endpoint: string, data: any): Promise<T> {
-    const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+    const baseUrl = getApiBaseUrl();
+    const response = await fetch(`${baseUrl}${endpoint}`, {
       method: 'POST',
       headers: this.getHeaders(),
       body: JSON.stringify(data),
@@ -35,7 +50,8 @@ class ApiClient {
   }
 
   async put<T>(endpoint: string, data: any): Promise<T> {
-    const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+    const baseUrl = getApiBaseUrl();
+    const response = await fetch(`${baseUrl}${endpoint}`, {
       method: 'PUT',
       headers: this.getHeaders(),
       body: JSON.stringify(data),
@@ -44,7 +60,8 @@ class ApiClient {
   }
 
   async delete<T>(endpoint: string): Promise<T> {
-    const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+    const baseUrl = getApiBaseUrl();
+    const response = await fetch(`${baseUrl}${endpoint}`, {
       method: 'DELETE',
       headers: this.getHeaders(),
     });

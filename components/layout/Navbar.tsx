@@ -12,12 +12,16 @@ import { cn } from '@/lib/utils';
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [userDropdownOpen, setUserDropdownOpen] = useState(false);
   const [authModal, setAuthModal] = useState<{ open: boolean; view: 'login' | 'signup' }>({ open: false, view: 'login' });
+  const [notificationsOpen, setNotificationsOpen] = useState(false);
+  const [notifications, setNotifications] = useState<any[]>([]);
+  
   const pathname = usePathname();
   const { isDark, toggle } = useTheme();
   const { user, isLoggedIn, isLoading, logout } = useAuth();
-  const dropdownRef = useRef<HTMLDivElement>(null);
+  
+  const notifRef = useRef<HTMLDivElement>(null);
+  const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
@@ -25,22 +29,63 @@ export function Navbar() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Close dropdown on outside click
+  // Close dropdowns on outside click
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
-        setUserDropdownOpen(false);
+      if (notifRef.current && !notifRef.current.contains(e.target as Node)) {
+        setNotificationsOpen(false);
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
+  useEffect(() => {
+    if (isLoggedIn) {
+      const fetchNotifs = async () => {
+        try {
+          const token = sessionStorage.getItem('token');
+          if (!token) return;
+          const res = await fetch(`${API}/api/users/notifications`, {
+            headers: { Authorization: `Bearer ${token}` }
+          });
+          const data = await res.json();
+          if (data.success) {
+            setNotifications(data.data);
+          }
+        } catch (err) {
+          console.error(err);
+        }
+      };
+      fetchNotifs();
+      const interval = setInterval(fetchNotifs, 30000); // Check every 30s
+      return () => clearInterval(interval);
+    } else {
+      setNotifications([]);
+    }
+  }, [isLoggedIn]);
+
+  const markAsRead = async (id: string) => {
+    try {
+      const token = sessionStorage.getItem('token');
+      if (!token) return;
+      await fetch(`${API}/api/users/notifications/${id}/read`, {
+        method: 'PUT',
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setNotifications(prev => prev.map(n => n._id === id ? { ...n, isRead: true } : n));
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const unreadCount = notifications.filter(n => !n.isRead).length;
+
   const links = [
     { name: 'Home', href: '/' },
     { name: 'Prompt Library', href: '/prompt-library' },
     { name: 'AI Directory', href: '/ai-directory' },
-    { name: 'Agent Builder', href: '/agent-builder' },
+    { name: 'Img to Prompt', href: '/image-to-prompt' },
   ];
 
   const openLogin = () => setAuthModal({ open: true, view: 'login' });
@@ -49,7 +94,6 @@ export function Navbar() {
 
   const handleLogout = async () => {
     await logout();
-    setUserDropdownOpen(false);
   };
 
   // Avatar initial
@@ -66,8 +110,8 @@ export function Navbar() {
         <div className="max-w-7xl mx-auto px-4 h-full flex items-center justify-between">
 
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2 group">
-            <div className="w-8 h-8 rounded flex items-center justify-center bg-accent text-black font-black text-xl">
+          <Link href="/" className="flex items-center gap-2 group" title="Nexpedia - AI Prompt Library & Directory">
+            <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-accent text-black font-black text-xl shadow-sm">
               N
             </div>
             <span className="font-bold text-lg tracking-tight">
@@ -119,74 +163,68 @@ export function Navbar() {
             ) : (
               <div className="flex items-center gap-3">
                 {/* Notification bell */}
-                <button className="text-muted hover:text-primary transition-colors relative">
-                  <Bell size={20} />
-                  <span className="absolute top-0 right-0 w-2 h-2 bg-accent rounded-full" />
-                </button>
-
-                {/* User Avatar + Dropdown */}
-                <div className="relative" ref={dropdownRef}>
-                  <button
-                    id="navbar-user-btn"
-                    onClick={() => setUserDropdownOpen(!userDropdownOpen)}
-                    className="w-8 h-8 rounded-full gradient-pink flex items-center justify-center text-black font-bold text-sm border border-[rgba(255,51,102,0.3)] transition-all hover:scale-105"
-                    title={user?.name}
+                <div className="relative" ref={notifRef}>
+                  <button 
+                    onClick={() => setNotificationsOpen(!notificationsOpen)}
+                    className="text-muted hover:text-primary transition-colors relative flex items-center justify-center p-1"
                   >
-                    {initial}
+                    <Bell size={20} />
+                    {unreadCount > 0 && (
+                      <span className="absolute top-0 right-0 w-2.5 h-2.5 bg-accent rounded-full border-[1.5px] border-[var(--bg-base)] flex items-center justify-center" />
+                    )}
                   </button>
-
-                  {userDropdownOpen && (
-                    <div className="absolute right-0 mt-2 w-52 rounded-xl py-2 shadow-2xl animate-in slide-in-from-top-2 fade-in duration-150"
+                  
+                  {notificationsOpen && (
+                    <div className="absolute right-0 mt-2 w-72 rounded-xl py-2 shadow-2xl animate-in slide-in-from-top-2 fade-in duration-150 max-h-96 overflow-y-auto"
                       style={{
                         background: 'var(--bg-elevated)',
                         border: '1px solid var(--border)',
                         backdropFilter: 'blur(20px)',
                       }}>
-                      {/* User info header */}
-                      <div className="px-4 py-2.5 border-b mb-1" style={{ borderColor: 'var(--border)' }}>
-                        <div className="font-semibold text-sm truncate" style={{ color: 'var(--text-primary)' }}>{user?.name}</div>
-                        <div className="text-xs truncate mt-0.5" style={{ color: 'var(--text-muted)' }}>{user?.email}</div>
+                      <div className="px-4 py-2 border-b font-semibold text-sm" style={{ borderColor: 'var(--border)' }}>
+                        Notifications
                       </div>
-
-                      <Link href="/profile" onClick={() => setUserDropdownOpen(false)}
-                        className="flex items-center gap-2 px-4 py-2 text-sm transition-colors"
-                        style={{ color: 'var(--text-muted)' }}
-                        onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(255,255,255,0.04)')}
-                        onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}>
-                        <UserIcon size={15} /> Profile
-                      </Link>
-
-                      <Link href="/profile" onClick={() => setUserDropdownOpen(false)}
-                        className="flex items-center gap-2 px-4 py-2 text-sm transition-colors"
-                        style={{ color: 'var(--text-muted)' }}
-                        onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(255,255,255,0.04)')}
-                        onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}>
-                        <Settings size={15} /> Settings
-                      </Link>
-
-                      <button onClick={toggle}
-                        className="w-full flex items-center gap-2 px-4 py-2 text-sm transition-colors"
-                        style={{ color: 'var(--text-muted)' }}
-                        onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(255,255,255,0.04)')}
-                        onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}>
-                        {isDark ? <Sun size={15} /> : <Moon size={15} />}
-                        {isDark ? 'Light Mode' : 'Dark Mode'}
-                      </button>
-
-                      <div className="h-px my-1" style={{ background: 'var(--border)' }} />
-
-                      <button
-                        id="navbar-logout-btn"
-                        onClick={handleLogout}
-                        className="w-full flex items-center gap-2 px-4 py-2 text-sm transition-colors"
-                        style={{ color: '#f87171' }}
-                        onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(239,68,68,0.06)')}
-                        onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}>
-                        <LogOut size={15} /> Sign Out
-                      </button>
+                      {notifications.length === 0 ? (
+                        <div className="px-4 py-4 text-center text-xs" style={{ color: 'var(--text-muted)' }}>
+                          No notifications yet.
+                        </div>
+                      ) : (
+                        notifications.map(n => (
+                          <div 
+                            key={n._id} 
+                            className={`px-4 py-3 border-b last:border-b-0 cursor-pointer transition-colors ${!n.isRead ? 'bg-accent/5' : ''}`}
+                            style={{ borderColor: 'var(--border)' }}
+                            onClick={() => !n.isRead && markAsRead(n._id)}
+                          >
+                            <div className="flex items-center justify-between mb-1">
+                              <span className="font-bold text-sm truncate" style={{ color: 'var(--text-primary)' }}>{n.title}</span>
+                              {!n.isRead && <span className="w-2 h-2 rounded-full bg-accent flex-shrink-0 ml-2" />}
+                            </div>
+                            <div className="text-xs line-clamp-2" style={{ color: 'var(--text-muted)' }}>{n.message}</div>
+                            <div className="text-[10px] mt-1" style={{ color: 'var(--text-muted)' }}>
+                              {new Date(n.createdAt).toLocaleDateString()}
+                            </div>
+                          </div>
+                        ))
+                      )}
                     </div>
                   )}
                 </div>
+
+                {/* Dark Mode Toggle */}
+                <button onClick={toggle} className="text-muted hover:text-primary transition-colors" title="Toggle Theme">
+                  {isDark ? <Sun size={20} /> : <Moon size={20} />}
+                </button>
+
+                {/* User Avatar */}
+                <Link
+                  id="navbar-user-btn"
+                  href="/profile"
+                  className="w-8 h-8 rounded-full gradient-pink flex items-center justify-center text-black font-bold text-sm border border-[rgba(255,51,102,0.3)] transition-all hover:scale-105 ml-1"
+                  title={`${user?.name} (Profile)`}
+                >
+                  {initial}
+                </Link>
               </div>
             )}
           </div>

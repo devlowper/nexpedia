@@ -6,30 +6,50 @@ import Link from "next/link";
 import { Search, ArrowRight } from "lucide-react";
 import { PromptCard, Prompt } from "@/components/prompts/PromptCard";
 import { DesignPromptCard } from "@/components/prompts/DesignPromptCard";
+import { LatestPromptsSection } from "@/components/prompts/LatestPromptsSection";
 import { SkeletonCard } from "@/components/ui/SkeletonCard";
-import { PromptEnhancer } from "@/components/home/PromptEnhancer";
+import { ImageToPromptSection } from "@/components/prompts/ImageToPromptSection";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
 
 const MARQUEE_TOOLS = [
-  { name: "ChatGPT", logo: "https://www.google.com/s2/favicons?domain=chatgpt.com&sz=128", color: "#10a37f" },
-  { name: "Claude", logo: "https://www.google.com/s2/favicons?domain=claude.ai&sz=128", color: "#d97706" },
-  { name: "DeepSeek", logo: "https://www.google.com/s2/favicons?domain=deepseek.com&sz=128", color: "#3b82f6" },
-  { name: "Gemini", logo: "https://www.google.com/s2/favicons?domain=gemini.google.com&sz=128", color: "#1a73e8" },
-  { name: "Grok", logo: "https://www.google.com/s2/favicons?domain=x.com&sz=128", color: "#ffffff" },
-  { name: "Midjourney", logo: "https://www.google.com/s2/favicons?domain=midjourney.com&sz=128", color: "#8b5cf6" },
+  { name: "ChatGPT", logo: "/models/chatgpt.svg", color: "#10a37f" },
+  { name: "Claude", logo: "/models/claude.svg", color: "#d97706" },
+  { name: "DeepSeek", logo: "/models/deepseek.svg", color: "#3b82f6" },
+  { name: "Gemini", logo: "/models/gemini.svg", color: "#1a73e8" },
+  { name: "Grok", logo: "/models/grok.svg", color: "#ffffff" },
+  { name: "Midjourney", logo: "/models/midjourney.svg", color: "#8b5cf6" },
   { name: "Nano Banana", emoji: "🍌", color: "#f9c22e" },
 ];
+
+import { getApiBaseUrl } from "@/lib/apiClient";
 
 const API = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:5000";
 const CATEGORY_ORDER = ["Design", "Business", "Marketing", "Writing", "Coding", "Education", "Health", "Finance"];
 
+
+function useLatestPrompts() {
+  const [prompts, setPrompts] = useState<Prompt[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch(`${getApiBaseUrl()}/api/prompts/latest`)
+      .then(res => res.json())
+      .then(json => {
+        if (json.success) setPrompts(json.data || []);
+      })
+      .catch(console.error)
+      .finally(() => setLoading(false));
+  }, []);
+
+  return { prompts, loading };
+}
 
 function useGroupedPrompts() {
   const [grouped, setGrouped] = useState<Record<string, Prompt[]>>({});
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch(`${API}/api/prompts/grouped`)
+    fetch(`${getApiBaseUrl()}/api/prompts/grouped`)
       .then(res => res.json())
       .then(json => {
         if (json.success) setGrouped(json.data || {});
@@ -52,7 +72,7 @@ function useSearchPrompts(query: string) {
     }
     setLoading(true);
     const delay = setTimeout(() => {
-      fetch(`${API}/api/prompts?search=${encodeURIComponent(query)}&limit=20`)
+      fetch(`${getApiBaseUrl()}/api/prompts?search=${encodeURIComponent(query)}&limit=20`)
         .then(res => res.json())
         .then(json => {
           if (json.success) setResults(json.data || []);
@@ -146,6 +166,7 @@ function PromptLibraryContent() {
     router.replace(`${pathname}?${params.toString()}`);
   };
 
+  const { prompts: latestPrompts, loading: latestLoading } = useLatestPrompts();
   const { grouped, loading: groupedLoading } = useGroupedPrompts();
   const { results: searchResults, loading: searchLoading } = useSearchPrompts(search);
 
@@ -154,9 +175,9 @@ function PromptLibraryContent() {
   return (
     <div className="max-w-7xl mx-auto px-4 py-12 relative overflow-hidden">
 
-      {/* ── Prompt Enhancer ── */}
-      <ScrollReveal variant="fade" className="w-full mb-12 relative z-10">
-        <PromptEnhancer />
+      {/* ── Image to Prompt Converter ── */}
+      <ScrollReveal variant="fade" className="w-full mb-16 relative z-10">
+        <ImageToPromptSection />
       </ScrollReveal>
 
       {/* ── Hero header ── */}
@@ -171,7 +192,7 @@ function PromptLibraryContent() {
       </div>
 
       {/* ── AI Tools Infinite Scroll Marquee ── */}
-      <div className="w-full mb-12 glass-card-solid p-6 md:p-8 relative z-10">
+      <div className="w-full mb-12 relative z-10">
         <p className="text-center text-xs font-bold text-muted mb-4 uppercase tracking-[0.25em]">
           Explore by AI Tool
         </p>
@@ -185,10 +206,10 @@ function PromptLibraryContent() {
                 style={{ "--tool-color": tool.color } as React.CSSProperties}
               >
                 <div className="w-5 h-5 rounded-full flex items-center justify-center overflow-hidden shrink-0 bg-black/10">
-                  {tool.logo ? (
-                    <img src={tool.logo} alt={tool.name} width={16} height={16} className="object-contain" />
+                  {(tool as any).logo ? (
+                    <img src={(tool as any).logo} alt={tool.name} width={16} height={16} className="object-contain" />
                   ) : (
-                    <span className="text-[12px] leading-none">{tool.emoji}</span>
+                    <span className="text-[12px] leading-none">{(tool as any).emoji}</span>
                   )}
                 </div>
                 <span className="text-primary text-xs font-semibold tracking-wide">
@@ -239,8 +260,14 @@ function PromptLibraryContent() {
             )}
           </div>
         ) : (
-          /* MIXED LAYOUT CATEGORY SECTIONS */
+          /* NORMAL LIBRARY VIEW */
           <div className="space-y-20">
+            {/* ── Latest Prompts section (above categories) ── */}
+            <ScrollReveal variant="slide-up" duration={0.5}>
+              <LatestPromptsSection prompts={latestPrompts} loading={latestLoading} />
+            </ScrollReveal>
+
+            {/* ── Category sections ── */}
             {groupedLoading ? (
               Array.from({ length: 3 }).map((_, i) => (
                 <div key={i} className="space-y-4">
@@ -251,7 +278,7 @@ function PromptLibraryContent() {
                 </div>
               ))
             ) : (
-              CATEGORY_ORDER.map((category, idx) => {
+              CATEGORY_ORDER.map((category) => {
                 const prompts = grouped[category];
                 if (!prompts || prompts.length === 0) return null;
                 

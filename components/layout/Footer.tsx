@@ -7,8 +7,8 @@ import { usePathname } from 'next/navigation';
 export function Footer() {
   const pathname = usePathname();
 
-  // Hide footer on agent-builder page for full-screen experience
-  if (pathname?.startsWith('/agent-builder')) {
+  // Hide footer on image-to-prompt, agent-builder and profile pages for full-screen experience
+  if (pathname?.startsWith('/image-to-prompt') || pathname?.startsWith('/agent-builder') || pathname?.startsWith('/profile')) {
     return null;
   }
 
@@ -19,8 +19,8 @@ export function Footer() {
           
           {/* Left Column (Brand & Newsletter) */}
           <div className="md:col-span-5 flex flex-col items-start">
-            <Link href="/" className="flex items-center gap-2 group mb-6">
-              <div className="w-8 h-8 rounded flex items-center justify-center bg-accent text-black font-black text-xl">
+            <Link href="/" className="flex items-center gap-2 group mb-6" title="Nexpedia - AI Prompt Library">
+              <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-accent text-black font-black text-xl shadow-sm">
                 N
               </div>
               <span className="font-bold text-xl tracking-tight text-black dark:text-white">
@@ -60,9 +60,13 @@ export function Footer() {
             <div>
               <h4 className="font-semibold text-black dark:text-white mb-6 text-sm">Quick links</h4>
               <ul className="space-y-4">
-                {['Features', 'Use Cases', 'Social proof', 'Numbers', 'AI Suggestions'].map((item) => (
-                  <li key={item}>
-                    <Link href="#" className="text-gray-500 dark:text-gray-400 text-sm hover:text-black dark:hover:text-white transition-colors">{item}</Link>
+                {[
+                  { name: 'Prompt Library', path: '/prompt-library' },
+                  { name: 'AI Directory', path: '/ai-directory' },
+                  { name: 'Img to Prompt', path: '/image-to-prompt' }
+                ].map((item) => (
+                  <li key={item.name}>
+                    <Link href={item.path} className="text-gray-500 dark:text-gray-400 text-sm hover:text-black dark:hover:text-white transition-colors">{item.name}</Link>
                   </li>
                 ))}
               </ul>
@@ -72,11 +76,17 @@ export function Footer() {
             <div>
               <h4 className="font-semibold text-black dark:text-white mb-6 text-sm">Pages</h4>
               <ul className="space-y-4">
-                {['About', 'Waitlist', 'Changelog', 'Error 404'].map((item) => (
-                  <li key={item}>
-                    <Link href="#" className="text-gray-500 dark:text-gray-400 text-sm hover:text-black dark:hover:text-white transition-colors">{item}</Link>
-                  </li>
-                ))}
+                {['About', 'Blog'].map((item) => {
+                  let href = "#";
+                  if (item === 'Blog') href = '/blog';
+                  if (item === 'About') href = '/about';
+                  
+                  return (
+                    <li key={item}>
+                      <Link href={href} className="text-gray-500 dark:text-gray-400 text-sm hover:text-black dark:hover:text-white transition-colors">{item}</Link>
+                    </li>
+                  );
+                })}
               </ul>
             </div>
 
@@ -84,11 +94,18 @@ export function Footer() {
             <div>
               <h4 className="font-semibold text-black dark:text-white mb-6 text-sm">Support</h4>
               <ul className="space-y-4">
-                {['FAQs', 'Contact', 'Privacy Policy', 'Terms & Conditions'].map((item) => (
-                  <li key={item}>
-                    <Link href="#" className="text-gray-500 dark:text-gray-400 text-sm hover:text-black dark:hover:text-white transition-colors">{item}</Link>
-                  </li>
-                ))}
+                {['FAQs', 'Contact', 'Privacy Policy', 'Terms & Conditions'].map((item) => {
+                  let href = "#";
+                  if (item === 'Contact') href = '/contact';
+                  if (item === 'Privacy Policy') href = '/privacy';
+                  if (item === 'Terms & Conditions') href = '/terms';
+                  
+                  return (
+                    <li key={item}>
+                      <Link href={href} className="text-gray-500 dark:text-gray-400 text-sm hover:text-black dark:hover:text-white transition-colors">{item}</Link>
+                    </li>
+                  );
+                })}
               </ul>
             </div>
           </div>
@@ -98,7 +115,7 @@ export function Footer() {
         {/* Bottom Section */}
         <div className="border-t border-gray-200 dark:border-zinc-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-6">
           <p className="text-gray-500 dark:text-gray-400 text-sm">
-            Designed by Nexpedia
+            © {new Date().getFullYear()} Nexpedia — AI Prompt Library & Directory. All rights reserved.
           </p>
           <div className="flex gap-3">
             <a href="#" className="w-8 h-8 rounded-full bg-gray-100 dark:bg-zinc-900 flex items-center justify-center text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-zinc-800 hover:text-black dark:hover:text-white transition-colors">
