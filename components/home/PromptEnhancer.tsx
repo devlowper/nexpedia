@@ -2,8 +2,12 @@
 
 import React, { useState, useRef } from 'react';
 import { Sparkles, Image as ImageIcon, Copy, Check, Loader2, X } from 'lucide-react';
+import { useAuth } from '@/hooks/useAuth';
+import { AuthModal } from '@/components/auth/AuthModal';
 
 export const PromptEnhancer = () => {
+  const { isLoggedIn } = useAuth();
+  const [showAuthModal, setShowAuthModal] = useState(false);
   const [prompt, setPrompt] = useState('');
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imageBase64, setImageBase64] = useState<string | null>(null);
@@ -35,6 +39,11 @@ export const PromptEnhancer = () => {
   };
 
   const handleEnhance = async () => {
+    if (!isLoggedIn) {
+      setShowAuthModal(true);
+      return;
+    }
+
     if (!prompt && !imageBase64) {
       setError("Please provide a text idea or upload an image.");
       return;
@@ -44,9 +53,15 @@ export const PromptEnhancer = () => {
     setEnhancedPrompt('');
     try {
       const API = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:5000";
+      const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
+      const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+      if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
+      }
+
       const res = await fetch(`${API}/api/ai/enhance`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers,
         body: JSON.stringify({ prompt, imageBase64 })
       });
       const data = await res.json();
@@ -148,11 +163,13 @@ export const PromptEnhancer = () => {
               {/* Generate Button */}
               <button
                 onClick={handleEnhance}
-                disabled={loading || (!prompt && !imageBase64)}
-                className="w-full sm:w-auto bg-accent hover:bg-accent-hover  disabled:cursor-not-allowed text-black px-8 py-3 rounded-full font-bold flex items-center justify-center gap-2 transition-all hover:shadow-accent/40 hover:scale-[1.02] active:scale-[0.98] relative z-50"
+                disabled={loading || (isLoggedIn && !prompt && !imageBase64)}
+                className="w-full sm:w-auto bg-accent hover:bg-accent-hover disabled:cursor-not-allowed text-black px-8 py-3 rounded-full font-bold flex items-center justify-center gap-2 transition-all hover:shadow-accent/40 hover:scale-[1.02] active:scale-[0.98] relative z-50 cursor-pointer"
               >
                 {loading ? (
                   <><Loader2 className="animate-spin" size={18} /> Generating…</>
+                ) : !isLoggedIn ? (
+                  <><Sparkles size={16} /> Login to Generate</>
                 ) : (
                   <><svg className="generator-hero__magic shrink-0" width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9.5 3 11 7l4 1.5-4 1.5-1.5 4-1.5-4L4 8.5 8 7l1.5-4Zm8 8 .9 2.4 2.4.9-2.4.9-.9 2.4-.9-2.4-2.4-.9 2.4-.9.9-2.4Zm-3 6 .55 1.45L16.5 19l-1.45.55L14.5 21l-.55-1.45L12.5 19l1.45-.55L14.5 17Z" fill="#2d2b2c"></path></svg> Generate</>
                 )}
@@ -194,6 +211,9 @@ export const PromptEnhancer = () => {
         )}
 
       </div>
+
+      {/* Auth Modal */}
+      <AuthModal isOpen={showAuthModal} onClose={() => setShowAuthModal(false)} />
     </section>
   );
 };

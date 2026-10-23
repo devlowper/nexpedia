@@ -11,6 +11,8 @@ import {
 } from 'lucide-react';
 import { FileFormatCardsIcon } from '@/components/ui/FileFormatCardsIcon';
 import { VisionModelSelector, VisionModel, PRESET_MODELS } from '@/components/prompts/VisionModelSelector';
+import { useAuth } from '@/hooks/useAuth';
+import { AuthModal } from '@/components/auth/AuthModal';
 
 interface ConvertedPrompt {
   id: string;
@@ -29,6 +31,8 @@ export interface PromptResult {
 }
 
 export default function ImageToPromptPage() {
+  const { isLoggedIn } = useAuth();
+  const [showAuthModal, setShowAuthModal] = useState(false);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [imageBase64, setImageBase64] = useState<string | null>(null);
   const [fileName, setFileName] = useState<string>('');
@@ -216,6 +220,11 @@ export default function ImageToPromptPage() {
   };
 
   const handleGenerate = async () => {
+    if (!isLoggedIn) {
+      setShowAuthModal(true);
+      return;
+    }
+
     if (!imageBase64) {
       setError('Please upload or paste an image to analyze.');
       return;
@@ -230,9 +239,15 @@ export default function ImageToPromptPage() {
       const API = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:5000';
       const promptInstruction = `Target Generator: ${selectedVisionModel.name} (${selectedVisionModel.modelName}). Output format preference: ${targetModel}. ${customNote ? `User preferences: ${customNote}.` : ''} Create an exact prompt that will reproduce this image with the same style, composition, lighting, and mood.`;
 
+      const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
+      const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+      if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
+      }
+
       const res = await fetch(`${API}/api/ai/enhance`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers,
         body: JSON.stringify({
           prompt: promptInstruction,
           imageBase64: imageBase64,
@@ -558,17 +573,38 @@ export default function ImageToPromptPage() {
               />
             </div>
 
-            {/* Generate Button */}
+            {/* Generate Button & Auth Notice */}
             <div className="w-full">
+              {!isLoggedIn && (
+                <div className="flex items-center justify-between p-3.5 rounded-2xl bg-[#EA4C89]/10 border border-[#EA4C89]/25 text-xs text-primary mb-3">
+                  <span className="flex items-center gap-2">
+                    <Sparkles size={15} className="text-[#EA4C89] shrink-0" />
+                    <span>Please <strong>Log In</strong> or <strong>Sign Up</strong> to use the AI Image-to-Prompt generator.</span>
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => setShowAuthModal(true)}
+                    className="text-xs font-bold text-[#EA4C89] hover:underline shrink-0 ml-2 cursor-pointer"
+                  >
+                    Log In &rarr;
+                  </button>
+                </div>
+              )}
+
               <button
                 onClick={handleGenerate}
-                disabled={loading || !imageBase64}
+                disabled={loading || (isLoggedIn && !imageBase64)}
                 className="w-full py-4 px-8 rounded-2xl bg-[#EA4C89] hover:bg-[#d43a76] disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold text-base transition-all flex items-center justify-center gap-2.5 shadow-[0_6px_25px_rgba(234,76,137,0.35)] active:scale-[0.99] cursor-pointer"
               >
                 {loading ? (
                   <>
                     <Loader2 size={18} className="animate-spin" />
                     <span>{loadingMessages[loadingStep]}</span>
+                  </>
+                ) : !isLoggedIn ? (
+                  <>
+                    <Sparkles size={18} />
+                    <span>Log In / Sign Up to Generate</span>
                   </>
                 ) : (
                   <>
@@ -772,6 +808,8 @@ export default function ImageToPromptPage() {
         </div>
       </main>
 
+      {/* Auth Modal for Login / Signup requirement */}
+      <AuthModal isOpen={showAuthModal} onClose={() => setShowAuthModal(false)} />
     </div>
   );
 }
