@@ -420,7 +420,7 @@ input:checked+.toggle-slider:before {
   box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.05);
 }
 
-/* Nexpedia Theme Toggle Buttons */
+/* proCraft Theme Toggle Buttons */
 .theme-btn-wrapper {
   position: relative;
   display: inline-block;

@@ -52,7 +52,7 @@ export default function AIDetailsPage() {
       try {
         await navigator.share({
           title: tool.name,
-          text: `Check out ${tool.name} on Nexpedia!`,
+          text: `Check out ${tool.name} on proCraft!`,
           url: pageUrl,
         });
       } catch (err: any) {

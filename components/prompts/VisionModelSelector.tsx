@@ -160,7 +160,7 @@ export function VisionModelSelector({ selectedModel, onSelectModel }: VisionMode
   // Load custom models from localStorage
   useEffect(() => {
     try {
-      const stored = localStorage.getItem("nexpedia_custom_vision_models");
+      const stored = localStorage.getItem("procraft_custom_vision_models") || localStorage.getItem("nexpedia_custom_vision_models");
       if (stored) {
         const parsed = JSON.parse(stored);
         if (Array.isArray(parsed)) {
@@ -213,7 +213,7 @@ export function VisionModelSelector({ selectedModel, onSelectModel }: VisionMode
     const updated = [newModel, ...customModels];
     setCustomModels(updated);
     try {
-      localStorage.setItem("nexpedia_custom_vision_models", JSON.stringify(updated));
+      localStorage.setItem("procraft_custom_vision_models", JSON.stringify(updated));
     } catch (err) {
       console.error("Error saving custom model", err);
     }
@@ -234,7 +234,7 @@ export function VisionModelSelector({ selectedModel, onSelectModel }: VisionMode
     const updated = customModels.filter(m => m.id !== id);
     setCustomModels(updated);
     try {
-      localStorage.setItem("nexpedia_custom_vision_models", JSON.stringify(updated));
+      localStorage.setItem("procraft_custom_vision_models", JSON.stringify(updated));
     } catch (err) {
       console.error("Error updating custom models", err);
     }

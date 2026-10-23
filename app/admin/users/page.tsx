@@ -161,7 +161,7 @@ export default function AdminUsersPage() {
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
           <h1 className="text-3xl font-bold font-bricolage mb-2">Users</h1>
-          <p className="text-[var(--text-muted)]">Manage all registered users on Nexpedia.</p>
+          <p className="text-[var(--text-muted)]">Manage all registered users on proCraft.</p>
         </div>
         <div className="flex w-full sm:w-auto items-center gap-3">
           <div className="relative w-full sm:w-72">

@@ -36,10 +36,10 @@ export function UseCases() {
             className="section-title font-bricolage text-3xl md:text-4xl font-bold text-primary mb-4"
             style={{ fontFamily: '"Bricolage Grotesque", var(--font-bricolage), sans-serif' }}
           >
-            Typical use cases of Nexpedia
+            Typical use cases of proCraft
           </h2>
           <p className="text-black/60 dark:text-white/60 text-sm max-w-xl mx-auto">
-            See how Nexpedia powers your creative workflow with precision prompts.
+            See how proCraft powers your creative workflow with precision prompts.
           </p>
         </div>
 

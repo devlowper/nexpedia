@@ -99,7 +99,7 @@ export default function ProfileDashboard() {
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = `nexpedia-data-${user?.username || 'user'}.json`;
+    a.download = `procraft-data-${user?.username || 'user'}.json`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -172,8 +172,8 @@ export default function ProfileDashboard() {
       <aside className="w-full md:w-[280px] shrink-0 border-r border-border bg-surface/50 p-6 flex flex-col min-h-screen">
 
         <div className="mb-8 px-2 flex items-center gap-3">
-          <div className="w-8 h-8 rounded-lg bg-accent flex items-center justify-center text-black font-black text-lg">N</div>
-          <span className="font-bold text-lg">Nexpedia</span>
+          <div className="w-8 h-8 rounded-lg bg-accent flex items-center justify-center text-white font-black text-lg shadow-sm">P</div>
+          <span className="font-bold text-lg tracking-tight">pro<span className="text-accent">Craft</span></span>
         </div>
 
         <div className="flex-1 space-y-2">
@@ -431,7 +431,7 @@ export default function ProfileDashboard() {
                     <h3 className="font-bold text-base text-black dark:text-white">Your Plan</h3>
                     <span className="px-2.5 py-0.5 rounded-full bg-accent/10 text-accent text-[10px] font-bold uppercase">Free Plan</span>
                   </div>
-                  <p className="text-sm text-muted mb-6">Explore basic features and get started with Nexpedia.</p>
+                  <p className="text-sm text-muted mb-6">Explore basic features and get started with proCraft.</p>
 
                   <button className="flex items-center gap-2 px-5 py-2.5 border border-accent/30 text-accent hover:bg-accent/10 rounded-xl text-sm font-bold transition-colors w-max">
                     <Crown size={16} />
@@ -525,7 +525,7 @@ export default function ProfileDashboard() {
                     </div>
                     <div>
                       <h3 className="font-bold text-lg mb-1">App Preferences</h3>
-                      <p className="text-sm text-muted">Customize your experience across Nexpedia.</p>
+                      <p className="text-sm text-muted">Customize your experience across proCraft.</p>
                     </div>
                   </div>
                   <div className="space-y-4">

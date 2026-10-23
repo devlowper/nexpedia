@@ -29,7 +29,7 @@ export function AIPromptWorkspace() {
           </h2>
 
           <p className="text-black/60 dark:text-white/70 text-lg md:text-xl leading-relaxed max-w-lg">
-            Nexpedia gives you instant access to the best prompt library and image to prompt inspirations for Midjourney, ChatGPT, FLUX, and AI workflows.
+            proCraft gives you instant access to the best prompt library and image to prompt inspirations for Midjourney, ChatGPT, FLUX, and AI workflows.
           </p>
 
           <div className="flex flex-col sm:flex-row items-center gap-4 mt-2 w-full sm:w-auto">

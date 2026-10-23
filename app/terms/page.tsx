@@ -2,8 +2,8 @@ import React from 'react';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Terms & Conditions — Nexpedia',
-  description: 'Review the terms and conditions for using the Nexpedia platform and prompt library.',
+  title: 'Terms & Conditions — proCraft',
+  description: 'Review the terms and conditions for using the proCraft platform and prompt library.',
   alternates: {
     canonical: '/terms',
   },

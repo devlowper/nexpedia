@@ -19,12 +19,12 @@ export function Footer() {
           
           {/* Left Column (Brand & Newsletter) */}
           <div className="md:col-span-5 flex flex-col items-start">
-            <Link href="/" className="flex items-center gap-2 group mb-6" title="Nexpedia - AI Prompt Library">
-              <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-accent text-black font-black text-xl shadow-sm">
-                N
+            <Link href="/" className="flex items-center gap-2 group mb-6" title="proCraft - AI Prompt Library">
+              <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-accent text-white font-black text-xl shadow-sm">
+                P
               </div>
               <span className="font-bold text-xl tracking-tight text-black dark:text-white">
-                Nexpedia
+                pro<span className="text-accent">Craft</span>
               </span>
             </Link>
             
@@ -115,7 +115,7 @@ export function Footer() {
         {/* Bottom Section */}
         <div className="border-t border-gray-200 dark:border-zinc-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-6">
           <p className="text-gray-500 dark:text-gray-400 text-sm">
-            © {new Date().getFullYear()} Nexpedia — AI Prompt Library & Directory. All rights reserved.
+            © {new Date().getFullYear()} proCraft — AI Prompt Library & Directory. All rights reserved.
           </p>
           <div className="flex gap-3">
             <a href="#" className="w-8 h-8 rounded-full bg-gray-100 dark:bg-zinc-900 flex items-center justify-center text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-zinc-800 hover:text-black dark:hover:text-white transition-colors">

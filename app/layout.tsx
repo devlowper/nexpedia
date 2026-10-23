@@ -13,20 +13,20 @@ const bricolage = Bricolage_Grotesque({
   display: "swap",
 });
 
-const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "https://nexpedia.com";
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "https://procraft.com";
 
 export const metadata: Metadata = {
   metadataBase: new URL(APP_URL),
   title: {
-    default: "Nexpedia — AI Prompt Library & Directory",
-    template: "%s | Nexpedia",
+    default: "proCraft — AI Prompt Library & Directory",
+    template: "%s | proCraft",
   },
   description:
-    "Nexpedia is the ultimate AI prompt library and tools directory. Discover curated prompts and tools for Midjourney, ChatGPT, Stable Diffusion & FLUX.",
+    "proCraft is the ultimate AI prompt library and tools directory. Discover curated prompts and tools for Midjourney, ChatGPT, Stable Diffusion & FLUX.",
   keywords: [
     "prompt library",
-    "Nexpedia",
-    "nexpedia",
+    "proCraft",
+    "procraft",
     "image to prompt",
     "best AI prompts",
     "ai prompt generator",
@@ -35,29 +35,29 @@ export const metadata: Metadata = {
     "trending ai prompts",
     "free prompt library"
   ],
-  authors: [{ name: "Nexpedia Team" }],
-  creator: "Nexpedia",
-  publisher: "Nexpedia",
-  applicationName: "Nexpedia",
+  authors: [{ name: "proCraft Team" }],
+  creator: "proCraft",
+  publisher: "proCraft",
+  applicationName: "proCraft",
   category: "technology",
   alternates: {
     canonical: "/",
   },
   openGraph: {
-    title: "Nexpedia — AI Prompt Library & Directory",
+    title: "proCraft — AI Prompt Library & Directory",
     description:
-      "Explore curated prompts, prompt styles, and AI tools with Nexpedia.",
+      "Explore curated prompts, prompt styles, and AI tools with proCraft.",
     url: APP_URL,
-    siteName: "Nexpedia",
+    siteName: "proCraft",
     locale: "en_US",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Nexpedia — AI Prompt Library & Directory",
+    title: "proCraft — AI Prompt Library & Directory",
     description:
-      "Discover the best prompt library, trendy prompts, and creative tools with Nexpedia.",
-    creator: "@nexpedia",
+      "Discover the best prompt library, trendy prompts, and creative tools with proCraft.",
+    creator: "@procraft",
   },
   robots: {
     index: true,
@@ -90,8 +90,8 @@ export default function RootLayout({
                   "@type": "WebSite",
                   "@id": `${APP_URL}/#website`,
                   "url": APP_URL,
-                  "name": "Nexpedia",
-                  "alternateName": ["nexpedia", "Nexpedia AI"],
+                  "name": "proCraft",
+                  "alternateName": ["procraft", "proCraft AI"],
                   "description": "Best AI Prompt Library and Directory for creators.",
                   "potentialAction": {
                     "@type": "SearchAction",
@@ -102,11 +102,11 @@ export default function RootLayout({
                 {
                   "@type": "WebApplication",
                   "@id": `${APP_URL}/#webapp`,
-                  "name": "Nexpedia",
+                  "name": "proCraft",
                   "url": APP_URL,
                   "applicationCategory": "DesignApplication",
                   "operatingSystem": "All",
-                  "description": "Discover curated prompts, explore the prompt library, and find AI tools with Nexpedia."
+                  "description": "Discover curated prompts, explore the prompt library, and find AI tools with proCraft."
                 }
               ]
             })

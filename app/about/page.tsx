@@ -2,9 +2,9 @@ import React from 'react';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'About Us — Nexpedia AI Prompt Library',
+  title: 'About Us — proCraft AI Prompt Library',
   description:
-    'Learn about Nexpedia, our mission to build the best AI prompt library, image to prompt workflows, and empower creators worldwide.',
+    'Learn about proCraft, our mission to build the best AI prompt library, image to prompt workflows, and empower creators worldwide.',
   alternates: {
     canonical: '/about',
   },
@@ -21,7 +21,7 @@ export default function AboutPage() {
         
         <div className="max-w-4xl mx-auto text-center relative z-10">
           <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-blue-500/30 text-black/80 dark:text-white/90 text-[13px] font-medium tracking-wide mb-6">
-            About Nexpedia
+            About proCraft
           </div>
           <h1 className="text-5xl md:text-6xl font-extrabold text-primary dark:text-white leading-tight tracking-tight mb-8" style={{ fontFamily: '"Bricolage Grotesque", var(--font-bricolage), sans-serif' }}>
             Empowering the Next Generation of Creators with AI.
@@ -38,7 +38,7 @@ export default function AboutPage() {
           <div>
             <h2 className="text-3xl font-bold text-primary dark:text-white mb-6">Our Mission</h2>
             <p className="text-muted text-lg mb-6 leading-relaxed">
-              At Nexpedia, we believe that AI is not just a tool, but a collaborative partner. Our mission is to democratize access to the most powerful AI workflows and trendy prompts, making them accessible to designers, developers, marketers, and dreamers around the world.
+              At proCraft, we believe that AI is not just a tool, but a collaborative partner. Our mission is to democratize access to the most powerful AI workflows and trendy prompts, making them accessible to designers, developers, marketers, and dreamers around the world.
             </p>
             <p className="text-muted text-lg leading-relaxed">
               What started as a small directory of tools has evolved into a comprehensive platform where you can discover cutting-edge AI software, find the best prompts to unlock their potential, and convert images to prompts with ease.
@@ -48,7 +48,7 @@ export default function AboutPage() {
             {/* Placeholder for an about image, falling back to a gradient block if image missing */}
             <div className="absolute inset-0 bg-gradient-to-tr from-blue-500/20 to-purple-500/20 flex items-center justify-center">
               <div className="w-full h-full bg-surface-secondary absolute inset-0 -z-10"></div>
-              <span className="text-4xl font-bold text-black/10 dark:text-white/10 select-none">Nexpedia</span>
+              <span className="text-4xl font-bold text-black/10 dark:text-white/10 select-none">proCraft</span>
             </div>
           </div>
         </div>
@@ -80,7 +80,7 @@ export default function AboutPage() {
               </div>
               <h3 className="text-xl font-bold text-primary dark:text-white mb-3">Community Driven</h3>
               <p className="text-muted leading-relaxed">
-                Nexpedia is built for and by creators. We rely on the shared knowledge of our community to curate the best resources.
+                proCraft is built for and by creators. We rely on the shared knowledge of our community to curate the best resources.
               </p>
             </div>
             <div className="bg-base dark:bg-[#0a0a0a] p-8 rounded-2xl border border-black/5 dark:border-white/5 shadow-sm">

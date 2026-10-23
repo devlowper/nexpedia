@@ -108,7 +108,7 @@ export default function ImageToPromptPage() {
     }
 
     try {
-      const savedModelId = localStorage.getItem('nexpedia_selected_vision_model');
+      const savedModelId = localStorage.getItem('procraft_selected_vision_model') || localStorage.getItem('nexpedia_selected_vision_model');
       if (savedModelId) {
         const found = PRESET_MODELS.find(m => m.id === savedModelId);
         if (found) setSelectedVisionModel(found);
@@ -119,7 +119,7 @@ export default function ImageToPromptPage() {
   const handleSelectVisionModel = (model: VisionModel) => {
     setSelectedVisionModel(model);
     try {
-      localStorage.setItem('nexpedia_selected_vision_model', model.id);
+      localStorage.setItem('procraft_selected_vision_model', model.id);
     } catch (e) {}
   };
 

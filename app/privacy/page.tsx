@@ -2,8 +2,8 @@ import React from 'react';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Privacy Policy — Nexpedia',
-  description: 'Learn how Nexpedia protects your privacy and personal data.',
+  title: 'Privacy Policy — proCraft',
+  description: 'Learn how proCraft protects your privacy and personal data.',
   alternates: {
     canonical: '/privacy',
   },
@@ -19,7 +19,7 @@ export default function PrivacyPolicyPage() {
         
         <h2 className="text-2xl font-bold text-primary mt-10 mb-4">1. Introduction</h2>
         <p className="mb-6">
-          Welcome to Nexpedia. We respect your privacy and are committed to protecting your personal data. 
+          Welcome to proCraft. We respect your privacy and are committed to protecting your personal data. 
           This privacy policy will inform you as to how we look after your personal data when you visit our website 
           and tell you about your privacy rights and how the law protects you.
         </p>

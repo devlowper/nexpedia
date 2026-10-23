@@ -22,7 +22,7 @@ export default function BlogList() {
             <div className="p-6 md:p-8 flex flex-col flex-1">
               <span className="text-[var(--brand-solid)] text-sm font-semibold mb-2 tracking-wide uppercase">Company News</span>
               <h2 className="text-2xl md:text-3xl font-bold text-black dark:text-white mb-4 leading-tight">
-                Exciting New Features Coming to Nexpedia Soon
+                Exciting New Features Coming to proCraft Soon
               </h2>
               <p className="text-gray-600 dark:text-gray-400 text-base mb-8 flex-1">
                 We are working hard to bring you the best AI generation experience. Here's a sneak peek at what's coming next in our platform update, including new generation tools and advanced workflows.

@@ -63,7 +63,7 @@ export function SettingsLayout() {
 
               <div className="pt-4 border-t border-border">
                 <div className="text-red-500 font-medium mb-1">Delete Account</div>
-                <div className="text-sm text-muted mb-3">Permanently delete your Nexpedia account and all associated data.</div>
+                <div className="text-sm text-muted mb-3">Permanently delete your proCraft account and all associated data.</div>
                 <button className="px-4 py-2 bg-red-500/10 text-red-500 border border-red-500/20 rounded-md text-sm font-medium hover:bg-red-500/20 transition-colors">
                   Delete Account
                 </button>

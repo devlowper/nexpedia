@@ -52,7 +52,7 @@ export default function AdminLogin() {
             <Shield size={28} style={{ color: "#ff3366" }} />
           </div>
           <h1 className="text-2xl font-bold" style={{ color: "var(--text-primary)" }}>Admin Panel</h1>
-          <p className="text-sm mt-1" style={{ color: "var(--text-muted)" }}>Sign in to manage Nexpedia</p>
+          <p className="text-sm mt-1" style={{ color: "var(--text-muted)" }}>Sign in to manage proCraft</p>
         </div>
 
         {/* Card */}

@@ -2,9 +2,9 @@ import React from 'react';
 import BlogList from './BlogList';
 
 export const metadata = {
-  title: 'Blog — AI Trends, Best Prompts & Guides | Nexpedia',
+  title: 'Blog — AI Trends, Best Prompts & Guides | proCraft',
   description:
-    'Read the latest articles on trendy prompts, image to prompt techniques, AI directory releases, and Midjourney creative workflows from Nexpedia.',
+    'Read the latest articles on trendy prompts, image to prompt techniques, AI directory releases, and Midjourney creative workflows from proCraft.',
   alternates: {
     canonical: '/blog',
   },
@@ -18,7 +18,7 @@ export default function BlogPage() {
           Our <span className="bg-clip-text text-transparent" style={{ backgroundImage: 'var(--brand-gradient)' }}>Blog</span>
         </h1>
         <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl">
-          Discover the latest insights on image to prompt, trendy AI prompts, and design workflows from the Nexpedia team.
+          Discover the latest insights on image to prompt, trendy AI prompts, and design workflows from the proCraft team.
         </p>
       </div>
       

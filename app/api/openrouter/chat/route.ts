@@ -21,7 +21,7 @@ export async function POST(req: Request) {
       headers: {
         "Authorization": `Bearer ${apiKey}`,
         "HTTP-Referer": process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000",
-        "X-Title": "Nexpedia AI Playground",
+        "X-Title": "proCraft AI Playground",
         "Content-Type": "application/json"
       },
       body: JSON.stringify({

@@ -1,12 +1,12 @@
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'AI Directory — Top AI Tools & Models | Nexpedia',
+  title: 'AI Directory — Top AI Tools & Models | proCraft',
   description:
-    'Discover curated AI tools, image generators, and productivity models in the Nexpedia AI Directory.',
+    'Discover curated AI tools, image generators, and productivity models in the proCraft AI Directory.',
   keywords: [
     'ai directory',
-    'Nexpedia',
+    'proCraft',
     'best ai tools',
     'ai image generators',
   ],

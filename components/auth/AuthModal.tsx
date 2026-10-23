@@ -66,7 +66,7 @@ export function AuthModal({ isOpen, onClose, defaultView = 'login' }: AuthModalP
     try {
       if (view === 'signup') {
         await register(name.trim(), email.trim(), password);
-        setSuccess('Account created! Welcome to Nexpedia 🎉');
+        setSuccess('Account created! Welcome to proCraft 🎉');
         setTimeout(() => { onClose(); reset(); }, 1200);
       } else {
         await login(email.trim(), password);
@@ -110,14 +110,14 @@ export function AuthModal({ isOpen, onClose, defaultView = 'login' }: AuthModalP
 
         {/* Header */}
         <div className="flex flex-col items-center text-center mb-7">
-          <div className="w-12 h-12 rounded-xl flex items-center justify-center text-black font-black text-2xl mb-4 bg-accent shadow-sm">
-            N
+          <div className="w-12 h-12 rounded-xl flex items-center justify-center text-white font-black text-2xl mb-4 bg-accent shadow-sm">
+            P
           </div>
           <h2 className="text-2xl font-bold mb-1.5" style={{ color: 'var(--text-primary)' }}>
             {view === 'login' ? 'Welcome back' : 'Create account'}
           </h2>
           <p className="text-sm" style={{ color: 'var(--text-muted)' }}>
-            {view === 'login' ? 'Sign in to continue creating' : 'Join Nexpedia for free'}
+            {view === 'login' ? 'Sign in to continue creating' : 'Join proCraft for free'}
           </p>
         </div>
 

@@ -13,23 +13,23 @@ function cn(...inputs: (string | undefined | null | false)[]) {
 const faqs = [
   {
     id: 'q1',
-    question: 'Q1 What is Nexpedia and who is it for?',
-    answer: 'Nexpedia is a comprehensive AI prompt library and directory designed for creators, designers, developers, and marketers. It helps you discover the best prompts, trendy prompts, and image to prompt inspirations for tools like Midjourney, ChatGPT, Claude, and Stable Diffusion.'
+    question: 'Q1 What is proCraft and who is it for?',
+    answer: 'proCraft is a comprehensive AI prompt library and directory designed for creators, designers, developers, and marketers. It helps you discover the best prompts, trendy prompts, and image to prompt inspirations for tools like Midjourney, ChatGPT, Claude, and Stable Diffusion.'
   },
   {
     id: 'q2',
-    question: 'Q2 How does Image to Prompt (Img to Prompt) work on Nexpedia?',
+    question: 'Q2 How does Image to Prompt (Img to Prompt) work on proCraft?',
     answer: 'Our image to prompt guides and templates help you extract visual attributes, lighting styles, camera angles, and art directions from images so you can recreate similar trendy art with AI image generators.'
   },
   {
     id: 'q3',
-    question: 'Q3 Do I need coding skills to use the Nexpedia prompt library?',
-    answer: 'Not at all! The Nexpedia prompt library is designed for everyone. Simply search for the best prompt or trendy prompt you need, copy with one click, and paste it into ChatGPT, Midjourney, or your favorite AI platform.'
+    question: 'Q3 Do I need coding skills to use the proCraft prompt library?',
+    answer: 'Not at all! The proCraft prompt library is designed for everyone. Simply search for the best prompt or trendy prompt you need, copy with one click, and paste it into ChatGPT, Midjourney, or your favorite AI platform.'
   },
   {
     id: 'q4',
     question: 'Q4 Can I organize and save my favorite AI prompts?',
-    answer: 'Yes, Nexpedia allows you to build a personalized AI workspace. You can bookmark top prompts, save your favorite models, and organize prompt templates to streamline your creative workflow.'
+    answer: 'Yes, proCraft allows you to build a personalized AI workspace. You can bookmark top prompts, save your favorite models, and organize prompt templates to streamline your creative workflow.'
   },
   {
     id: 'q5',

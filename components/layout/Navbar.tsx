@@ -110,13 +110,13 @@ export function Navbar() {
         <div className="max-w-7xl mx-auto px-4 h-full flex items-center justify-between">
 
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2 group" title="Nexpedia - AI Prompt Library & Directory">
-            <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-accent text-black font-black text-xl shadow-sm">
-              N
+          <Link href="/" className="flex items-center gap-2 group" title="proCraft - AI Prompt Library & Directory">
+            <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-accent text-white font-black text-xl shadow-sm">
+              P
             </div>
             <span className="font-bold text-lg tracking-tight">
-              <span className="text-primary group-hover:text-gray-300 transition-colors">Nex</span>
-              <span className="text-accent">pedia</span>
+              <span className="text-primary group-hover:text-accent transition-colors">pro</span>
+              <span className="text-accent">Craft</span>
             </span>
           </Link>
 
