@@ -157,7 +157,7 @@ export function Navbar() {
                   onClick={openSignup}
                   className="bg-accent text-black text-sm font-semibold px-5 py-2 rounded-full hover:bg-accent-hover transition-colors"
                 >
-                  Start for Free →
+                  Get Start →
                 </button>
               </>
             ) : (
@@ -264,7 +264,7 @@ export function Navbar() {
                   </button>
                   <button onClick={() => { setMobileOpen(false); openSignup(); }}
                     className="bg-accent text-black text-center font-semibold py-3 rounded-full hover:bg-accent-hover transition-colors">
-                    Start for Free
+                    Get Start
                   </button>
                 </>
               ) : (
