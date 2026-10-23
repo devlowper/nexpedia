@@ -81,10 +81,10 @@ export function AuthModal({ isOpen, onClose, defaultView = 'login' }: AuthModalP
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-      {/* Backdrop */}
+    <div className="fixed inset-0 z-[99999] flex items-center justify-center p-4">
+      {/* Backdrop with rich blur */}
       <div
-        className="absolute inset-0 bg-black/75 backdrop-blur-[6px]"
+        className="absolute inset-0 bg-black/60 backdrop-blur-md transition-all duration-300"
         onClick={() => { onClose(); reset(); }}
       />
 
@@ -244,7 +244,7 @@ export function AuthModal({ isOpen, onClose, defaultView = 'login' }: AuthModalP
             disabled={loading || !!success}
             className="w-full py-3 rounded-[8px] font-semibold text-sm transition-all flex items-center justify-center gap-2 mt-1"
             style={{
-              background: '#ff3366',
+              background: 'var(--brand-solid)',
               color: '#fff',
               opacity: loading || success ? 0.7 : 1,
             }}
@@ -263,7 +263,7 @@ export function AuthModal({ isOpen, onClose, defaultView = 'login' }: AuthModalP
               Don&apos;t have an account?{' '}
               <button id="auth-switch-signup" onClick={() => switchView('signup')}
                 className="font-semibold transition-colors" style={{ color: 'var(--text-primary)' }}
-                onMouseEnter={(e) => ((e.target as HTMLElement).style.color = '#ff3366')}
+                onMouseEnter={(e) => ((e.target as HTMLElement).style.color = 'var(--brand-solid)')}
                 onMouseLeave={(e) => ((e.target as HTMLElement).style.color = 'var(--text-primary)')}>
                 Sign up free
               </button>
@@ -273,7 +273,7 @@ export function AuthModal({ isOpen, onClose, defaultView = 'login' }: AuthModalP
               Already have an account?{' '}
               <button id="auth-switch-login" onClick={() => switchView('login')}
                 className="font-semibold transition-colors" style={{ color: 'var(--text-primary)' }}
-                onMouseEnter={(e) => ((e.target as HTMLElement).style.color = '#ff3366')}
+                onMouseEnter={(e) => ((e.target as HTMLElement).style.color = 'var(--brand-solid)')}
                 onMouseLeave={(e) => ((e.target as HTMLElement).style.color = 'var(--text-primary)')}>
                 Sign in
               </button>

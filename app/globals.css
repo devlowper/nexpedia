@@ -11,7 +11,8 @@ h2,
   font-family: var(--font-bricolage), 'Bricolage Grotesque', sans-serif !important;
 }
 
-:root {
+:root,
+[data-theme="dark"] {
   --bg-base: #090A0A;
   --bg-surface: #111213;
   --bg-elevated: #161718;
@@ -20,10 +21,10 @@ h2,
   --text-primary: #F0F0F0;
   --text-muted: #c0c0c0;
   --text-faint: #606060;
-  --brand-solid: #ff3366;
+  --brand-solid: #FF3366;
   --brand-solid-hover: #ff0044;
-  --brand-gradient: linear-gradient(135deg, #ff3366 0%, #ff007f 100%);
-  --brand-gradient-vertical: linear-gradient(180deg, #ff6699 0%, #ff3366 100%);
+  --brand-gradient: linear-gradient(135deg, #FF3366 0%, #ff007f 100%);
+  --brand-gradient-vertical: linear-gradient(180deg, #ff6699 0%, #FF3366 100%);
 }
 
 /* Core Theme Utility Classes */
@@ -85,13 +86,63 @@ h2,
   --brand-gradient-vertical: linear-gradient(to bottom, #f06fa0, #EA4C89);
 }
 
+/* Dynamic Dark Mode Pink (#FF3366) and Light Mode Pink (#EA4C89) mapping */
+[data-theme="dark"] .text-\[\#EA4C89\],
+[data-theme="dark"] .text-\[\#ea4c89\],
+[data-theme="dark"] .text-\[\#E8407F\],
+[data-theme="dark"] .text-\[\#e8407f\] {
+  color: #FF3366 !important;
+}
+
+[data-theme="dark"] .bg-\[\#EA4C89\],
+[data-theme="dark"] .bg-\[\#ea4c89\],
+[data-theme="dark"] .bg-\[\#E8407F\],
+[data-theme="dark"] .bg-\[\#e8407f\] {
+  background-color: #FF3366 !important;
+}
+
+[data-theme="dark"] .border-\[\#EA4C89\],
+[data-theme="dark"] .border-\[\#ea4c89\],
+[data-theme="dark"] .border-\[\#E8407F\],
+[data-theme="dark"] .border-\[\#e8407f\] {
+  border-color: #FF3366 !important;
+}
+
+[data-theme="light"] .text-\[\#ff3366\],
+[data-theme="light"] .text-\[\#FF3366\],
+[data-theme="light"] .text-\[\#E8407F\],
+[data-theme="light"] .text-\[\#e8407f\] {
+  color: #EA4C89 !important;
+}
+
+[data-theme="light"] .bg-\[\#ff3366\],
+[data-theme="light"] .bg-\[\#FF3366\],
+[data-theme="light"] .bg-\[\#E8407F\],
+[data-theme="light"] .bg-\[\#e8407f\] {
+  background-color: #EA4C89 !important;
+}
+
+[data-theme="light"] .border-\[\#ff3366\],
+[data-theme="light"] .border-\[\#FF3366\],
+[data-theme="light"] .border-\[\#E8407F\],
+[data-theme="light"] .border-\[\#e8407f\] {
+  border-color: #EA4C89 !important;
+}
+
 [data-theme="light"] .bg-accent,
 [data-theme="light"] .bg-accent.text-black,
 [data-theme="light"] .bg-accent .text-black {
   color: #ffffff !important;
 }
 
-[data-theme="light"] .cta-btn {
+[data-theme="dark"] .bg-accent,
+[data-theme="dark"] .bg-accent.text-black,
+[data-theme="dark"] .bg-accent .text-black {
+  color: #ffffff !important;
+}
+
+[data-theme="light"] .cta-btn,
+[data-theme="dark"] .cta-btn {
   color: #ffffff !important;
 }
 

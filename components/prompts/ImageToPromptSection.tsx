@@ -346,43 +346,24 @@ export function ImageToPromptSection() {
             />
           </div>
 
-          {/* Generate Prompt Button & Auth Notice */}
+          {/* Generate Prompt Button */}
           <div className="w-full flex flex-col gap-2">
-            {!isLoggedIn && (
-              <div className="flex items-center justify-between p-3.5 rounded-2xl bg-[#EA4C89]/10 border border-[#EA4C89]/25 text-xs text-primary mb-1">
-                <span className="flex items-center gap-2">
-                  <Sparkles size={15} className="text-[#EA4C89] shrink-0" />
-                  <span>Please <strong>Log In</strong> or <strong>Sign Up</strong> to use the AI Image-to-Prompt generator.</span>
-                </span>
-                <button
-                  type="button"
-                  onClick={() => setShowAuthModal(true)}
-                  className="text-xs font-bold text-[#EA4C89] hover:underline shrink-0 ml-2 cursor-pointer"
-                >
-                  Log In &rarr;
-                </button>
-              </div>
-            )}
-
             <button
+              type="button"
               onClick={handleGenerate}
-              disabled={loading || (isLoggedIn && !imageBase64)}
-              className="w-full py-4 px-8 rounded-2xl bg-[#EA4C89] hover:bg-[#d43a76] disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold text-sm sm:text-base transition-all flex items-center justify-center gap-2.5 shadow-[0_6px_25px_rgba(234,76,137,0.35)] active:scale-[0.99] cursor-pointer"
+              disabled={loading}
+              className="w-full py-4 px-8 rounded-2xl bg-[#EA4C89] hover:bg-[#d43a76] disabled:opacity-50 disabled:cursor-not-allowed !text-white font-bold text-sm sm:text-base transition-all flex items-center justify-center gap-2.5 shadow-[0_6px_25px_rgba(234,76,137,0.35)] active:scale-[0.99] cursor-pointer"
+              style={{ color: '#ffffff' }}
             >
               {loading ? (
                 <>
-                  <Loader2 size={18} className="animate-spin" />
-                  <span>Analyzing Visuals & Generating Prompt...</span>
-                </>
-              ) : !isLoggedIn ? (
-                <>
-                  <Sparkles size={18} />
-                  <span>Log In / Sign Up to Generate</span>
+                  <Loader2 size={18} className="animate-spin text-white shrink-0" style={{ color: '#ffffff' }} />
+                  <span className="text-white font-bold" style={{ color: '#ffffff' }}>Analyzing Visuals & Generating Prompt...</span>
                 </>
               ) : (
                 <>
-                  <Sparkles size={18} />
-                  <span>Generate Prompt</span>
+                  <Sparkles size={18} className="text-white shrink-0" style={{ color: '#ffffff' }} />
+                  <span className="text-white font-bold" style={{ color: '#ffffff' }}>Generate Prompt</span>
                 </>
               )}
             </button>

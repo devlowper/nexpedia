@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { useAuth } from '@/hooks/useAuth';
 import { useTheme } from '@/hooks/useTheme';
 import { api } from '@/lib/apiClient';
@@ -40,9 +41,20 @@ import {
 } from 'lucide-react';
 
 export default function ProfileDashboard() {
+  const router = useRouter();
   const { user, logout, refreshUser } = useAuth();
   const { isDark: isDarkMode, toggle: toggleDarkMode } = useTheme();
   const [activeTab, setActiveTab] = useState('Settings');
+
+  const handleLogoutConfirm = async () => {
+    setIsLogoutModalOpen(false);
+    await logout();
+    try {
+      localStorage.removeItem('token');
+      sessionStorage.removeItem('token');
+    } catch (e) {}
+    router.push('/');
+  };
   const [isSubmitModalOpen, setIsSubmitModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
@@ -133,7 +145,7 @@ export default function ProfileDashboard() {
   const stats = {
     prompts: submissions.length,
     uses: submissions.reduce((acc, sub) => acc + (sub.usageCount || 0), 0),
-    rating: 4.9,
+    rating: 0,
     upvotes: submissions.reduce((acc, sub) => acc + (sub.saveCount || 0), 0),
     credits: user?.credits || 0
   };
@@ -640,7 +652,7 @@ export default function ProfileDashboard() {
       <LogoutModal
         isOpen={isLogoutModalOpen}
         onClose={() => setIsLogoutModalOpen(false)}
-        onConfirm={logout}
+        onConfirm={handleLogoutConfirm}
       />
       <ChangePasswordModal
         isOpen={isPasswordModalOpen}

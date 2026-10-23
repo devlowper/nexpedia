@@ -176,9 +176,11 @@ function PromptLibraryContent() {
     <div className="max-w-7xl mx-auto px-4 py-12 relative overflow-hidden">
 
       {/* ── Image to Prompt Converter ── */}
-      <ScrollReveal variant="fade" className="w-full mb-16 relative z-10">
-        <ImageToPromptSection />
-      </ScrollReveal>
+      {!isSearching && (
+        <ScrollReveal variant="fade" className="w-full mb-16 relative z-10">
+          <ImageToPromptSection />
+        </ScrollReveal>
+      )}
 
       {/* ── Hero header ── */}
       <div className="flex flex-col items-center text-center mb-10 gap-3 relative z-10">

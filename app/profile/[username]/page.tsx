@@ -71,7 +71,7 @@ export default function PublicProfilePage({ params }: { params: Promise<{ userna
   const stats = {
     prompts: userPrompts.length,
     uses: userPrompts.reduce((acc, p) => acc + (p.views_count || 0), 0),
-    rating: 4.9,
+    rating: profileUser.rating || 0,
     upvotes: userPrompts.reduce((acc, p) => acc + (p.saveCount || 0), 0)
   };
 

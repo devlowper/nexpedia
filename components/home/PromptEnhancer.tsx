@@ -164,14 +164,15 @@ export const PromptEnhancer = () => {
               <button
                 onClick={handleEnhance}
                 disabled={loading || (isLoggedIn && !prompt && !imageBase64)}
-                className="w-full sm:w-auto bg-accent hover:bg-accent-hover disabled:cursor-not-allowed text-black px-8 py-3 rounded-full font-bold flex items-center justify-center gap-2 transition-all hover:shadow-accent/40 hover:scale-[1.02] active:scale-[0.98] relative z-50 cursor-pointer"
+                className="w-full sm:w-auto bg-accent hover:bg-accent-hover disabled:cursor-not-allowed !text-white px-8 py-3 rounded-full font-bold flex items-center justify-center gap-2 transition-all hover:shadow-accent/40 hover:scale-[1.02] active:scale-[0.98] relative z-50 cursor-pointer"
+                style={{ color: '#ffffff' }}
               >
                 {loading ? (
-                  <><Loader2 className="animate-spin" size={18} /> Generating…</>
+                  <><Loader2 className="animate-spin text-white" size={18} /> <span className="text-white">Generating…</span></>
                 ) : !isLoggedIn ? (
-                  <><Sparkles size={16} /> Login to Generate</>
+                  <><Sparkles size={16} className="text-white" /> <span className="text-white">Login to Generate</span></>
                 ) : (
-                  <><svg className="generator-hero__magic shrink-0" width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9.5 3 11 7l4 1.5-4 1.5-1.5 4-1.5-4L4 8.5 8 7l1.5-4Zm8 8 .9 2.4 2.4.9-2.4.9-.9 2.4-.9-2.4-2.4-.9 2.4-.9.9-2.4Zm-3 6 .55 1.45L16.5 19l-1.45.55L14.5 21l-.55-1.45L12.5 19l1.45-.55L14.5 17Z" fill="#2d2b2c"></path></svg> Generate</>
+                  <><svg className="generator-hero__magic shrink-0 text-white" width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9.5 3 11 7l4 1.5-4 1.5-1.5 4-1.5-4L4 8.5 8 7l1.5-4Zm8 8 .9 2.4 2.4.9-2.4.9-.9 2.4-.9-2.4-2.4-.9 2.4-.9.9-2.4Zm-3 6 .55 1.45L16.5 19l-1.45.55L14.5 21l-.55-1.45L12.5 19l1.45-.55L14.5 17Z" fill="currentColor"></path></svg> <span className="text-white">Generate</span></>
                 )}
               </button>
             </div>

@@ -14,7 +14,7 @@ export function ContributionStats({ stats }: ContributionStatsProps) {
   const statItems = [
     { label: 'Prompts', value: stats.prompts },
     { label: 'Total Uses', value: formatViewCount(stats.uses) },
-    { label: 'Rating', value: `${stats.rating.toFixed(1)}★`, highlight: true },
+    { label: 'Rating', value: stats.rating > 0 ? `${stats.rating.toFixed(1)}★` : '0', highlight: true },
     { label: 'Upvotes', value: formatViewCount(stats.upvotes) },
   ];
 

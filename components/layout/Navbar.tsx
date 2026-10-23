@@ -15,11 +15,11 @@ export function Navbar() {
   const [authModal, setAuthModal] = useState<{ open: boolean; view: 'login' | 'signup' }>({ open: false, view: 'login' });
   const [notificationsOpen, setNotificationsOpen] = useState(false);
   const [notifications, setNotifications] = useState<any[]>([]);
-  
+
   const pathname = usePathname();
   const { isDark, toggle } = useTheme();
   const { user, isLoggedIn, isLoading, logout } = useAuth();
-  
+
   const notifRef = useRef<HTMLDivElement>(null);
   const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
 
@@ -99,14 +99,12 @@ export function Navbar() {
   // Avatar initial
   const initial = user?.name?.[0]?.toUpperCase() ?? 'U';
 
-  const isHomeTop = pathname === '/' && !scrolled;
-
   return (
     <>
       <nav className={cn(
         "fixed z-40 transition-all duration-300 h-[60px] left-1/2 -translate-x-1/2",
         scrolled
-          ? "top-4 w-[calc(100%-2rem)] max-w-5xl rounded-full bg-black/60 dark:bg-black/60 backdrop-blur-xl border border-white/10 shadow-xl scrolled"
+          ? "top-4 w-[calc(100%-2rem)] max-w-5xl rounded-full bg-black/5 dark:bg-black/5 dark:bg-white/5 backdrop-blur-xl border border-border shadow-lg scrolled"
           : "top-0 w-full max-w-full rounded-none bg-transparent border border-transparent"
       )}>
         <div className="max-w-7xl mx-auto px-4 h-full flex items-center justify-between">
@@ -117,7 +115,7 @@ export function Navbar() {
               P
             </div>
             <span className="font-bold text-lg tracking-tight">
-              <span className={cn("transition-colors", isHomeTop ? "text-white group-hover:text-accent" : "text-primary group-hover:text-accent")}>pro</span>
+              <span className="text-primary group-hover:text-accent transition-colors">pro</span>
               <span className="text-accent">Craft</span>
             </span>
           </Link>
@@ -130,13 +128,9 @@ export function Navbar() {
                 href={link.href}
                 className={cn(
                   "text-[0.875rem] transition-colors px-3 py-1.5 rounded-md",
-                  isHomeTop
-                    ? pathname === link.href
-                      ? "text-white bg-white/10 font-bold"
-                      : "text-white/70 hover:text-white hover:bg-white/10 font-medium"
-                    : pathname === link.href
-                      ? "text-accent bg-black/5 dark:bg-white/5 font-bold"
-                      : "text-primary hover:text-primary hover:bg-surface font-medium"
+                  pathname === link.href
+                    ? "text-accent bg-black/5 dark:bg-black/5 dark:bg-white/5 font-bold"
+                    : "text-primary hover:text-primary hover:bg-surface font-medium"
                 )}
               >
                 {link.name}
@@ -154,17 +148,14 @@ export function Navbar() {
                 <button
                   id="navbar-login-btn"
                   onClick={openLogin}
-                  className={cn(
-                    "text-sm font-medium px-4 py-2 rounded-md transition-colors",
-                    isHomeTop ? "text-white/80 hover:text-white hover:bg-white/10" : "hover:bg-surface text-primary"
-                  )}
+                  className="text-sm font-medium px-4 py-2 rounded-md hover:bg-surface text-primary transition-colors"
                 >
                   Login
                 </button>
                 <button
                   id="navbar-signup-btn"
                   onClick={openSignup}
-                  className="bg-accent text-white text-sm font-semibold px-5 py-2 rounded-full hover:bg-accent-hover transition-colors shadow-sm"
+                  className="bg-accent text-black text-sm font-semibold px-5 py-2 rounded-full hover:bg-accent-hover transition-colors"
                 >
                   Get Start →
                 </button>
@@ -173,7 +164,7 @@ export function Navbar() {
               <div className="flex items-center gap-3">
                 {/* Notification bell */}
                 <div className="relative" ref={notifRef}>
-                  <button 
+                  <button
                     onClick={() => setNotificationsOpen(!notificationsOpen)}
                     className="text-muted hover:text-primary transition-colors relative flex items-center justify-center p-1"
                   >
@@ -182,7 +173,7 @@ export function Navbar() {
                       <span className="absolute top-0 right-0 w-2.5 h-2.5 bg-accent rounded-full border-[1.5px] border-[var(--bg-base)] flex items-center justify-center" />
                     )}
                   </button>
-                  
+
                   {notificationsOpen && (
                     <div className="absolute right-0 mt-2 w-72 rounded-xl py-2 shadow-2xl animate-in slide-in-from-top-2 fade-in duration-150 max-h-96 overflow-y-auto"
                       style={{
@@ -199,8 +190,8 @@ export function Navbar() {
                         </div>
                       ) : (
                         notifications.map(n => (
-                          <div 
-                            key={n._id} 
+                          <div
+                            key={n._id}
                             className={`px-4 py-3 border-b last:border-b-0 cursor-pointer transition-colors ${!n.isRead ? 'bg-accent/5' : ''}`}
                             style={{ borderColor: 'var(--border)' }}
                             onClick={() => !n.isRead && markAsRead(n._id)}

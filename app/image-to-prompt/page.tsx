@@ -2,10 +2,10 @@
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import Image from 'next/image';
-import Link from 'next/link';
+import { motion, AnimatePresence } from 'framer-motion';
 import { 
   UploadCloud, Sparkles, Copy, Check, Loader2, X, 
-  Image as ImageIcon, Sliders, ArrowLeft, RefreshCw, 
+  Image as ImageIcon, Sliders, RefreshCw, 
   Trash2, Search, Plus, Layers, Wand2, Eye, Download, History,
   Camera, Palette, ShieldAlert, FileText
 } from 'lucide-react';
@@ -323,6 +323,9 @@ export default function ImageToPromptPage() {
   };
 
   const loadHistoryItem = (item: ConvertedPrompt) => {
+    if (typeof window !== 'undefined' && window.innerWidth < 768) {
+      setSidebarOpen(false);
+    }
     setImagePreview(item.thumbnail);
     setImageBase64(item.thumbnail);
     setGeneratedPrompt(item.prompt);
@@ -346,23 +349,50 @@ export default function ImageToPromptPage() {
   return (
     <div className="fixed inset-0 top-[60px] flex w-full overflow-hidden bg-base text-primary">
       
+      {/* ── Mobile Backdrop for Sidebar Drawer ── */}
+      <AnimatePresence>
+        {sidebarOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            onClick={() => setSidebarOpen(false)}
+            className="fixed inset-0 top-[60px] z-40 bg-black/60 backdrop-blur-xs md:hidden"
+          />
+        )}
+      </AnimatePresence>
+
       {/* ── Left Sidebar (History & Saved) ── */}
       <aside className={`
-        ${sidebarOpen ? 'w-80 md:w-88' : 'w-0'} 
-        shrink-0 border-r border-black/10 dark:border-white/10 bg-white/50 dark:bg-[#0c0d0e]/60 backdrop-blur-xl flex flex-col transition-all duration-300 overflow-hidden relative z-30
+        fixed inset-y-0 left-0 top-[60px] z-50 w-72 sm:w-80 md:relative md:top-0
+        ${sidebarOpen ? 'translate-x-0 md:w-80 lg:w-88' : '-translate-x-full md:translate-x-0 md:w-0'} 
+        shrink-0 border-r border-black/10 dark:border-white/10 bg-white/95 dark:bg-[#0c0d0e]/95 md:bg-white/50 md:dark:bg-[#0c0d0e]/60 backdrop-blur-2xl md:backdrop-blur-xl flex flex-col transition-all duration-300 overflow-hidden shadow-2xl md:shadow-none
       `}>
-        <div className="p-4 border-b border-black/10 dark:border-white/10 flex items-center justify-between">
+        <div className="p-3.5 sm:p-4 border-b border-black/10 dark:border-white/10 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <History size={18} className="text-[#EA4C89]" />
             <h3 className="font-bold text-sm tracking-tight">Recent Conversions</h3>
           </div>
-          <button
-            onClick={startNew}
-            className="p-1.5 rounded-lg bg-[#EA4C89] hover:bg-[#d43a76] text-white transition-colors shadow-sm"
-            title="Start New Image Conversion"
-          >
-            <Plus size={16} />
-          </button>
+          <div className="flex items-center gap-1.5">
+            <button
+              onClick={() => {
+                startNew();
+                if (typeof window !== 'undefined' && window.innerWidth < 768) setSidebarOpen(false);
+              }}
+              className="p-1.5 rounded-lg bg-[var(--brand-solid)] hover:opacity-90 text-white transition-opacity shadow-sm"
+              title="Start New Image Conversion"
+            >
+              <Plus size={16} />
+            </button>
+            <button
+              onClick={() => setSidebarOpen(false)}
+              className="md:hidden p-1.5 rounded-lg hover:bg-black/5 dark:hover:bg-white/5 text-muted hover:text-primary transition-colors cursor-pointer"
+              title="Close Sidebar"
+            >
+              <X size={18} />
+            </button>
+          </div>
         </div>
 
         {/* Search History */}
@@ -380,7 +410,7 @@ export default function ImageToPromptPage() {
         </div>
 
         {/* History List */}
-        <div className="flex-1 overflow-y-auto p-3 space-y-2.5 custom-scrollbar">
+        <div className="flex-1 overflow-y-auto p-2.5 sm:p-3 space-y-2 custom-scrollbar">
           {filteredHistory.length === 0 ? (
             <div className="h-48 flex flex-col items-center justify-center text-center p-4">
               <Layers size={28} className="text-black/20 dark:text-white/20 mb-2" />
@@ -442,23 +472,16 @@ export default function ImageToPromptPage() {
       <main className="flex-1 flex flex-col h-full overflow-hidden relative">
         
         {/* Top Bar Navigation (Fixed Header) */}
-        <header className="h-14 border-b border-black/10 dark:border-white/10 px-4 md:px-8 flex items-center justify-between shrink-0 bg-white/40 dark:bg-[#090A0A]/40 backdrop-blur-md z-30">
-          <div className="flex items-center gap-3">
+        <header className="h-14 border-b border-black/10 dark:border-white/10 px-3 sm:px-6 md:px-8 flex items-center justify-between shrink-0 bg-white/40 dark:bg-[#090A0A]/40 backdrop-blur-md z-30">
+          <div className="flex items-center gap-2 sm:gap-3">
             <button
               onClick={() => setSidebarOpen(!sidebarOpen)}
-              className="p-1.5 rounded-lg hover:bg-black/5 dark:hover:bg-white/5 text-black/70 dark:text-white/70 transition-colors"
+              className="p-2 rounded-lg hover:bg-black/5 dark:hover:bg-white/5 text-black/70 dark:text-white/70 transition-colors cursor-pointer"
               title="Toggle History Sidebar"
+              aria-label="Toggle History Sidebar"
             >
               <Layers size={18} />
             </button>
-
-            <div className="flex items-center gap-2">
-              <Link href="/prompt-library" className="text-xs text-black/50 dark:text-white/50 hover:text-primary transition-colors flex items-center gap-1">
-                <ArrowLeft size={13} /> Back
-              </Link>
-              <span className="text-black/30 dark:text-white/30">/</span>
-              <h1 className="text-sm font-bold tracking-tight text-primary">Img to Prompt Studio</h1>
-            </div>
           </div>
 
           <div className="flex items-center gap-2">
@@ -470,8 +493,8 @@ export default function ImageToPromptPage() {
         </header>
 
         {/* Studio Canvas (Internal Scroll Area ONLY) */}
-        <div className="flex-1 overflow-y-auto custom-scrollbar p-4 sm:p-8">
-          <div className="max-w-4xl w-full mx-auto flex flex-col gap-6">
+        <div className="flex-1 overflow-y-auto custom-scrollbar p-3.5 sm:p-6 md:p-8">
+          <div className="max-w-4xl w-full mx-auto flex flex-col gap-5 sm:gap-6">
           
 
           {/* Error Banner */}
@@ -485,7 +508,7 @@ export default function ImageToPromptPage() {
           )}
 
           {/* ── Main Studio Form Stack ── */}
-          <div className="w-full max-w-3xl mx-auto flex flex-col gap-6">
+          <div className="w-full max-w-3xl mx-auto flex flex-col gap-5 sm:gap-6">
             
             {/* Upload Dropzone */}
             <div className="w-full">
@@ -504,28 +527,30 @@ export default function ImageToPromptPage() {
                   onDrop={handleDrop}
                   onClick={() => fileInputRef.current?.click()}
                   className={`
-                    w-full min-h-[320px] rounded-3xl border-2 border-dashed flex flex-col items-center justify-center p-8 text-center cursor-pointer transition-all duration-300 relative group
+                    w-full min-h-[250px] sm:min-h-[320px] rounded-3xl border-2 border-dashed flex flex-col items-center justify-center p-4 sm:p-8 text-center cursor-pointer transition-all duration-300 relative group
                     ${isDragging 
                       ? 'border-[#EA4C89] bg-[#EA4C89]/10 scale-[0.99]' 
                       : 'border-black/15 dark:border-white/15 hover:border-[#EA4C89]/60 hover:bg-black/[0.02] dark:hover:bg-white/[0.02]'
                     }
                   `}
                 >
-                  {/* 3 File Cards Vector Icon (.png, .jpg, .webp) in #EA4C89 */}
-                  <FileFormatCardsIcon className="w-56 h-36 mb-3 transition-transform duration-300 group-hover:scale-105" />
+                  {/* 3 File Cards Vector Icon (.png, .jpg, .webp) */}
+                  <FileFormatCardsIcon className="w-44 sm:w-56 h-28 sm:h-36 mb-2 sm:mb-3 transition-transform duration-300 group-hover:scale-105" />
 
                   {/* Target Headline */}
-                  <h3 className="font-extrabold text-xl sm:text-2xl text-primary dark:text-white tracking-wide uppercase mb-2">
-                    DRAG IMAGE HERE TO BEGIN
+                  <h3 className="font-extrabold text-lg sm:text-2xl text-primary dark:text-white tracking-wide uppercase mb-1.5 sm:mb-2 text-center">
+                    <span className="sm:hidden">TAP OR DROP IMAGE HERE</span>
+                    <span className="hidden sm:inline">DRAG IMAGE HERE TO BEGIN</span>
                   </h3>
 
-                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-black/5 dark:bg-white/5 text-[11px] text-black/60 dark:text-white/60 font-medium">
-                    Supports PNG, JPG, WEBP • Max 10MB • Paste with <kbd className="px-1.5 py-0.5 rounded bg-black/10 dark:bg-white/10 font-mono text-xs">Ctrl+V</kbd>
+                  <div className="inline-flex flex-wrap justify-center items-center gap-1.5 px-3 py-1 rounded-full bg-black/5 dark:bg-white/5 text-[11px] text-black/60 dark:text-white/60 font-medium text-center">
+                    <span>Supports PNG, JPG, WEBP • Max 10MB</span>
+                    <span className="hidden sm:inline">• Paste with <kbd className="px-1.5 py-0.5 rounded bg-black/10 dark:bg-white/10 font-mono text-xs">Ctrl+V</kbd></span>
                   </div>
                 </div>
               ) : (
-                <div className="w-full min-h-[340px] rounded-3xl overflow-hidden border border-black/10 dark:border-white/10 bg-black/5 dark:bg-[#121315] relative group flex items-center justify-center p-4">
-                  <div className="relative w-full h-[320px]">
+                <div className="w-full min-h-[250px] sm:min-h-[340px] rounded-3xl overflow-hidden border border-black/10 dark:border-white/10 bg-black/5 dark:bg-[#121315] relative group flex items-center justify-center p-3 sm:p-4">
+                  <div className="relative w-full h-[240px] sm:h-[320px]">
                     <Image
                       src={imagePreview}
                       alt="Uploaded target"
@@ -535,10 +560,10 @@ export default function ImageToPromptPage() {
                   </div>
 
                   {/* Image Controls Overlay */}
-                  <div className="absolute top-4 right-4 flex items-center gap-2 z-10">
+                  <div className="absolute top-3 right-3 sm:top-4 sm:right-4 flex items-center gap-2 z-10">
                     <button
                       onClick={() => fileInputRef.current?.click()}
-                      className="px-3.5 py-1.5 rounded-xl bg-black/75 hover:bg-black text-white text-xs font-semibold backdrop-blur-md transition-all shadow-md flex items-center gap-1.5"
+                      className="px-3 py-1.5 rounded-xl bg-black/75 hover:bg-black text-white text-xs font-semibold backdrop-blur-md transition-all shadow-md flex items-center gap-1.5"
                     >
                       <RefreshCw size={13} /> Replace
                     </button>
@@ -551,9 +576,9 @@ export default function ImageToPromptPage() {
                     </button>
                   </div>
 
-                  <div className="absolute bottom-4 left-4 z-10 px-3.5 py-1.5 rounded-xl bg-black/75 text-white text-xs font-medium backdrop-blur-md flex items-center gap-2">
-                    <ImageIcon size={14} className="text-[#EA4C89]" />
-                    <span className="truncate max-w-[220px]">{fileName || 'Target Visual'}</span>
+                  <div className="absolute bottom-3 left-3 sm:bottom-4 sm:left-4 z-10 px-3 py-1.5 rounded-xl bg-black/75 text-white text-xs font-medium backdrop-blur-md flex items-center gap-2 max-w-[calc(100%-1.5rem)]">
+                    <ImageIcon size={14} className="text-[#EA4C89] shrink-0" />
+                    <span className="truncate">{fileName || 'Target Visual'}</span>
                   </div>
                 </div>
               )}
@@ -569,47 +594,28 @@ export default function ImageToPromptPage() {
                 onChange={(e) => setCustomNote(e.target.value)}
                 placeholder="e.g. Focus on lighting and textures, cinematic mood, 8k resolution, photorealistic..."
                 rows={3}
-                className="w-full rounded-2xl p-4 text-xs sm:text-sm bg-black/[0.02] dark:bg-white/[0.03] border border-black/10 dark:border-white/10 text-primary dark:text-white placeholder:text-black/30 dark:placeholder:text-white/30 focus:outline-none focus:border-[#EA4C89] transition-colors resize-none shadow-sm"
+                className="w-full rounded-2xl p-3.5 sm:p-4 text-xs sm:text-sm bg-black/[0.02] dark:bg-white/[0.03] border border-black/10 dark:border-white/10 text-primary dark:text-white placeholder:text-black/30 dark:placeholder:text-white/30 focus:outline-none focus:border-[#EA4C89] transition-colors resize-none shadow-sm"
               />
             </div>
 
-            {/* Generate Button & Auth Notice */}
+            {/* Generate Button */}
             <div className="w-full">
-              {!isLoggedIn && (
-                <div className="flex items-center justify-between p-3.5 rounded-2xl bg-[#EA4C89]/10 border border-[#EA4C89]/25 text-xs text-primary mb-3">
-                  <span className="flex items-center gap-2">
-                    <Sparkles size={15} className="text-[#EA4C89] shrink-0" />
-                    <span>Please <strong>Log In</strong> or <strong>Sign Up</strong> to use the AI Image-to-Prompt generator.</span>
-                  </span>
-                  <button
-                    type="button"
-                    onClick={() => setShowAuthModal(true)}
-                    className="text-xs font-bold text-[#EA4C89] hover:underline shrink-0 ml-2 cursor-pointer"
-                  >
-                    Log In &rarr;
-                  </button>
-                </div>
-              )}
-
               <button
+                type="button"
                 onClick={handleGenerate}
-                disabled={loading || (isLoggedIn && !imageBase64)}
-                className="w-full py-4 px-8 rounded-2xl bg-[#EA4C89] hover:bg-[#d43a76] disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold text-base transition-all flex items-center justify-center gap-2.5 shadow-[0_6px_25px_rgba(234,76,137,0.35)] active:scale-[0.99] cursor-pointer"
+                disabled={loading}
+                className="w-full py-3.5 sm:py-4 px-6 sm:px-8 rounded-2xl bg-[#EA4C89] hover:bg-[#d43a76] disabled:opacity-50 disabled:cursor-not-allowed !text-white font-bold text-sm sm:text-base transition-all flex items-center justify-center gap-2.5 shadow-[0_6px_25px_rgba(234,76,137,0.35)] active:scale-[0.99] cursor-pointer"
+                style={{ color: '#ffffff' }}
               >
                 {loading ? (
                   <>
-                    <Loader2 size={18} className="animate-spin" />
-                    <span>{loadingMessages[loadingStep]}</span>
-                  </>
-                ) : !isLoggedIn ? (
-                  <>
-                    <Sparkles size={18} />
-                    <span>Log In / Sign Up to Generate</span>
+                    <Loader2 size={18} className="animate-spin text-white shrink-0" style={{ color: '#ffffff' }} />
+                    <span className="text-white font-bold" style={{ color: '#ffffff' }}>{loadingMessages[loadingStep]}</span>
                   </>
                 ) : (
                   <>
-                    <Wand2 size={18} />
-                    <span>Generate Prompt</span>
+                    <Wand2 size={18} className="text-white shrink-0" style={{ color: '#ffffff' }} />
+                    <span className="text-white font-bold" style={{ color: '#ffffff' }}>Generate Prompt</span>
                   </>
                 )}
               </button>
@@ -619,48 +625,48 @@ export default function ImageToPromptPage() {
 
           {/* Generated Result Section with 3 Options: Main, Style & Negative */}
           {generatedPrompt && promptResult && (
-            <div className="w-full rounded-3xl border border-black/10 dark:border-white/10 bg-white dark:bg-[#121315] p-6 sm:p-8 shadow-xl animate-in fade-in slide-in-from-bottom-3 duration-300">
+            <div className="w-full rounded-3xl border border-black/10 dark:border-white/10 bg-white dark:bg-[#121315] p-4 sm:p-6 md:p-8 shadow-xl animate-in fade-in slide-in-from-bottom-3 duration-300">
               
               {/* Header Bar */}
-              <div className="flex flex-wrap items-center justify-between gap-4 mb-6 pb-5 border-b border-black/5 dark:border-white/10">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3.5 mb-5 pb-4 border-b border-black/5 dark:border-white/10">
                 <div className="flex items-center gap-2.5">
-                  <span className="w-3 h-3 rounded-full bg-emerald-500 animate-pulse" />
+                  <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse shrink-0" />
                   <div>
-                    <h3 className="font-extrabold text-base text-primary">
+                    <h3 className="font-extrabold text-sm sm:text-base text-primary">
                       Re-creation Prompt Breakdown
                     </h3>
-                    <p className="text-xs text-muted">
+                    <p className="text-[11px] sm:text-xs text-muted">
                       Optimized for <span className="text-primary font-semibold">{targetModel}</span>
                     </p>
                   </div>
                 </div>
 
-                <div className="flex items-center gap-2.5">
+                <div className="flex items-center gap-2 w-full sm:w-auto">
                   <button
                     onClick={handleGenerate}
                     disabled={loading}
-                    className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-black/10 dark:border-white/10 text-xs font-semibold hover:bg-black/5 dark:hover:bg-white/5 transition-colors"
+                    className="flex-1 sm:flex-none justify-center inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border border-black/10 dark:border-white/10 text-xs font-semibold hover:bg-black/5 dark:hover:bg-white/5 transition-colors"
                   >
                     <RefreshCw size={13} className={loading ? 'animate-spin' : ''} />
-                    Regenerate
+                    <span>Regenerate</span>
                   </button>
                   <button
                     onClick={handleCopy}
-                    className="inline-flex items-center gap-1.5 px-5 py-2 rounded-xl bg-[#EA4C89] hover:bg-[#d43a76] text-white text-xs font-bold transition-all shadow-md active:scale-95"
+                    className="flex-1 sm:flex-none justify-center inline-flex items-center gap-1.5 px-4 sm:px-5 py-2 rounded-xl bg-[#EA4C89] hover:bg-[#d43a76] text-white text-xs font-bold transition-all shadow-md active:scale-95"
                   >
                     {copied ? <Check size={14} /> : <Copy size={14} />}
-                    {copied ? 'Copied Full Prompt!' : 'Copy Full Prompt'}
+                    <span>{copied ? 'Copied Full!' : 'Copy Full'}</span>
                   </button>
                 </div>
               </div>
 
               {/* 3-Tab Filter Pills */}
-              <div className="flex flex-wrap items-center gap-2 mb-6">
+              <div className="flex items-center gap-1.5 sm:gap-2 mb-5 overflow-x-auto no-scrollbar py-1 -mx-1 px-1">
                 {[
-                  { id: 'all', label: 'All 3 Options', icon: Layers },
-                  { id: 'main', label: '1. Main Prompt', icon: Sparkles },
-                  { id: 'style', label: '2. Style (Color, Camera)', icon: Camera },
-                  { id: 'negative', label: '3. Negative Prompt', icon: ShieldAlert },
+                  { id: 'all', label: 'All Options', icon: Layers },
+                  { id: 'main', label: '1. Main', icon: Sparkles },
+                  { id: 'style', label: '2. Style', icon: Camera },
+                  { id: 'negative', label: '3. Negative', icon: ShieldAlert },
                 ].map((tab) => {
                   const Icon = tab.icon;
                   const isActive = activeTab === tab.id;
@@ -669,7 +675,7 @@ export default function ImageToPromptPage() {
                       key={tab.id}
                       type="button"
                       onClick={() => setActiveTab(tab.id as any)}
-                      className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all ${
+                      className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all shrink-0 ${
                         isActive
                           ? 'bg-black dark:bg-white text-white dark:text-black shadow-xs'
                           : 'bg-black/5 dark:bg-white/5 text-muted hover:text-primary hover:bg-black/10 dark:hover:bg-white/10'
@@ -683,94 +689,94 @@ export default function ImageToPromptPage() {
               </div>
 
               {/* The 3 Option Cards */}
-              <div className="space-y-4">
+              <div className="space-y-3.5 sm:space-y-4">
                 
                 {/* ── Option 1: Main Prompt ── */}
                 {(activeTab === 'all' || activeTab === 'main') && (
-                  <div className="rounded-2xl border border-indigo-500/20 bg-indigo-500/[0.03] dark:bg-indigo-500/[0.05] p-5 transition-all">
-                    <div className="flex items-center justify-between mb-3">
-                      <div className="flex items-center gap-2">
-                        <span className="w-6 h-6 rounded-lg bg-indigo-500/15 border border-indigo-500/30 text-indigo-500 flex items-center justify-center font-bold text-xs">
+                  <div className="rounded-2xl border border-indigo-500/20 bg-indigo-500/[0.03] dark:bg-indigo-500/[0.05] p-3.5 sm:p-5 transition-all">
+                    <div className="flex items-center justify-between gap-2 mb-2.5">
+                      <div className="flex items-center gap-2 min-w-0">
+                        <span className="w-5 h-5 sm:w-6 sm:h-6 rounded-lg bg-indigo-500/15 border border-indigo-500/30 text-indigo-500 flex items-center justify-center font-bold text-xs shrink-0">
                           1
                         </span>
-                        <span className="text-xs font-bold uppercase tracking-wide text-indigo-600 dark:text-indigo-400 flex items-center gap-1.5">
-                          <Sparkles size={13} />
+                        <span className="text-xs font-bold uppercase tracking-wide text-indigo-600 dark:text-indigo-400 flex items-center gap-1.5 truncate">
+                          <Sparkles size={13} className="shrink-0" />
                           Main Prompt (Subject & Scene)
                         </span>
                       </div>
                       <button
                         onClick={() => copySpecificField('main', promptResult.mainPrompt)}
-                        className="inline-flex items-center gap-1 px-3 py-1 rounded-lg text-xs font-medium border border-indigo-500/20 hover:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 transition-colors"
+                        className="inline-flex items-center gap-1 px-2.5 sm:px-3 py-1 rounded-lg text-[11px] sm:text-xs font-medium border border-indigo-500/20 hover:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 transition-colors shrink-0"
                       >
                         {copiedField === 'main' ? <Check size={12} /> : <Copy size={12} />}
-                        {copiedField === 'main' ? 'Copied' : 'Copy Main'}
+                        {copiedField === 'main' ? 'Copied' : 'Copy'}
                       </button>
                     </div>
                     <textarea
                       rows={3}
                       value={promptResult.mainPrompt}
                       onChange={(e) => setPromptResult({ ...promptResult, mainPrompt: e.target.value })}
-                      className="w-full bg-white/70 dark:bg-black/40 border border-black/5 dark:border-white/10 rounded-xl p-3.5 font-mono text-xs sm:text-sm text-primary leading-relaxed focus:outline-none focus:border-indigo-500 resize-none"
+                      className="w-full bg-white/70 dark:bg-black/40 border border-black/5 dark:border-white/10 rounded-xl p-3 sm:p-3.5 font-mono text-xs sm:text-sm text-primary leading-relaxed focus:outline-none focus:border-indigo-500 resize-none"
                     />
                   </div>
                 )}
 
                 {/* ── Option 2: Style (Color, Camera, Lighting) ── */}
                 {(activeTab === 'all' || activeTab === 'style') && (
-                  <div className="rounded-2xl border border-amber-500/20 bg-amber-500/[0.03] dark:bg-amber-500/[0.05] p-5 transition-all">
-                    <div className="flex items-center justify-between mb-3">
-                      <div className="flex items-center gap-2">
-                        <span className="w-6 h-6 rounded-lg bg-amber-500/15 border border-amber-500/30 text-amber-500 flex items-center justify-center font-bold text-xs">
+                  <div className="rounded-2xl border border-amber-500/20 bg-amber-500/[0.03] dark:bg-amber-500/[0.05] p-3.5 sm:p-5 transition-all">
+                    <div className="flex items-center justify-between gap-2 mb-2.5">
+                      <div className="flex items-center gap-2 min-w-0">
+                        <span className="w-5 h-5 sm:w-6 sm:h-6 rounded-lg bg-amber-500/15 border border-amber-500/30 text-amber-500 flex items-center justify-center font-bold text-xs shrink-0">
                           2
                         </span>
-                        <span className="text-xs font-bold uppercase tracking-wide text-amber-600 dark:text-amber-400 flex items-center gap-1.5">
-                          <Camera size={13} />
-                          Style & Aesthetics (Color, Camera, Lighting & Optics)
+                        <span className="text-xs font-bold uppercase tracking-wide text-amber-600 dark:text-amber-400 flex items-center gap-1.5 truncate">
+                          <Camera size={13} className="shrink-0" />
+                          Style & Optics
                         </span>
                       </div>
                       <button
                         onClick={() => copySpecificField('style', promptResult.style)}
-                        className="inline-flex items-center gap-1 px-3 py-1 rounded-lg text-xs font-medium border border-amber-500/20 hover:bg-amber-500/10 text-amber-600 dark:text-amber-400 transition-colors"
+                        className="inline-flex items-center gap-1 px-2.5 sm:px-3 py-1 rounded-lg text-[11px] sm:text-xs font-medium border border-amber-500/20 hover:bg-amber-500/10 text-amber-600 dark:text-amber-400 transition-colors shrink-0"
                       >
                         {copiedField === 'style' ? <Check size={12} /> : <Copy size={12} />}
-                        {copiedField === 'style' ? 'Copied' : 'Copy Style'}
+                        {copiedField === 'style' ? 'Copied' : 'Copy'}
                       </button>
                     </div>
                     <textarea
                       rows={3}
                       value={promptResult.style}
                       onChange={(e) => setPromptResult({ ...promptResult, style: e.target.value })}
-                      className="w-full bg-white/70 dark:bg-black/40 border border-black/5 dark:border-white/10 rounded-xl p-3.5 font-mono text-xs sm:text-sm text-primary leading-relaxed focus:outline-none focus:border-amber-500 resize-none"
+                      className="w-full bg-white/70 dark:bg-black/40 border border-black/5 dark:border-white/10 rounded-xl p-3 sm:p-3.5 font-mono text-xs sm:text-sm text-primary leading-relaxed focus:outline-none focus:border-amber-500 resize-none"
                     />
                   </div>
                 )}
 
                 {/* ── Option 3: Negative Prompt ── */}
                 {(activeTab === 'all' || activeTab === 'negative') && (
-                  <div className="rounded-2xl border border-rose-500/20 bg-rose-500/[0.03] dark:bg-rose-500/[0.05] p-5 transition-all">
-                    <div className="flex items-center justify-between mb-3">
-                      <div className="flex items-center gap-2">
-                        <span className="w-6 h-6 rounded-lg bg-rose-500/15 border border-rose-500/30 text-rose-500 flex items-center justify-center font-bold text-xs">
+                  <div className="rounded-2xl border border-rose-500/20 bg-rose-500/[0.03] dark:bg-rose-500/[0.05] p-3.5 sm:p-5 transition-all">
+                    <div className="flex items-center justify-between gap-2 mb-2.5">
+                      <div className="flex items-center gap-2 min-w-0">
+                        <span className="w-5 h-5 sm:w-6 sm:h-6 rounded-lg bg-rose-500/15 border border-rose-500/30 text-rose-500 flex items-center justify-center font-bold text-xs shrink-0">
                           3
                         </span>
-                        <span className="text-xs font-bold uppercase tracking-wide text-rose-600 dark:text-rose-400 flex items-center gap-1.5">
-                          <ShieldAlert size={13} />
+                        <span className="text-xs font-bold uppercase tracking-wide text-rose-600 dark:text-rose-400 flex items-center gap-1.5 truncate">
+                          <ShieldAlert size={13} className="shrink-0" />
                           Negative Prompt (What to Avoid)
                         </span>
                       </div>
                       <button
                         onClick={() => copySpecificField('negative', promptResult.negativePrompt)}
-                        className="inline-flex items-center gap-1 px-3 py-1 rounded-lg text-xs font-medium border border-rose-500/20 hover:bg-rose-500/10 text-rose-600 dark:text-rose-400 transition-colors"
+                        className="inline-flex items-center gap-1 px-2.5 sm:px-3 py-1 rounded-lg text-[11px] sm:text-xs font-medium border border-rose-500/20 hover:bg-rose-500/10 text-rose-600 dark:text-rose-400 transition-colors shrink-0"
                       >
                         {copiedField === 'negative' ? <Check size={12} /> : <Copy size={12} />}
-                        {copiedField === 'negative' ? 'Copied' : 'Copy Negative'}
+                        {copiedField === 'negative' ? 'Copied' : 'Copy'}
                       </button>
                     </div>
                     <textarea
                       rows={2}
                       value={promptResult.negativePrompt}
                       onChange={(e) => setPromptResult({ ...promptResult, negativePrompt: e.target.value })}
-                      className="w-full bg-white/70 dark:bg-black/40 border border-black/5 dark:border-white/10 rounded-xl p-3.5 font-mono text-xs sm:text-sm text-primary leading-relaxed focus:outline-none focus:border-rose-500 resize-none"
+                      className="w-full bg-white/70 dark:bg-black/40 border border-black/5 dark:border-white/10 rounded-xl p-3 sm:p-3.5 font-mono text-xs sm:text-sm text-primary leading-relaxed focus:outline-none focus:border-rose-500 resize-none"
                     />
                   </div>
                 )}
@@ -778,9 +784,9 @@ export default function ImageToPromptPage() {
               </div>
 
               {/* Parameter Toggles */}
-              <div className="flex flex-wrap items-center gap-2 mt-6 pt-5 border-t border-black/5 dark:border-white/10">
-                <span className="text-xs text-black/50 dark:text-white/50 flex items-center gap-1 mr-2 font-medium">
-                  <Sliders size={13} /> Active Parameters:
+              <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 mt-5 pt-4 border-t border-black/5 dark:border-white/10">
+                <span className="text-[11px] sm:text-xs text-black/50 dark:text-white/50 flex items-center gap-1 mr-1 font-medium">
+                  <Sliders size={12} /> Parameters:
                 </span>
                 {paramOptions.map((p) => {
                   const isActive = activeParams.includes(p);
@@ -789,7 +795,7 @@ export default function ImageToPromptPage() {
                       key={p}
                       type="button"
                       onClick={() => toggleParam(p)}
-                      className={`px-3 py-1.5 rounded-xl text-xs font-mono transition-all ${
+                      className={`px-2.5 sm:px-3 py-1 rounded-xl text-[11px] sm:text-xs font-mono transition-all ${
                         isActive
                           ? 'bg-[#EA4C89]/15 border border-[#EA4C89] text-[#EA4C89] font-bold'
                           : 'bg-black/5 dark:bg-white/5 border border-transparent text-black/60 dark:text-white/60 hover:border-black/20 dark:hover:border-white/20'

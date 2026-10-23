@@ -88,20 +88,26 @@ function ExploreContent() {
   // Read initial params from URL
   const initialCategory = searchParams.get("category") || "All";
   const initialPage = parseInt(searchParams.get("page") ?? "1", 10) || 1;
+  const initialSearch = searchParams.get("search") || searchParams.get("q") || "";
+  const initialSort = searchParams.get("sort") || "newest";
 
-  const [search,   setSearch]   = useState("");
-  const [debouncedSearch, setDebouncedSearch] = useState("");
+  const [search,   setSearch]   = useState(initialSearch);
+  const [debouncedSearch, setDebouncedSearch] = useState(initialSearch);
   const [category, setCategory] = useState(initialCategory);
-  const [sort,     setSort]     = useState("newest");
+  const [sort,     setSort]     = useState(initialSort);
   const [premium,  setPremium]  = useState("all");
   const [page,     setPage]     = useState(initialPage);
   const [showFilters, setShowFilters] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
-  // Sync category and page when URL changes
+  // Sync category, search, and page when URL changes
   useEffect(() => {
     setCategory(searchParams.get("category") || "All");
     setPage(parseInt(searchParams.get("page") ?? "1", 10) || 1);
+    const q = searchParams.get("search") || searchParams.get("q") || "";
+    setSearch(q);
+    setDebouncedSearch(q);
+    if (searchParams.get("sort")) setSort(searchParams.get("sort")!);
   }, [searchParams]);
 
   // Debounce search input
@@ -137,6 +143,12 @@ function ExploreContent() {
     if (filtersChanged) {
       prevFilters.current = { debouncedSearch, sort, premium };
       const params = new URLSearchParams(searchParams.toString());
+      if (debouncedSearch) params.set("search", debouncedSearch);
+      else params.delete("search");
+      if (sort !== "newest") params.set("sort", sort);
+      else params.delete("sort");
+      if (premium !== "all") params.set("premium", premium);
+      else params.delete("premium");
       params.set("page", "1");
       router.push(`?${params.toString()}`, { scroll: false });
     }
