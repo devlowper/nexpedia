@@ -17,9 +17,23 @@ interface LatestPromptCardProps {
   index: number;
 }
 
+const latestCardVariants: any = {
+  hidden: { opacity: 0, y: 24, scale: 0.96 },
+  visible: (i: number) => ({
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: {
+      duration: 0.45,
+      delay: i * 0.07,
+      ease: [0.25, 0.46, 0.45, 0.94],
+    },
+  }),
+};
+
 /** 
  * LatestPromptCard:
- * Visual-first card that reveals full prompt details (title, tools, category, views, save) on hover.
+ * Visual-first card that reveals full prompt details (title, tools, category, views, save) on hover with rich micro-animations.
  */
 function LatestPromptCard({ prompt, index }: LatestPromptCardProps) {
   const { toggleSavedPrompt, isPromptSaved } = useAuth();
@@ -38,10 +52,11 @@ function LatestPromptCard({ prompt, index }: LatestPromptCardProps) {
   return (
     <motion.div
       custom={index}
-      variants={cardVariants}
+      variants={latestCardVariants}
       initial="hidden"
       animate="visible"
-      className="group relative w-full aspect-[4/5] rounded-2xl overflow-hidden cursor-pointer border border-border/60 bg-surface dark:bg-[#0D1117] shadow-sm hover:shadow-xl hover:border-accent/50 transition-all duration-300"
+      whileHover={{ y: -6, transition: { duration: 0.25, ease: "easeOut" } }}
+      className="group relative w-full aspect-[4/5] rounded-2xl overflow-hidden cursor-pointer border border-border/60 bg-surface dark:bg-[#0D1117] shadow-sm hover:shadow-[0_22px_45px_-12px_rgba(234,76,137,0.32)] hover:border-accent/60 transition-all duration-300"
     >
       {/* ── Background Image ── */}
       {imageUrl ? (
@@ -49,7 +64,7 @@ function LatestPromptCard({ prompt, index }: LatestPromptCardProps) {
           src={imageUrl}
           alt={prompt.page_name}
           fill
-          className="object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
+          className="object-cover group-hover:scale-108 transition-transform duration-700 ease-out"
           unoptimized
         />
       ) : (
@@ -58,12 +73,15 @@ function LatestPromptCard({ prompt, index }: LatestPromptCardProps) {
           const Icon = style.icon;
           return (
             <div className={`absolute inset-0 flex items-center justify-center bg-gradient-to-br ${style.bg} overflow-hidden`}>
-              <Icon size={64} className={`${style.color} opacity-40 group-hover:scale-110 group-hover:opacity-60 transition-all duration-500 ease-out`} strokeWidth={1.5} />
+              <Icon size={64} className={`${style.color} opacity-40 group-hover:scale-115 group-hover:opacity-60 transition-all duration-500 ease-out`} strokeWidth={1.5} />
               <div className={`absolute -top-10 -left-10 w-36 h-36 blur-3xl opacity-50 rounded-full bg-gradient-to-br ${style.bg}`} />
             </div>
           );
         })()
       )}
+
+      {/* ── Shimmer light sweep across card on hover ── */}
+      <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-out bg-gradient-to-r from-transparent via-white/20 to-transparent pointer-events-none z-15" />
 
       {/* ── Gradient Overlay for Text Readability (visible on hover) ── */}
       <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/50 to-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none z-10" />
@@ -71,7 +89,7 @@ function LatestPromptCard({ prompt, index }: LatestPromptCardProps) {
       {/* ── Top Bar (Badges & Actions) ── */}
       <div className="absolute top-3 left-3 right-3 z-30 flex items-center justify-between pointer-events-none">
         {/* Left: Category and Free/Pro badges (reveal on hover) */}
-        <div className="flex items-center gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-auto">
+        <div className="flex items-center gap-1.5 opacity-0 group-hover:opacity-100 -translate-y-2 group-hover:translate-y-0 transition-all duration-300 pointer-events-auto">
           {prompt.category && (
             <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-white/95 bg-black/60 border border-white/15 px-2 py-0.5 rounded-lg backdrop-blur-md shadow-sm">
               <Layers size={10} className="text-accent" />
@@ -95,7 +113,7 @@ function LatestPromptCard({ prompt, index }: LatestPromptCardProps) {
           {/* Heart Save Button */}
           <button
             onClick={handleSave}
-            className={`p-1.5 rounded-lg backdrop-blur-md transition-all shadow-sm border opacity-0 group-hover:opacity-100 ${
+            className={`p-1.5 rounded-lg backdrop-blur-md transition-all duration-200 shadow-sm border opacity-0 group-hover:opacity-100 hover:scale-110 active:scale-95 ${
               isSaved
                 ? 'bg-red-500/20 border-red-500/40 text-red-500 hover:bg-red-500/30 opacity-100'
                 : 'bg-black/60 border-white/15 text-white/80 hover:text-white hover:bg-black/80'
@@ -105,16 +123,19 @@ function LatestPromptCard({ prompt, index }: LatestPromptCardProps) {
             <Heart size={13} fill={isSaved ? "currentColor" : "none"} className={isSaved ? "text-red-500" : ""} />
           </button>
 
-          {/* NEW Badge */}
-          <span className="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-lg bg-accent text-white shadow-md shadow-accent/25 border border-white/20 backdrop-blur-md">
-            <Sparkles size={9} />
-            NEW
-          </span>
+          {/* Animated NEW Badge with ambient glowing pulse */}
+          <div className="relative inline-flex items-center">
+            <span className="absolute -inset-0.5 rounded-lg bg-accent/60 blur-xs animate-pulse opacity-80" />
+            <span className="relative inline-flex items-center gap-1 text-[10px] font-bold px-2.5 py-0.5 rounded-lg bg-accent text-white shadow-md shadow-accent/30 border border-white/25 backdrop-blur-md">
+              <Sparkles size={9} className="animate-pulse" />
+              NEW
+            </span>
+          </div>
         </div>
       </div>
 
       {/* ── Hover Details: Bottom Info (Title, Tool logos, Views) ── */}
-      <div className="absolute inset-x-0 bottom-0 z-20 p-4 flex flex-col justify-end opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-300 pointer-events-none">
+      <div className="absolute inset-x-0 bottom-0 z-20 p-4 flex flex-col justify-end opacity-0 group-hover:opacity-100 translate-y-3 group-hover:translate-y-0 transition-all duration-300 pointer-events-none">
         {/* Title */}
         <h3 className="font-bold text-white text-base leading-snug line-clamp-2 drop-shadow-md">
           {cleanTitle(prompt.page_name)}
@@ -137,7 +158,7 @@ function LatestPromptCard({ prompt, index }: LatestPromptCardProps) {
                   <div
                     key={i}
                     title={t.name}
-                    className="w-5.5 h-5.5 rounded-full bg-white border border-black/10 flex items-center justify-center shrink-0 overflow-hidden shadow-2xs p-0.5 hover:scale-110 transition-transform"
+                    className="w-5.5 h-5.5 rounded-full bg-white border border-black/10 flex items-center justify-center shrink-0 overflow-hidden shadow-2xs p-0.5 hover:scale-125 transition-transform duration-200"
                   >
                     {t.logo ? (
                       t.logo.startsWith("http") || t.logo.startsWith("/") ? (
