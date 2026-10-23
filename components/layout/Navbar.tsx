@@ -99,12 +99,14 @@ export function Navbar() {
   // Avatar initial
   const initial = user?.name?.[0]?.toUpperCase() ?? 'U';
 
+  const isHomeTop = pathname === '/' && !scrolled;
+
   return (
     <>
       <nav className={cn(
         "fixed z-40 transition-all duration-300 h-[60px] left-1/2 -translate-x-1/2",
         scrolled
-          ? "top-4 w-[calc(100%-2rem)] max-w-5xl rounded-full bg-black/5 dark:bg-black/5 dark:bg-white/5 backdrop-blur-xl border border-border shadow-lg scrolled"
+          ? "top-4 w-[calc(100%-2rem)] max-w-5xl rounded-full bg-black/60 dark:bg-black/60 backdrop-blur-xl border border-white/10 shadow-xl scrolled"
           : "top-0 w-full max-w-full rounded-none bg-transparent border border-transparent"
       )}>
         <div className="max-w-7xl mx-auto px-4 h-full flex items-center justify-between">
@@ -115,7 +117,7 @@ export function Navbar() {
               P
             </div>
             <span className="font-bold text-lg tracking-tight">
-              <span className="text-primary group-hover:text-accent transition-colors">pro</span>
+              <span className={cn("transition-colors", isHomeTop ? "text-white group-hover:text-accent" : "text-primary group-hover:text-accent")}>pro</span>
               <span className="text-accent">Craft</span>
             </span>
           </Link>
@@ -128,9 +130,13 @@ export function Navbar() {
                 href={link.href}
                 className={cn(
                   "text-[0.875rem] transition-colors px-3 py-1.5 rounded-md",
-                  pathname === link.href
-                    ? "text-accent bg-black/5 dark:bg-black/5 dark:bg-white/5 font-bold"
-                    : "text-primary hover:text-primary hover:bg-surface font-medium"
+                  isHomeTop
+                    ? pathname === link.href
+                      ? "text-white bg-white/10 font-bold"
+                      : "text-white/70 hover:text-white hover:bg-white/10 font-medium"
+                    : pathname === link.href
+                      ? "text-accent bg-black/5 dark:bg-white/5 font-bold"
+                      : "text-primary hover:text-primary hover:bg-surface font-medium"
                 )}
               >
                 {link.name}
@@ -148,14 +154,17 @@ export function Navbar() {
                 <button
                   id="navbar-login-btn"
                   onClick={openLogin}
-                  className="text-sm font-medium px-4 py-2 rounded-md hover:bg-surface text-primary transition-colors"
+                  className={cn(
+                    "text-sm font-medium px-4 py-2 rounded-md transition-colors",
+                    isHomeTop ? "text-white/80 hover:text-white hover:bg-white/10" : "hover:bg-surface text-primary"
+                  )}
                 >
                   Login
                 </button>
                 <button
                   id="navbar-signup-btn"
                   onClick={openSignup}
-                  className="bg-accent text-black text-sm font-semibold px-5 py-2 rounded-full hover:bg-accent-hover transition-colors"
+                  className="bg-accent text-white text-sm font-semibold px-5 py-2 rounded-full hover:bg-accent-hover transition-colors shadow-sm"
                 >
                   Get Start →
                 </button>
