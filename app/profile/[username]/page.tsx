@@ -10,7 +10,7 @@ import {
 } from 'lucide-react';
 import { notFound } from 'next/navigation';
 import { api } from '@/lib/apiClient';
-
+import { formatViewCount } from '@/lib/utils';
 import { ScrollReveal } from '@/components/ui/ScrollReveal';
 
 export default function PublicProfilePage({ params }: { params: Promise<{ username: string }> }) {
@@ -133,8 +133,8 @@ export default function PublicProfilePage({ params }: { params: Promise<{ userna
                     <h4 className="font-bold mb-2 group-hover:text-accent transition-colors line-clamp-1">{prompt.page_name || prompt.title}</h4>
                     <p className="text-sm text-muted line-clamp-2 mb-4">{prompt.description}</p>
                     <div className="flex items-center justify-between text-xs text-muted">
-                      <span>{prompt.views_count || 0} uses</span>
-                      <span>{prompt.saveCount || 0} saves</span>
+                      <span>{formatViewCount(prompt.views_count)} uses</span>
+                      <span>{formatViewCount(prompt.saveCount)} saves</span>
                     </div>
                   </div>
                 ))

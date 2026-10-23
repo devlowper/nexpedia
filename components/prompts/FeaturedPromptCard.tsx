@@ -7,6 +7,7 @@ import { Eye, Crown, Layers, Heart } from "lucide-react";
 import { motion } from "framer-motion";
 import { Prompt, cardVariants, cleanTitle, getPromptTools } from "./PromptCard";
 import { useAuth } from "@/hooks/useAuth";
+import { formatViewCount } from "@/lib/utils";
 
 interface FeaturedPromptCardProps {
   prompt: Prompt;
@@ -132,7 +133,7 @@ export function FeaturedPromptCard({ prompt, index = 0 }: FeaturedPromptCardProp
           {/* Views */}
           <span className="flex items-center gap-1.5 text-faint text-xs font-medium shrink-0">
             <Eye size={14} />
-            {views.toLocaleString()}
+            {formatViewCount(views)}
           </span>
         </div>
 

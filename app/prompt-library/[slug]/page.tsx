@@ -12,6 +12,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Prompt, PromptCard, cardVariants, cleanTitle, getPromptTools } from "@/components/prompts/PromptCard";
 import { useAuth } from "@/hooks/useAuth";
 import { getApiBaseUrl } from "@/lib/apiClient";
+import { formatViewCount } from "@/lib/utils";
 
 const API = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:5000";
 
@@ -305,7 +306,7 @@ export default function PromptDetailPage() {
             )}
             <span className="flex items-center gap-1 text-[11px] text-faint ml-auto">
               <Eye size={12} />
-              {(prompt.views_count ?? 0).toLocaleString()} views
+              {formatViewCount(prompt.views_count)} views
             </span>
           </div>
 

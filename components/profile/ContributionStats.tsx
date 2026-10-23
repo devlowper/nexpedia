@@ -1,4 +1,5 @@
 import React from 'react';
+import { formatViewCount } from '@/lib/utils';
 
 interface ContributionStatsProps {
   stats: {
@@ -12,9 +13,9 @@ interface ContributionStatsProps {
 export function ContributionStats({ stats }: ContributionStatsProps) {
   const statItems = [
     { label: 'Prompts', value: stats.prompts },
-    { label: 'Total Uses', value: stats.uses >= 1000 ? (stats.uses / 1000).toFixed(1) + 'K' : stats.uses },
+    { label: 'Total Uses', value: formatViewCount(stats.uses) },
     { label: 'Rating', value: `${stats.rating.toFixed(1)}★`, highlight: true },
-    { label: 'Upvotes', value: stats.upvotes >= 1000 ? (stats.upvotes / 1000).toFixed(1) + 'K' : stats.upvotes },
+    { label: 'Upvotes', value: formatViewCount(stats.upvotes) },
   ];
 
   return (

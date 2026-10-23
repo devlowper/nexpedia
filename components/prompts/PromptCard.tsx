@@ -6,6 +6,7 @@ import Image from "next/image";
 import { Eye, Crown, Layers, Briefcase, ShoppingCart, FileText, Code, GraduationCap, HeartPulse, DollarSign, Palette, Sparkles, Heart } from "lucide-react";
 import { motion, type Variants } from "framer-motion";
 import { useAuth } from "@/hooks/useAuth";
+import { formatViewCount } from "@/lib/utils";
 
 
 export interface RecommendedTool {
@@ -362,7 +363,7 @@ export function PromptCard({
           {/* Views count */}
           <div className="flex items-center gap-1 text-faint text-[11px] font-medium shrink-0 ml-1">
             <Eye size={12} />
-            <span>{views.toLocaleString()}</span>
+            <span>{formatViewCount(views)}</span>
           </div>
         </div>
 

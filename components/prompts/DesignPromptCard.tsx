@@ -7,6 +7,7 @@ import { Eye, Crown, Heart, Share2, Layers } from "lucide-react";
 import { motion } from "framer-motion";
 import { Prompt, cardVariants, getCategoryStyle, cleanTitle, getPromptTools } from "./PromptCard";
 import { useAuth } from "@/hooks/useAuth";
+import { formatViewCount } from "@/lib/utils";
 
 interface DesignPromptCardProps {
   prompt: Prompt;
@@ -144,7 +145,7 @@ export function DesignPromptCard({ prompt, index = 0, masonry = false }: DesignP
             {/* Views */}
             <span className="flex items-center gap-1.5 text-white/90 text-xs font-medium bg-black/40 px-2.5 py-1 rounded-lg backdrop-blur-sm border border-white/15 shadow-sm">
               <Eye size={12} />
-              {views.toLocaleString()}
+              {formatViewCount(views)}
             </span>
           </div>
         </div>
