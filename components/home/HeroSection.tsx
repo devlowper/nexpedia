@@ -5,7 +5,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import { ArrowRight, Loader2 } from 'lucide-react';
 import { PinkArc } from './PinkArc';
-import { LineStrip } from './LineStrip';
 import { FloatingIcons } from './FloatingIcons';
 import { getApiBaseUrl } from '@/lib/apiClient';
 
@@ -23,6 +22,13 @@ const suggestionTags = [
   { label: "Best Prompts", href: "/prompt-library/explore?sort=popular" },
   { label: "Midjourney", href: "/prompt-library/explore?search=Midjourney" },
   { label: "ChatGPT", href: "/prompt-library/explore?search=ChatGPT" },
+];
+
+const duplicatedTags = [
+  ...suggestionTags,
+  ...suggestionTags,
+  ...suggestionTags,
+  ...suggestionTags,
 ];
 
 export function HeroSection() {
@@ -233,8 +239,6 @@ export function HeroSection() {
           transition={{ duration: 0.8, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
           className="w-full max-w-3xl flex flex-col items-center gap-6 relative pointer-events-auto"
         >
-          {/* Thin horizontal line strip passing behind the search bar */}
-          <LineStrip />
 
           {/* Search Bar Container */}
           <div
@@ -439,31 +443,35 @@ export function HeroSection() {
             )}
           </AnimatePresence>
 
-          {/* Suggestion Tags */}
-          <div className="flex flex-wrap justify-center gap-2.5 mt-2">
-            {suggestionTags.map((tag, i) => (
-              <motion.button
-                key={tag.label}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4, delay: 0.4 + (i * 0.08) }}
-                whileHover={{ y: -2, borderColor: 'var(--brand-solid)' }}
-                whileTap={{ scale: 0.96 }}
-                onClick={() => router.push(tag.href)}
-                className="glass"
-                style={{
-                  padding: '7px 16px',
-                  borderRadius: '100px',
-                  fontSize: '0.85rem',
-                  color: 'var(--text-muted)',
-                  cursor: 'pointer',
-                  border: '1px solid var(--border)',
-                  transition: 'all 0.2s',
-                }}
-              >
-                {tag.label}
-              </motion.button>
-            ))}
+          {/* Suggestion Tags - Single Line Infinite Scrolling Marquee */}
+          <div
+            className="w-full max-w-full sm:max-w-3xl overflow-hidden mt-1 py-1 relative select-none"
+            style={{
+              maskImage: 'linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%)',
+              WebkitMaskImage: 'linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%)',
+            }}
+          >
+            <div className="flex w-max gap-2.5 animate-scroll-left hover:[animation-play-state:paused] items-center">
+              {duplicatedTags.map((tag, i) => (
+                <button
+                  key={`${tag.label}-${i}`}
+                  type="button"
+                  onClick={() => router.push(tag.href)}
+                  className="glass shrink-0 transition-all duration-200 hover:-translate-y-0.5 hover:border-[var(--brand-solid)] hover:text-primary active:scale-95"
+                  style={{
+                    padding: '7px 18px',
+                    borderRadius: '100px',
+                    fontSize: '0.85rem',
+                    color: 'var(--text-muted)',
+                    cursor: 'pointer',
+                    border: '1px solid var(--border)',
+                    whiteSpace: 'nowrap',
+                  }}
+                >
+                  {tag.label}
+                </button>
+              ))}
+            </div>
           </div>
         </motion.div>
       </div>
