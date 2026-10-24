@@ -30,6 +30,7 @@ function getLocalDevOrigins(): string[] {
 }
 
 const nextConfig: NextConfig = {
+  output: "standalone",
   // @ts-ignore
   allowedDevOrigins: getLocalDevOrigins(),
   images: {
