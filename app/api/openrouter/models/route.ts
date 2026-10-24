@@ -1,7 +1,6 @@
 import { NextResponse } from 'next/server';
 
-// Revalidate this endpoint at most every 1 hour (3600 seconds)
-export const revalidate = 3600;
+export const dynamic = 'force-dynamic';
 
 export async function GET() {
   try {
