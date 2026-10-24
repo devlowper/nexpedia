@@ -23,7 +23,6 @@ const MARQUEE_TOOLS = [
 
 import { getApiBaseUrl } from "@/lib/apiClient";
 
-const API = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:5000";
 const CATEGORY_ORDER = ["Design", "Business", "Marketing", "Writing", "Coding", "Education", "Health", "Finance"];
 
 

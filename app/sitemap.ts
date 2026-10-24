@@ -1,9 +1,10 @@
 import { MetadataRoute } from 'next';
+import { BLOG_POSTS } from '@/lib/blogData';
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://procraft.com';
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://procraft.site';
 
-  const routes = [
+  const staticRoutes = [
     '',
     '/prompt-library',
     '/ai-directory',
@@ -23,5 +24,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: route === '' ? 1.0 : route === '/prompt-library' ? 0.9 : 0.7,
   }));
 
-  return routes;
+  const blogRoutes = BLOG_POSTS.map((post) => ({
+    url: `${baseUrl}/blog/${post.slug}`,
+    lastModified: new Date().toISOString(),
+    changeFrequency: 'monthly' as const,
+    priority: 0.8,
+  }));
+
+  return [...staticRoutes, ...blogRoutes];
 }

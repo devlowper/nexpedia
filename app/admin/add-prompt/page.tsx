@@ -8,11 +8,12 @@ import {
   Lightbulb, BookOpen, ChevronDown, ChevronUp, Wand2, Crown, DollarSign
 } from "lucide-react";
 import { ImageUploadInput } from "@/components/ui/ImageUploadInput";
+import { getApiBaseUrl } from "@/lib/apiClient";
 
 // ── Constants ─────────────────────────────────────────────────────────────────
 const CATEGORIES = ["Design", "Business", "Marketing", "Writing", "Coding", "Education", "Health", "Finance"];
 const AI_MODELS  = ["ChatGPT", "Claude", "Gemini", "Grok", "DeepSeek", "Midjourney", "Runway", "Nano Banana", "Other"];
-const API        = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:5000";
+const API        = getApiBaseUrl();
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 interface PromptRow {

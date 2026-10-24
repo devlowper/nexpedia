@@ -1,14 +1,38 @@
+const DEFAULT_PRODUCTION_API_URL = "https://procarft-back.onrender.com";
+
 export const getApiBaseUrl = (): string => {
+  const configured = process.env.NEXT_PUBLIC_API_URL;
+
   if (typeof window !== 'undefined') {
-    const hostname = window.location.hostname;
-    if (hostname && hostname !== 'localhost' && hostname !== '127.0.0.1') {
-      const configured = process.env.NEXT_PUBLIC_API_URL;
-      if (!configured || configured.includes('localhost') || configured.includes('127.0.0.1')) {
-        return `http://${hostname}:5000`;
+    const isHttps = window.location.protocol === 'https:';
+    const isLocal =
+      window.location.hostname === 'localhost' ||
+      window.location.hostname === '127.0.0.1';
+
+    // On an HTTPS production page, NEVER request insecure http (prevents Mixed Content block)
+    if (isHttps) {
+      if (configured && configured.startsWith('https://')) {
+        return configured;
       }
+      return DEFAULT_PRODUCTION_API_URL;
+    }
+
+    // In a non-local browser environment (e.g. deployed domain)
+    if (!isLocal) {
+      if (configured && !configured.includes('localhost') && !configured.includes('127.0.0.1')) {
+        return configured;
+      }
+      return DEFAULT_PRODUCTION_API_URL;
     }
   }
-  return process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+
+  if (configured && configured.trim().length > 0) {
+    return configured;
+  }
+
+  return process.env.NODE_ENV === 'production'
+    ? DEFAULT_PRODUCTION_API_URL
+    : 'http://localhost:5000';
 };
 
 export const API_BASE_URL = getApiBaseUrl();

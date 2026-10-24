@@ -2,8 +2,9 @@
 
 import { useEffect, useState } from "react";
 import { Users, Search, MoreHorizontal, X, Bell } from "lucide-react";
+import { getApiBaseUrl } from "@/lib/apiClient";
 
-const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+const API = getApiBaseUrl();
 
 interface User {
   _id: string;

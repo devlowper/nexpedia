@@ -12,6 +12,7 @@ import { FileFormatCardsIcon } from '@/components/ui/FileFormatCardsIcon';
 import { VisionModel, PRESET_MODELS } from './VisionModelSelector';
 import { useAuth } from '@/hooks/useAuth';
 import { AuthModal } from '@/components/auth/AuthModal';
+import { getApiBaseUrl } from '@/lib/apiClient';
 
 export interface PromptResult {
   mainPrompt: string;
@@ -149,7 +150,7 @@ export function ImageToPromptSection() {
     setGeneratedPrompt('');
 
     try {
-      const API = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:5000';
+      const API = getApiBaseUrl();
       const promptInstruction = `Target Generator: ${selectedVisionModel.name} (${selectedVisionModel.modelName}). ${customNote ? `User preferences: ${customNote}. ` : ''}Create an exact prompt that will reproduce this image with the same style, composition, lighting, and mood.`;
 
       const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;

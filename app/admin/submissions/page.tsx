@@ -3,8 +3,9 @@
 import React, { useState, useEffect } from 'react';
 import { FileText, CheckCircle, XCircle, Clock, X } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { getApiBaseUrl } from "@/lib/apiClient";
 
-const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+const API = getApiBaseUrl();
 
 export default function AdminSubmissionsDashboard() {
   const router = useRouter();

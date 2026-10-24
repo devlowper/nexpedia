@@ -5,6 +5,7 @@ import { useParams, useRouter } from 'next/navigation';
 import { AITool } from '../page';
 import { Loader2, ArrowLeft, CheckCircle2, Star, Sparkles, ExternalLink, ShieldCheck } from 'lucide-react';
 import { Toast } from '@/components/ui/Toast';
+import { getApiBaseUrl } from '@/lib/apiClient';
 
 // Custom SVG Icons matching the visual design
 const ShareIcon = (props: React.SVGProps<SVGSVGElement>) => (
@@ -78,7 +79,7 @@ export default function AIDetailsPage() {
   useEffect(() => {
     const fetchTool = async () => {
       try {
-        const API = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:5000';
+        const API = getApiBaseUrl();
         const res = await fetch(`${API}/api/directory/${params.slug}`);
         if (!res.ok) throw new Error('Failed to fetch tool details');
         const data = await res.json();
@@ -107,14 +108,16 @@ export default function AIDetailsPage() {
   if (error || !tool) {
     return (
       <div className="min-h-[60vh] flex flex-col items-center justify-center">
-        <div className="text-red-500 bg-red-500/10 p-6 rounded-xl border border-red-500/20 max-w-lg text-center">
-          <h2 className="text-xl font-bold mb-2">Error Loading Details</h2>
-          <p className="text-muted">{error || 'Tool not found.'}</p>
+        <div className="bg-surface-secondary/80 p-8 rounded-2xl border border-border max-w-md text-center shadow-sm">
+          <h2 className="text-lg font-bold text-primary mb-2">Unable to Load Details</h2>
+          <p className="text-sm text-muted mb-6 leading-relaxed">
+            We couldn't retrieve information for this tool. It may have been removed or is temporarily unavailable.
+          </p>
           <button
-            onClick={() => router.back()}
-            className="mt-6 px-4 py-2 bg-black/5 dark:bg-black/10 dark:bg-white/10 rounded-lg transition-colors flex items-center gap-2 mx-auto"
+            onClick={() => router.push('/ai-directory')}
+            className="px-5 py-2.5 bg-accent text-black font-semibold text-xs rounded-full hover:bg-accent-hover transition-colors inline-flex items-center gap-2 mx-auto"
           >
-            <ArrowLeft size={16} /> Go Back
+            <ArrowLeft size={14} /> Back to Directory
           </button>
         </div>
       </div>

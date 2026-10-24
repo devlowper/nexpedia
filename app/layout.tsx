@@ -13,7 +13,7 @@ const bricolage = Bricolage_Grotesque({
   display: "swap",
 });
 
-const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "https://procraft.com";
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "https://procraft.site";
 
 export const metadata: Metadata = {
   metadataBase: new URL(APP_URL),

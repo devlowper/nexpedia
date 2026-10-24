@@ -6,8 +6,9 @@ import Link from "next/link";
 import { Search, ArrowLeft } from "lucide-react";
 import { PromptCard, Prompt } from "@/components/prompts/PromptCard";
 import { SkeletonCard } from "@/components/ui/SkeletonCard";
+import { getApiBaseUrl } from "@/lib/apiClient";
 
-const API = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:5000";
+const API = getApiBaseUrl();
 
 function useToolPrompts(params: {
   tool: string;

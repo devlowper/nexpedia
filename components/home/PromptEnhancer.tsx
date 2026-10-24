@@ -4,6 +4,7 @@ import React, { useState, useRef } from 'react';
 import { Sparkles, Image as ImageIcon, Copy, Check, Loader2, X } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { AuthModal } from '@/components/auth/AuthModal';
+import { getApiBaseUrl } from '@/lib/apiClient';
 
 export const PromptEnhancer = () => {
   const { isLoggedIn } = useAuth();
@@ -52,7 +53,7 @@ export const PromptEnhancer = () => {
     setError('');
     setEnhancedPrompt('');
     try {
-      const API = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:5000";
+      const API = getApiBaseUrl();
       const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
       const headers: Record<string, string> = { 'Content-Type': 'application/json' };
       if (token) {

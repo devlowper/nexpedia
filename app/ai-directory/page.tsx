@@ -1,7 +1,6 @@
 "use client";
-
 import React, { useState, useEffect, useMemo, Suspense } from 'react';
-import { Search, Loader2, Sparkles, BadgeCheck, ListFilter, SlidersHorizontal, Check, Star, Heart, Bookmark, ExternalLink, Award, TrendingUp, LayoutGrid, ChevronLeft, ChevronRight, ArrowLeft, Video, Type, Briefcase, Image as ImageIcon, Settings, Palette, Headphones, Box, Code } from 'lucide-react';
+import { Search, Loader2, Sparkles, BadgeCheck, ListFilter, SlidersHorizontal, Check, Star, Heart, Bookmark, ExternalLink, Award, TrendingUp, LayoutGrid, ChevronLeft, ChevronRight, ArrowLeft, Video, Type, Briefcase, Image as ImageIcon, Settings, Palette, Headphones, Box, Code, AlertCircle, RefreshCw } from 'lucide-react';
 import { GlassCard } from '@/components/ui/GlassCard';
 import { SkeletonCard } from '@/components/ui/SkeletonCard';
 import { ProductHuntMarquee } from '@/components/ui/ProductHuntMarquee';
@@ -9,6 +8,7 @@ import { ScrollReveal } from '@/components/ui/ScrollReveal';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { getApiBaseUrl } from '@/lib/apiClient';
 
 
 
@@ -230,7 +230,7 @@ function AIDirectoryContent() {
       try {
         setLoading(true);
         setError(null);
-        const API = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:5000';
+        const API = getApiBaseUrl();
         let url = `${API}/api/directory?limit=100&search=${encodeURIComponent(searchQuery)}&pricing=${pricingFilter}&badge=${badgeFilter}&verified=${verifiedFilter}&sort=${activeTab}`;
         if (category) {
           url = `${API}/api/directory?category=${encodeURIComponent(category)}&page=${currentPage}&limit=12&search=${encodeURIComponent(searchQuery)}&pricing=${pricingFilter}&badge=${badgeFilter}&verified=${verifiedFilter}&sort=${activeTab}`;
@@ -439,10 +439,20 @@ function AIDirectoryContent() {
           ))}
         </div>
       ) : error ? (
-        <div className="text-center py-20 text-red-500 bg-red-500/10 rounded-xl border border-red-500/20 max-w-lg mx-auto shadow-lg">
-          <p className="font-medium">Failed to load AI directory data.</p>
-          <p className="text-sm mt-2 opacity-80">Error: {error}</p>
-          <p className="text-sm mt-2 opacity-80">Please ensure the backend server is running and connected to MongoDB.</p>
+        <div className="text-center py-16 px-6 bg-surface-secondary/80 border border-border rounded-2xl max-w-md mx-auto shadow-sm">
+          <div className="w-12 h-12 rounded-full bg-red-500/10 text-red-500 flex items-center justify-center mx-auto mb-4">
+            <AlertCircle size={24} />
+          </div>
+          <h3 className="text-lg font-semibold text-primary mb-1.5">Unable to load AI tools</h3>
+          <p className="text-sm text-muted mb-6 leading-relaxed">
+            We’re having trouble connecting to our services right now. Please try refreshing or check back in a moment.
+          </p>
+          <button
+            onClick={() => window.location.reload()}
+            className="inline-flex items-center gap-2 px-5 py-2.5 bg-accent text-black font-semibold text-xs rounded-full hover:bg-accent-hover transition-colors shadow-sm"
+          >
+            <RefreshCw size={14} /> Try Again
+          </button>
         </div>
       ) : filteredTools.length === 0 ? (
         <div className="text-center py-20 bg-surface-secondary border border-border rounded-2xl max-w-2xl mx-auto shadow-lg">

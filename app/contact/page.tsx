@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from 'react';
+import { getApiBaseUrl } from '@/lib/apiClient';
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({ name: '', email: '', subject: '', message: '' });
@@ -19,7 +20,7 @@ export default function ContactPage() {
     setStatus({ loading: true, error: null, success: false });
 
     try {
-      const API = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:5000';
+      const API = getApiBaseUrl();
       const res = await fetch(`${API}/api/contact`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

@@ -8,6 +8,7 @@ import { useTheme } from '@/hooks/useTheme';
 import { useAuth } from '@/hooks/useAuth';
 import { AuthModal } from '@/components/auth/AuthModal';
 import { cn } from '@/lib/utils';
+import { getApiBaseUrl } from '@/lib/apiClient';
 
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -21,7 +22,7 @@ export function Navbar() {
   const { user, isLoggedIn, isLoading, logout } = useAuth();
 
   const notifRef = useRef<HTMLDivElement>(null);
-  const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+  const API = getApiBaseUrl();
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
@@ -157,7 +158,7 @@ export function Navbar() {
                   onClick={openSignup}
                   className="bg-accent text-black text-sm font-semibold px-5 py-2 rounded-full hover:bg-accent-hover transition-colors"
                 >
-                  Get Start →
+                  Get Start
                 </button>
               </>
             ) : (

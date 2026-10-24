@@ -45,6 +45,11 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "ph-avatars.imgix.net" },
       // ProductHunt thumbnails
       { protocol: "https", hostname: "*.imgix.net" },
+      // ImgBB
+      { protocol: "https", hostname: "i.ibb.co" },
+      // GitHub Avatars
+      { protocol: "https", hostname: "avatars.githubusercontent.com" },
+      { protocol: "https", hostname: "github.com" },
     ],
   },
 };

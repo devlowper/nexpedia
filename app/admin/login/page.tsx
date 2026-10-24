@@ -3,8 +3,9 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Shield } from "lucide-react";
+import { getApiBaseUrl } from "@/lib/apiClient";
 
-const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+const API = getApiBaseUrl();
 
 export default function AdminLogin() {
   const router = useRouter();

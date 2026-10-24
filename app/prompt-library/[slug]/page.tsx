@@ -14,8 +14,6 @@ import { useAuth } from "@/hooks/useAuth";
 import { getApiBaseUrl } from "@/lib/apiClient";
 import { formatViewCount } from "@/lib/utils";
 
-const API = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:5000";
-
 
 function BulletList({ text, bulletColor = "text-accent" }: { text: string; bulletColor?: string }) {
   const lines = text

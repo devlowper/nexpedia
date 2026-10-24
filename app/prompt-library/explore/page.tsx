@@ -8,8 +8,9 @@ import { motion, AnimatePresence } from "framer-motion";
 import { PromptCard, Prompt } from "@/components/prompts/PromptCard";
 import { DesignPromptCard } from "@/components/prompts/DesignPromptCard";
 import { SkeletonCard } from "@/components/ui/SkeletonCard";
+import { getApiBaseUrl } from "@/lib/apiClient";
 
-const API = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:5000";
+const API = getApiBaseUrl();
 
 const CATEGORIES = [
   { label: "All Prompts", value: "All" },

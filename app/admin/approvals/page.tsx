@@ -6,6 +6,7 @@ import {
   CheckCircle, XCircle, Clock,
   RefreshCw, User, AlertTriangle, Inbox
 } from "lucide-react";
+import { getApiBaseUrl } from "@/lib/apiClient";
 
 interface ApprovalRequest {
   _id: string;
@@ -22,7 +23,7 @@ interface Stats {
   rejected: number;
 }
 
-const API = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+const API = getApiBaseUrl();
 
 function timeAgo(dateStr: string) {
   const diff = Date.now() - new Date(dateStr).getTime();

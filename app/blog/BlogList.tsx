@@ -1,57 +1,80 @@
 "use client";
 
-import React, { useState } from 'react';
-
-const allPosts = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+import React from 'react';
+import Link from 'next/link';
+import Image from 'next/image';
+import { Clock, ArrowRight, Sparkles } from 'lucide-react';
+import { BLOG_POSTS } from '@/lib/blogData';
 
 export default function BlogList() {
-  const [visibleCount, setVisibleCount] = useState(3);
-
-  const loadMore = () => {
-    setVisibleCount(prev => prev + 3);
-  };
-
   return (
     <div className="flex flex-col items-center w-full max-w-4xl mx-auto">
       <div className="grid grid-cols-1 gap-8 w-full">
-        {allPosts.slice(0, visibleCount).map((i) => (
-          <div key={i} className="group flex flex-col md:flex-row glass-card-solid rounded-2xl overflow-hidden border border-gray-100 dark:border-zinc-800 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
-            <div className="w-full md:w-[40%] h-56 md:h-auto bg-gray-200 dark:bg-zinc-800 relative overflow-hidden flex-shrink-0">
-              <div className="absolute inset-0 bg-gradient-to-br from-[var(--brand-solid)] to-[var(--brand-solid-hover)] opacity-20 group-hover:opacity-40 transition-opacity duration-300" />
-            </div>
-            <div className="p-6 md:p-8 flex flex-col flex-1">
-              <span className="text-[var(--brand-solid)] text-sm font-semibold mb-2 tracking-wide uppercase">Company News</span>
-              <h2 className="text-2xl md:text-3xl font-bold text-black dark:text-white mb-4 leading-tight">
-                Exciting New Features Coming to proCraft Soon
-              </h2>
-              <p className="text-gray-600 dark:text-gray-400 text-base mb-8 flex-1">
-                We are working hard to bring you the best AI generation experience. Here's a sneak peek at what's coming next in our platform update, including new generation tools and advanced workflows.
-              </p>
-              <div className="flex items-center justify-between text-sm text-gray-500 mt-auto pt-6 border-t border-gray-100 dark:border-zinc-800">
-                <span className="font-medium">Oct 12, 2026</span>
-                <span className="font-medium text-black dark:text-white group-hover:text-[var(--brand-solid)] transition-colors cursor-pointer flex items-center gap-1">
-                  Read Article 
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" className="transition-transform group-hover:translate-x-1">
-                    <path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
-                </span>
+        {BLOG_POSTS.map((post) => (
+          <article
+            key={post.slug}
+            className="group flex flex-col md:flex-row bg-white/70 dark:bg-zinc-900/70 backdrop-blur-xl rounded-2xl overflow-hidden border border-black/5 dark:border-white/10 transition-all duration-300 hover:shadow-2xl hover:-translate-y-1"
+          >
+            <Link
+              href={`/blog/${post.slug}`}
+              className="w-full md:w-[42%] h-64 md:h-auto relative overflow-hidden flex-shrink-0 bg-black/5 dark:bg-white/5 block"
+            >
+              <Image
+                src={post.coverImage.url}
+                alt={post.coverImage.alt}
+                fill
+                sizes="(max-width: 768px) 100vw, 400px"
+                className="object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
+                priority
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-60 md:hidden" />
+              <div className="absolute top-3 left-3 bg-accent text-black font-bold text-[11px] px-3 py-1 rounded-full uppercase tracking-wider shadow-md">
+                {post.category}
+              </div>
+            </Link>
+
+            <div className="p-6 md:p-8 flex flex-col flex-1 justify-between">
+              <div>
+                <div className="hidden md:flex items-center gap-3 text-xs font-semibold text-accent uppercase tracking-wider mb-2.5">
+                  <span className="flex items-center gap-1">
+                    <Sparkles size={12} /> {post.category}
+                  </span>
+                  <span>•</span>
+                  <span className="text-black/50 dark:text-white/50 flex items-center gap-1">
+                    <Clock size={12} /> {post.readTime}
+                  </span>
+                </div>
+
+                <h2 className="text-2xl md:text-2xl font-bold font-bricolage text-primary mb-3 leading-snug group-hover:text-accent transition-colors">
+                  <Link href={`/blog/${post.slug}`}>
+                    {post.title}
+                  </Link>
+                </h2>
+
+                <p className="text-black/60 dark:text-white/60 text-sm leading-relaxed mb-6 line-clamp-3">
+                  {post.excerpt}
+                </p>
+              </div>
+
+              <div className="flex items-center justify-between text-xs text-black/50 dark:text-white/50 pt-5 border-t border-black/5 dark:border-white/10">
+                <div className="flex items-center gap-2">
+                  <span className="font-semibold text-primary">{post.author.name}</span>
+                  <span>•</span>
+                  <span>{post.publishedAt}</span>
+                </div>
+
+                <Link
+                  href={`/blog/${post.slug}`}
+                  className="font-bold text-accent group-hover:underline flex items-center gap-1.5 transition-all group-hover:translate-x-1"
+                >
+                  Read Article
+                  <ArrowRight size={14} />
+                </Link>
               </div>
             </div>
-          </div>
+          </article>
         ))}
       </div>
-      
-      {visibleCount < allPosts.length && (
-        <button 
-          onClick={loadMore}
-          className="mt-16 px-10 py-4 bg-black dark:bg-white text-white dark:text-black rounded-full font-medium hover:bg-black/80 dark:hover:bg-gray-100 transition-colors shadow-[0_4px_14px_0_rgba(0,0,0,0.2)] dark:shadow-[0_4px_14px_0_rgba(255,255,255,0.1)] flex items-center gap-2"
-        >
-          Load More Blogs
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-            <path d="M12 5v14M5 12l7 7 7-7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
-        </button>
-      )}
     </div>
   );
 }
