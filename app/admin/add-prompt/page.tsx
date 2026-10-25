@@ -5,15 +5,57 @@ import {
   Plus, Search, Edit2, Trash2, X, Save, AlertCircle,
   CheckCircle, Loader2, Sparkles, Clock, Tag, Eye,
   ChevronLeft, ChevronRight, Filter, ToggleLeft, ToggleRight,
-  Lightbulb, BookOpen, ChevronDown, ChevronUp, Wand2, Crown, DollarSign
+  Lightbulb, BookOpen, ChevronDown, ChevronUp, Wand2, Crown, DollarSign, Layers
 } from "lucide-react";
 import { ImageUploadInput } from "@/components/ui/ImageUploadInput";
 import { getApiBaseUrl } from "@/lib/apiClient";
 
 // ── Constants ─────────────────────────────────────────────────────────────────
-const CATEGORIES = ["Design", "Business", "Marketing", "Writing", "Coding", "Education", "Health", "Finance"];
-const AI_MODELS  = ["ChatGPT", "Claude", "Gemini", "Grok", "DeepSeek", "Midjourney", "Runway", "Nano Banana", "Other"];
-const API        = getApiBaseUrl();
+const CATEGORIES = [
+  "Photography",
+  "Logos & Icons",
+  "Vector Design",
+  "Video",
+  "Viral Prompt",
+  "Mockup Prompt",
+  "Master Prompt",
+  "Design",
+  "Business",
+  "Marketing",
+  "Writing",
+  "Coding",
+  "Education",
+  "Health",
+  "Finance",
+];
+
+export const AI_MODELS_DATA = [
+  { name: "ChatGPT", logo: "/logos/chatgpt.svg", color: "#10a37f" },
+  { name: "Claude", logo: "/logos/claude.svg", color: "#d97706" },
+  { name: "Gemini", logo: "/logos/gemini.svg", color: "#1a73e8" },
+  { name: "Grok", logo: "/logos/grok.svg", color: "#ffffff" },
+  { name: "DeepSeek", logo: "/logos/deepseek.svg", color: "#3b82f6" },
+  { name: "Midjourney", logo: "/logos/midjourney.svg", color: "#8b5cf6" },
+  { name: "Runway", logo: "/logos/muse.svg", color: "#ec4899" },
+  { name: "Nano Banana", emoji: "🍌", color: "#f9c22e" },
+  { name: "Qwen", logo: "/logos/qwen.svg", color: "#6366f1" },
+  { name: "FLUX", emoji: "⚡", color: "#eab308" },
+  { name: "Sora", logo: "/logos/chatgpt.svg", color: "#06b6d4" },
+  { name: "Other", emoji: "🤖", color: "#94a3b8" },
+];
+
+const AI_MODELS = AI_MODELS_DATA.map(m => m.name);
+
+export const getModelData = (name?: string) => {
+  if (!name) return null;
+  return AI_MODELS_DATA.find(m => m.name.toLowerCase() === name.toLowerCase()) || {
+    name,
+    emoji: "🤖",
+    color: "#6366f1",
+  };
+};
+
+const API = getApiBaseUrl();
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 interface PromptRow {
@@ -382,16 +424,105 @@ function PromptFormModal({
                 className="w-full bg-black/5 dark:bg-white/5 border border-border rounded-lg px-4 py-2.5 text-primary text-sm focus:border-accent outline-none transition-colors"
               />
             </div>
-            <div className="space-y-1.5">
-              <label className="text-sm font-semibold text-primary">AI Model / Tool</label>
-              <select
-                value={form.aiModel}
-                onChange={e => set("aiModel", e.target.value)}
-                className="w-full bg-black/5 dark:bg-white/5 border border-border rounded-lg px-4 py-2.5 text-primary text-sm focus:border-accent outline-none transition-colors"
-              >
-                <option value="">Select AI tool…</option>
-                {AI_MODELS.map(m => <option key={m} value={m}>{m}</option>)}
-              </select>
+            <div className="space-y-2">
+              <label className="text-sm font-semibold text-primary flex items-center justify-between">
+                <span>AI Model / Tool</span>
+                {form.aiModel && (
+                  <span className="text-[11px] font-medium text-accent">Selected</span>
+                )}
+              </label>
+
+              <div className="relative flex items-center">
+                <select
+                  value={form.aiModel}
+                  onChange={e => set("aiModel", e.target.value)}
+                  className={`w-full bg-black/5 dark:bg-white/5 border border-border rounded-lg ${
+                    form.aiModel ? "pl-11" : "pl-4"
+                  } pr-4 py-2.5 text-primary text-sm focus:border-accent outline-none transition-all appearance-none cursor-pointer`}
+                >
+                  <option value="">Select AI tool…</option>
+                  {AI_MODELS.map(m => (
+                    <option key={m} value={m}>
+                      {m}
+                    </option>
+                  ))}
+                </select>
+
+                {/* Inline model logo preview inside the dropdown */}
+                {form.aiModel && (
+                  <div className="absolute left-3 pointer-events-none flex items-center justify-center">
+                    {getModelData(form.aiModel)?.logo ? (
+                      <img
+                        src={getModelData(form.aiModel)?.logo}
+                        alt={form.aiModel}
+                        className="w-5 h-5 object-contain"
+                      />
+                    ) : (
+                      <span className="text-base leading-none">
+                        {getModelData(form.aiModel)?.emoji || "🤖"}
+                      </span>
+                    )}
+                  </div>
+                )}
+              </div>
+
+              {/* Selected Model Logo Banner */}
+              {form.aiModel && (
+                <div className="flex items-center gap-3 p-2.5 rounded-xl border border-border bg-black/5 dark:bg-white/5 transition-all">
+                  <div
+                    className="w-8 h-8 rounded-lg p-1.5 flex items-center justify-center border shadow-xs shrink-0"
+                    style={{
+                      borderColor: `${getModelData(form.aiModel)?.color}40`,
+                      backgroundColor: `${getModelData(form.aiModel)?.color}15`,
+                    }}
+                  >
+                    {getModelData(form.aiModel)?.logo ? (
+                      <img
+                        src={getModelData(form.aiModel)?.logo}
+                        alt={form.aiModel}
+                        className="w-full h-full object-contain"
+                      />
+                    ) : (
+                      <span className="text-sm">
+                        {getModelData(form.aiModel)?.emoji || "🤖"}
+                      </span>
+                    )}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-xs font-bold text-primary flex items-center gap-2">
+                      <span>{form.aiModel}</span>
+                      <span
+                        className="w-2 h-2 rounded-full inline-block"
+                        style={{ backgroundColor: getModelData(form.aiModel)?.color }}
+                      />
+                    </p>
+                    <p className="text-[10px] text-muted">Model logo will appear on the prompt card</p>
+                  </div>
+                </div>
+              )}
+
+              {/* Quick Model Selector Pills */}
+              <div className="flex flex-wrap gap-1.5 pt-1">
+                {AI_MODELS_DATA.map(m => (
+                  <button
+                    key={m.name}
+                    type="button"
+                    onClick={() => set("aiModel", m.name)}
+                    className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs transition-all ${
+                      form.aiModel === m.name
+                        ? "bg-accent/15 border-accent text-accent font-semibold shadow-xs border"
+                        : "bg-black/5 dark:bg-white/5 border border-border text-muted hover:text-primary hover:border-border/80"
+                    }`}
+                  >
+                    {m.logo ? (
+                      <img src={m.logo} alt={m.name} className="w-3.5 h-3.5 object-contain" />
+                    ) : (
+                      <span className="text-xs">{m.emoji}</span>
+                    )}
+                    <span>{m.name}</span>
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
 
@@ -667,6 +798,7 @@ export default function AdminPromptsPage() {
   const [search, setSearch]               = useState("");
   const [filterStatus, setFilter]         = useState("");
   const [filterPricing, setFilterPricing] = useState("");
+  const [filterCategory, setFilterCategory] = useState("");
   const [page, setPage]                   = useState(1);
   const [totalPages, setTotalPages]       = useState(1);
   const LIMIT = 15;
@@ -696,6 +828,7 @@ export default function AdminPromptsPage() {
         ...(search && { search }),
         ...(filterStatus && { status: filterStatus }),
         ...(filterPricing && { pricing: filterPricing }),
+        ...(filterCategory && { category: filterCategory }),
       });
       const res  = await fetch(`${API}/api/admin/prompts?${params}`, {
         headers: { Authorization: `Bearer ${token}` },
@@ -710,14 +843,14 @@ export default function AdminPromptsPage() {
     } finally {
       setLoading(false);
     }
-  }, [page, search, filterStatus, filterPricing, showToast]);
+  }, [page, search, filterStatus, filterPricing, filterCategory, showToast]);
 
   useEffect(() => { fetchPrompts(); }, [fetchPrompts]);
 
   // Re-fetch with debounce on search/filter change
   useEffect(() => {
     setPage(1);
-  }, [search, filterStatus, filterPricing]);
+  }, [search, filterStatus, filterPricing, filterCategory]);
 
   const handleDelete = async () => {
     if (!deleteTarget) return;
@@ -890,6 +1023,17 @@ export default function AdminPromptsPage() {
               <option value="paid">Paid (PRO) Only</option>
             </select>
           </div>
+          <div className="flex items-center gap-2 px-3 py-2.5 rounded-xl border text-sm" style={{ borderColor: "var(--border)", background: "var(--glass-bg)" }}>
+            <Layers size={14} className="text-muted" />
+            <select
+              value={filterCategory}
+              onChange={e => setFilterCategory(e.target.value)}
+              className="bg-transparent outline-none text-primary"
+            >
+              <option value="">All Categories</option>
+              {CATEGORIES.map(c => <option key={c} value={c}>{c}</option>)}
+            </select>
+          </div>
         </div>
 
         {/* ── Table ── */}
@@ -909,7 +1053,7 @@ export default function AdminPromptsPage() {
               <table className="w-full text-sm">
                 <thead>
                   <tr className="border-b" style={{ borderColor: "var(--border)" }}>
-                    <th className="px-5 py-3.5 text-left text-xs font-bold text-muted uppercase tracking-wider">Title</th>
+                    <th className="px-5 py-3.5 text-left text-xs font-bold text-muted uppercase tracking-wider">Title & Model</th>
                     <th className="px-4 py-3.5 text-left text-xs font-bold text-muted uppercase tracking-wider hidden md:table-cell">Category</th>
                     <th className="px-4 py-3.5 text-left text-xs font-bold text-muted uppercase tracking-wider">Pricing</th>
                     <th className="px-4 py-3.5 text-left text-xs font-bold text-muted uppercase tracking-wider">Status</th>
@@ -920,12 +1064,43 @@ export default function AdminPromptsPage() {
                   </tr>
                 </thead>
                 <tbody className="divide-y" style={{ borderColor: "var(--border)" }}>
-                  {prompts.map(p => (
-                    <tr key={p._id} className="hover:bg-black/3 dark:hover:bg-white/3 transition-colors">
-                      <td className="px-5 py-4">
-                        <p className="font-medium text-primary line-clamp-1 max-w-[200px]">{getTitle(p)}</p>
-                        <p className="text-muted text-xs mt-0.5 line-clamp-1">{p.slug || ""}</p>
-                      </td>
+                  {prompts.map(p => {
+                    const modelData = p.aiModel ? getModelData(p.aiModel) : null;
+                    return (
+                      <tr key={p._id} className="hover:bg-black/3 dark:hover:bg-white/3 transition-colors">
+                        <td className="px-5 py-4">
+                          <div className="flex items-center gap-3">
+                            {modelData && (
+                              <div
+                                className="w-7 h-7 rounded-lg flex items-center justify-center p-1 border shadow-xs shrink-0"
+                                style={{
+                                  borderColor: `${modelData.color}40`,
+                                  backgroundColor: `${modelData.color}15`,
+                                }}
+                                title={`AI Model: ${p.aiModel}`}
+                              >
+                                {modelData.logo ? (
+                                  <img
+                                    src={modelData.logo}
+                                    alt={p.aiModel || ""}
+                                    className="w-full h-full object-contain"
+                                  />
+                                ) : (
+                                  <span className="text-xs">{modelData.emoji || "🤖"}</span>
+                                )}
+                              </div>
+                            )}
+                            <div>
+                              <p className="font-medium text-primary line-clamp-1 max-w-[200px]">{getTitle(p)}</p>
+                              <div className="flex items-center gap-2 mt-0.5">
+                                {p.aiModel && (
+                                  <span className="text-[10px] text-accent font-semibold">{p.aiModel}</span>
+                                )}
+                                <span className="text-muted text-[11px] line-clamp-1">{p.slug || ""}</span>
+                              </div>
+                            </div>
+                          </div>
+                        </td>
                       <td className="px-4 py-4 hidden md:table-cell">
                         <span className="text-muted text-xs font-medium">{getCategoryName(p.category)}</span>
                       </td>
@@ -965,8 +1140,9 @@ export default function AdminPromptsPage() {
                         </div>
                       </td>
                     </tr>
-                  ))}
-                </tbody>
+                  );
+                })}
+              </tbody>
               </table>
             </div>
           )}

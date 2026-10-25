@@ -2,7 +2,7 @@ import React from 'react';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Terms and Conditions — proCraft',
+  title: 'Terms and Conditions | proCraft',
   description: 'Review the terms and conditions governing your access to and use of proCraft.',
   alternates: {
     canonical: '/terms',
@@ -66,8 +66,8 @@ export default function TermsConditionsPage() {
           </p>
           <p>
             If you suspect unauthorized access to your account, contact us promptly at{' '}
-            <a href="mailto:ahmedrakin@gmail.com" className="text-primary hover:underline">
-              ahmedrakin@gmail.com
+            <a href="mailto:ahmedrakin45@gmail.com" className="text-primary hover:underline">
+              ahmedrakin45@gmail.com
             </a>
             .
           </p>
@@ -208,8 +208,8 @@ export default function TermsConditionsPage() {
           </p>
           <p>
             You may stop using proCraft at any time. To request account deletion, contact{' '}
-            <a href="mailto:ahmedrakin@gmail.com" className="text-primary hover:underline">
-              ahmedrakin@gmail.com
+            <a href="mailto:ahmedrakin45@gmail.com" className="text-primary hover:underline">
+              ahmedrakin45@gmail.com
             </a>{' '}
             from your registered email address. Account deletion does not necessarily cancel a separate paid subscription. You should cancel any active subscription through the relevant subscription or payment interface where applicable.
           </p>

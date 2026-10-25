@@ -2,7 +2,7 @@ import React from 'react';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Privacy Policy — proCraft',
+  title: 'Privacy Policy | proCraft',
   description: 'Understand how proCraft collects, uses, protects, and retains your data.',
   alternates: {
     canonical: '/privacy',
@@ -186,8 +186,8 @@ export default function PrivacyPolicyPage() {
           </ul>
           <p>
             To exercise an applicable right, contact{' '}
-            <a href="mailto:ahmedrakin@gmail.com" className="text-primary hover:underline">
-              ahmedrakin@gmail.com
+            <a href="mailto:ahmedrakin45@gmail.com" className="text-primary hover:underline">
+              ahmedrakin45@gmail.com
             </a>
             . We may need to verify your identity before fulfilling a request.
           </p>
@@ -195,8 +195,8 @@ export default function PrivacyPolicyPage() {
             <h3 className="font-semibold text-foreground">Account deletion</h3>
             <p className="text-sm">
               To request account deletion, send an email from your registered account to{' '}
-              <a href="mailto:ahmedrakin@gmail.com" className="text-primary hover:underline font-medium">
-                ahmedrakin@gmail.com
+              <a href="mailto:ahmedrakin45@gmail.com" className="text-primary hover:underline font-medium">
+                ahmedrakin45@gmail.com
               </a>{' '}
               with the subject line &ldquo;Account Deletion Request.&rdquo;
             </p>
@@ -228,8 +228,8 @@ export default function PrivacyPolicyPage() {
           </p>
           <p>
             If you believe a child under 13 has provided personal information through the Service, contact{' '}
-            <a href="mailto:ahmedrakin@gmail.com" className="text-primary hover:underline">
-              ahmedrakin@gmail.com
+            <a href="mailto:ahmedrakin45@gmail.com" className="text-primary hover:underline">
+              ahmedrakin45@gmail.com
             </a>{' '}
             so that we can assess the situation and take appropriate action in accordance with applicable law. Where local law establishes a higher minimum age or additional consent requirements, those requirements apply.
           </p>

@@ -219,13 +219,12 @@ export function HeroSection() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+          className="max-w-[320px] sm:max-w-[650px] mx-auto mb-10 sm:mb-14"
           style={{
             color: 'var(--text-muted)',
             textAlign: 'center',
-            fontSize: 'clamp(1rem, 2vw, 1.25rem)',
-            lineHeight: 1.6,
-            marginBottom: '56px',
-            maxWidth: '650px',
+            fontSize: 'clamp(0.95rem, 2vw, 1.25rem)',
+            lineHeight: 1.55,
             fontWeight: 400,
           }}
         >

@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Eye, Crown, Layers, Briefcase, ShoppingCart, FileText, Code, GraduationCap, HeartPulse, DollarSign, Palette, Sparkles, Heart } from "lucide-react";
+import { Eye, Crown, Layers, Briefcase, ShoppingCart, FileText, Code, GraduationCap, HeartPulse, DollarSign, Palette, Sparkles, Heart, Camera, Shapes, PenTool, Video, Flame, LayoutTemplate, Smartphone } from "lucide-react";
 import { motion, type Variants } from "framer-motion";
 import { useAuth } from "@/hooks/useAuth";
 import { formatViewCount } from "@/lib/utils";
@@ -186,14 +186,22 @@ const getUniqueTools = (tools?: RecommendedTool[]) => {
 };
 
 export const CATEGORY_STYLES: Record<string, { icon: any, bg: string, color: string }> = {
-  "Business":  { icon: Briefcase,     bg: "from-blue-500/20 to-indigo-600/30 dark:from-blue-500/20 dark:to-indigo-600/30", color: "text-indigo-500 dark:text-indigo-400" },
-  "Marketing": { icon: ShoppingCart,  bg: "from-rose-500/20 to-pink-600/30 dark:from-rose-500/20 dark:to-pink-600/30",   color: "text-rose-500 dark:text-rose-400" },
-  "Writing":   { icon: FileText,      bg: "from-amber-500/20 to-orange-600/30 dark:from-amber-500/20 dark:to-orange-600/30",color: "text-amber-500 dark:text-amber-400" },
-  "Coding":    { icon: Code,          bg: "from-emerald-500/20 to-teal-600/30 dark:from-emerald-500/20 dark:to-teal-600/30",color: "text-teal-500 dark:text-teal-400" },
-  "Education": { icon: GraduationCap, bg: "from-cyan-500/20 to-blue-600/30 dark:from-cyan-500/20 dark:to-blue-600/30",   color: "text-cyan-500 dark:text-cyan-400" },
-  "Health":    { icon: HeartPulse,    bg: "from-red-500/20 to-rose-600/30 dark:from-red-500/20 dark:to-rose-600/30",    color: "text-red-500 dark:text-red-400" },
-  "Finance":   { icon: DollarSign,    bg: "from-green-500/20 to-emerald-600/30 dark:from-green-500/20 dark:to-emerald-600/30",color: "text-green-500 dark:text-green-400" },
-  "Design":    { icon: Palette,       bg: "from-fuchsia-500/20 to-purple-600/30 dark:from-fuchsia-500/20 dark:to-purple-600/30",color: "text-fuchsia-500 dark:text-fuchsia-400" },
+  "Business":       { icon: Briefcase,     bg: "from-blue-500/20 to-indigo-600/30 dark:from-blue-500/20 dark:to-indigo-600/30", color: "text-indigo-500 dark:text-indigo-400" },
+  "Marketing":      { icon: ShoppingCart,  bg: "from-rose-500/20 to-pink-600/30 dark:from-rose-500/20 dark:to-pink-600/30",   color: "text-rose-500 dark:text-rose-400" },
+  "Writing":        { icon: FileText,      bg: "from-amber-500/20 to-orange-600/30 dark:from-amber-500/20 dark:to-orange-600/30",color: "text-amber-500 dark:text-amber-400" },
+  "Coding":         { icon: Code,          bg: "from-emerald-500/20 to-teal-600/30 dark:from-emerald-500/20 dark:to-teal-600/30",color: "text-teal-500 dark:text-teal-400" },
+  "Website & App":  { icon: Code,          bg: "from-emerald-500/20 to-teal-600/30 dark:from-emerald-500/20 dark:to-teal-600/30",color: "text-teal-500 dark:text-teal-400" },
+  "Education":      { icon: GraduationCap, bg: "from-cyan-500/20 to-blue-600/30 dark:from-cyan-500/20 dark:to-blue-600/30",   color: "text-cyan-500 dark:text-cyan-400" },
+  "Health":         { icon: HeartPulse,    bg: "from-red-500/20 to-rose-600/30 dark:from-red-500/20 dark:to-rose-600/30",    color: "text-red-500 dark:text-red-400" },
+  "Finance":        { icon: DollarSign,    bg: "from-green-500/20 to-emerald-600/30 dark:from-green-500/20 dark:to-emerald-600/30",color: "text-green-500 dark:text-green-400" },
+  "Design":         { icon: Palette,       bg: "from-fuchsia-500/20 to-purple-600/30 dark:from-fuchsia-500/20 dark:to-purple-600/30",color: "text-fuchsia-500 dark:text-fuchsia-400" },
+  "Photography":    { icon: Camera,        bg: "from-amber-500/20 to-yellow-600/30 dark:from-amber-500/20 dark:to-yellow-600/30", color: "text-amber-500 dark:text-amber-400" },
+  "Logos & Icons":  { icon: Shapes,        bg: "from-indigo-500/20 to-violet-600/30 dark:from-indigo-500/20 dark:to-violet-600/30", color: "text-indigo-400 dark:text-indigo-300" },
+  "Vector Design":  { icon: PenTool,       bg: "from-sky-500/20 to-blue-600/30 dark:from-sky-500/20 dark:to-blue-600/30", color: "text-sky-500 dark:text-sky-400" },
+  "Video":          { icon: Video,         bg: "from-rose-500/20 to-red-600/30 dark:from-rose-500/20 dark:to-red-600/30", color: "text-rose-500 dark:text-rose-400" },
+  "Viral Prompt":   { icon: Flame,         bg: "from-orange-500/20 to-amber-600/30 dark:from-orange-500/20 dark:to-amber-600/30", color: "text-orange-500 dark:text-orange-400" },
+  "Mockup Prompt":  { icon: LayoutTemplate,bg: "from-teal-500/20 to-emerald-600/30 dark:from-teal-500/20 dark:to-emerald-600/30", color: "text-teal-400 dark:text-teal-300" },
+  "Master Prompt":  { icon: Crown,         bg: "from-purple-500/20 to-pink-600/30 dark:from-purple-500/20 dark:to-pink-600/30", color: "text-purple-400 dark:text-purple-300" },
 };
 
 export const getCategoryStyle = (categoryName?: string) => {

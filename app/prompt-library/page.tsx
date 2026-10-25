@@ -7,6 +7,7 @@ import { Search, ArrowRight } from "lucide-react";
 import { PromptCard, Prompt } from "@/components/prompts/PromptCard";
 import { DesignPromptCard } from "@/components/prompts/DesignPromptCard";
 import { LatestPromptsSection } from "@/components/prompts/LatestPromptsSection";
+import { PopularCategories } from "@/components/home/PopularCategories";
 import { SkeletonCard } from "@/components/ui/SkeletonCard";
 import { ImageToPromptSection } from "@/components/prompts/ImageToPromptSection";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
@@ -23,7 +24,23 @@ const MARQUEE_TOOLS = [
 
 import { getApiBaseUrl } from "@/lib/apiClient";
 
-const CATEGORY_ORDER = ["Design", "Business", "Marketing", "Writing", "Coding", "Education", "Health", "Finance"];
+const CATEGORY_ORDER = [
+  "Photography",
+  "Logos & Icons",
+  "Vector Design",
+  "Video",
+  "Viral Prompt",
+  "Mockup Prompt",
+  "Master Prompt",
+  "Design",
+  "Business",
+  "Marketing",
+  "Writing",
+  "Coding",
+  "Education",
+  "Health",
+  "Finance",
+];
 
 
 function useLatestPrompts() {
@@ -268,6 +285,11 @@ function PromptLibraryContent() {
               <LatestPromptsSection prompts={latestPrompts} loading={latestLoading} />
             </ScrollReveal>
 
+            {/* ── Popular Categories section (under Latest Prompts) ── */}
+            <ScrollReveal variant="slide-up" duration={0.5}>
+              <PopularCategories embedded={true} groupedPrompts={grouped} />
+            </ScrollReveal>
+
             {/* ── Category sections ── */}
             {groupedLoading ? (
               Array.from({ length: 3 }).map((_, i) => (
@@ -287,6 +309,13 @@ function PromptLibraryContent() {
                   return renderDesignSection(category, prompts);
                 } else {
                   let description = "Explore specialized prompts for this category.";
+                  if (category === "Photography") description = "Capture studio lighting, cinematic portraits, and high-res photography.";
+                  if (category === "Logos & Icons") description = "Generate scalable vector logos, app icons, and modern brand emblems.";
+                  if (category === "Vector Design") description = "Create crisp vector art, illustrations, and digital graphics.";
+                  if (category === "Video") description = "Craft dynamic prompts for AI video generators like Sora, Runway, and Kling.";
+                  if (category === "Viral Prompt") description = "Trending prompts generating viral engagement across social platforms.";
+                  if (category === "Mockup Prompt") description = "Realistic 3D packaging, apparel, stationery, and product mockups.";
+                  if (category === "Master Prompt") description = "Comprehensive mega-prompts engineered for maximum detail and quality.";
                   if (category === "Business") description = "Elevate your business strategy and operations with AI.";
                   if (category === "Marketing") description = "Supercharge your campaigns and copy with tailored prompts.";
                   if (category === "Writing") description = "Overcome writer's block and polish your content.";

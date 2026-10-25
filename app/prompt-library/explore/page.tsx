@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useCallback, Suspense, useRef } from "react";
 import Link from "next/link";
 import { useSearchParams, useRouter } from "next/navigation";
-import { Search, SlidersHorizontal, Crown, ChevronRight, ArrowLeft, PanelLeftClose, PanelLeftOpen, LayoutGrid, ShoppingCart, User, Smile, Wand2, Paintbrush, Building, MonitorPlay, PenTool, LayoutTemplate, Briefcase, FileText, Code, GraduationCap, HeartPulse, DollarSign, Palette } from "lucide-react";
+import { Search, SlidersHorizontal, Crown, ChevronRight, ArrowLeft, PanelLeftClose, PanelLeftOpen, LayoutGrid, ShoppingCart, User, Smile, Wand2, Paintbrush, Building, MonitorPlay, PenTool, LayoutTemplate, Briefcase, FileText, Code, GraduationCap, HeartPulse, DollarSign, Palette, Camera, Shapes, Video, Flame } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { PromptCard, Prompt } from "@/components/prompts/PromptCard";
 import { DesignPromptCard } from "@/components/prompts/DesignPromptCard";
@@ -13,15 +13,22 @@ import { getApiBaseUrl } from "@/lib/apiClient";
 const API = getApiBaseUrl();
 
 const CATEGORIES = [
-  { label: "All Prompts", value: "All" },
-  { label: "Business",    value: "Business" },
-  { label: "Marketing",   value: "Marketing" },
-  { label: "Writing",     value: "Writing" },
-  { label: "Coding",      value: "Coding" },
-  { label: "Education",   value: "Education" },
-  { label: "Health",      value: "Health" },
-  { label: "Finance",     value: "Finance" },
-  { label: "Design",      value: "Design" },
+  { label: "All Prompts",        value: "All" },
+  { label: "Photography",        value: "Photography" },
+  { label: "Logos & Icons",      value: "Logos & Icons" },
+  { label: "Vector Design",      value: "Vector Design" },
+  { label: "Video",              value: "Video" },
+  { label: "Viral Prompt",       value: "Viral Prompt" },
+  { label: "Mockup Prompt",      value: "Mockup Prompt" },
+  { label: "Master Prompt",      value: "Master Prompt" },
+  { label: "Design",             value: "Design" },
+  { label: "Business",           value: "Business" },
+  { label: "Marketing",          value: "Marketing" },
+  { label: "Writing",            value: "Writing" },
+  { label: "Coding / Apps",      value: "Coding" },
+  { label: "Education",          value: "Education" },
+  { label: "Health",             value: "Health" },
+  { label: "Finance",            value: "Finance" },
 ];
 
 const SORT_OPTIONS = [
@@ -32,6 +39,13 @@ const SORT_OPTIONS = [
 
 const CATEGORY_ICONS: Record<string, any> = {
   "All": LayoutGrid,
+  "Photography": Camera,
+  "Logos & Icons": Shapes,
+  "Vector Design": PenTool,
+  "Video": Video,
+  "Viral Prompt": Flame,
+  "Mockup Prompt": LayoutTemplate,
+  "Master Prompt": Crown,
   "Business": Briefcase,
   "Marketing": ShoppingCart,
   "Writing": FileText,

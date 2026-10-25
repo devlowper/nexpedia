@@ -3,7 +3,7 @@ import type { Metadata } from 'next';
 import Image from 'next/image';
 
 export const metadata: Metadata = {
-  title: 'About Us — proCraft AI Prompt Library',
+  title: 'About Us | proCraft AI Prompt Library',
   description:
     'Learn about proCraft, our mission to build the best AI prompt library, image to prompt workflows, and empower creators worldwide.',
   alternates: {

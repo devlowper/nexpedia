@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from 'react';
+import Image from 'next/image';
 import { X, Eye, EyeOff, RefreshCw, AlertTriangle, CheckCircle } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 
@@ -110,8 +111,14 @@ export function AuthModal({ isOpen, onClose, defaultView = 'login' }: AuthModalP
 
         {/* Header */}
         <div className="flex flex-col items-center text-center mb-7">
-          <div className="w-12 h-12 rounded-xl flex items-center justify-center text-white font-black text-2xl mb-4 bg-accent shadow-sm">
-            P
+          <div className="mb-4 flex items-center justify-center">
+            <Image
+              src="/logo-icon-pink.png"
+              alt="proCraft"
+              width={48}
+              height={48}
+              className="w-12 h-12 object-contain"
+            />
           </div>
           <h2 className="text-2xl font-bold mb-1.5" style={{ color: 'var(--text-primary)' }}>
             {view === 'login' ? 'Welcome back' : 'Create account'}

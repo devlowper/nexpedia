@@ -47,6 +47,35 @@ export const BLOG_POSTS: BlogPost[] = [
       role: 'AI Prompt Engineering Team'
     },
     excerpt: 'Have you ever found an image online and wanted to recreate its exact visual style? Learn practical image to prompt tips and tricks to turn any picture into a recipe for Midjourney, Stable Diffusion, Flux, and more.'
+  },
+  {
+    slug: 'prompt-engineering-guide',
+    title: 'Prompt Engineering in 2026: The Complete Guide to Writing, Reversing and Organizing AI Prompts',
+    seoTitle: 'Prompt Engineering Guide 2026: Image to Prompt, Reverse Prompting & Prompt Library | ProCraft',
+    metaDescription: 'Learn prompt engineering step by step: how to write better prompts, use image to prompt tools, apply reverse prompt engineering, and build a prompt library that saves hours. Free tools on ProCraft.',
+    focusKeyword: 'prompt engineering',
+    secondaryKeywords: [
+      'image to prompt',
+      'reverse prompt engineering',
+      'prompt library',
+      'prompt making',
+      'AI prompt generator',
+      'how to write AI prompts',
+      'Midjourney prompts',
+      'ChatGPT prompts'
+    ],
+    coverImage: {
+      url: 'https://i.ibb.co/KzFPGfxn/prompt-engineering-guide-cover.webp',
+      alt: 'Prompt Engineering Guide 2026 cover illustration featuring an illuminated lightbulb on a suit'
+    },
+    category: 'Guides & Tutorials',
+    publishedAt: 'Oct 26, 2026',
+    readTime: '10 min read',
+    author: {
+      name: 'ProCraft Team',
+      role: 'AI Prompt Engineering Team'
+    },
+    excerpt: 'Learn prompt engineering step by step: how to write better prompts, use image to prompt tools, apply reverse prompt engineering, and build a prompt library that saves hours. Free tools on ProCraft.'
   }
 ];
 

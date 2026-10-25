@@ -18,7 +18,7 @@ const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "https://procraft.site";
 export const metadata: Metadata = {
   metadataBase: new URL(APP_URL),
   title: {
-    default: "proCraft — AI Prompt Library & Directory",
+    default: "proCraft | Prompt Library & Directory",
     template: "%s | proCraft",
   },
   description:
@@ -43,8 +43,16 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "/",
   },
+  icons: {
+    icon: [
+      { url: '/favicon.ico?v=2' },
+      { url: '/icon.png?v=2', type: 'image/png' },
+    ],
+    shortcut: '/favicon.ico?v=2',
+    apple: '/apple-icon.png?v=2',
+  },
   openGraph: {
-    title: "proCraft — AI Prompt Library & Directory",
+    title: "proCraft | Prompt Library & Directory",
     description:
       "Explore curated prompts, prompt styles, and AI tools with proCraft.",
     url: APP_URL,
@@ -54,7 +62,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "proCraft — AI Prompt Library & Directory",
+    title: "proCraft | Prompt Library & Directory",
     description:
       "Discover the best prompt library, trendy prompts, and creative tools with proCraft.",
     creator: "@procraft",
@@ -69,6 +77,9 @@ export const metadata: Metadata = {
       "max-image-preview": "large",
       "max-snippet": -1,
     },
+  },
+  verification: {
+    google: "google9b78feeff9304ba5",
   },
 };
 

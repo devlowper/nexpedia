@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { Menu, X, Bell, User as UserIcon, Settings, Sun, Moon, LogOut } from 'lucide-react';
 import { useTheme } from '@/hooks/useTheme';
@@ -9,6 +10,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { AuthModal } from '@/components/auth/AuthModal';
 import { cn } from '@/lib/utils';
 import { getApiBaseUrl } from '@/lib/apiClient';
+import { CometButton } from '@/components/ui/CometButton';
 
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -111,14 +113,25 @@ export function Navbar() {
         <div className="max-w-7xl mx-auto px-4 h-full flex items-center justify-between">
 
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2 group" title="proCraft - AI Prompt Library & Directory">
-            <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-accent text-white font-black text-xl shadow-sm">
-              P
-            </div>
-            <span className="font-bold text-lg tracking-tight">
-              <span className="text-primary group-hover:text-accent transition-colors">pro</span>
-              <span className="text-accent">Craft</span>
-            </span>
+          <Link href="/" className="flex items-center group transition-opacity hover:opacity-90 py-1" title="proCraft | Prompt Library & Directory">
+            <Image
+              src="/logo-dark-v2.png"
+              alt="proCraft"
+              width={140}
+              height={26}
+              priority
+              unoptimized
+              className="block dark:hidden h-7 w-auto object-contain"
+            />
+            <Image
+              src="/logo-light-v2.png"
+              alt="proCraft"
+              width={140}
+              height={26}
+              priority
+              unoptimized
+              className="hidden dark:block h-7 w-auto object-contain"
+            />
           </Link>
 
           {/* Desktop Links */}
@@ -153,13 +166,19 @@ export function Navbar() {
                 >
                   Login
                 </button>
-                <button
+                <CometButton
                   id="navbar-signup-btn"
                   onClick={openSignup}
-                  className="bg-accent text-black text-sm font-semibold px-5 py-2 rounded-full hover:bg-accent-hover transition-colors"
+                  backgroundColor={isDark ? '#0b0c10' : '#111318'}
+                  hoverBackgroundColor={isDark ? '#151722' : '#1c1f2a'}
+                  textColor="#ffffff"
+                  hoverTextColor="#ffffff"
+                  padding="0.45rem 1.25rem"
+                  fontSize="0.875rem"
+                  fontWeight={600}
                 >
                   Get Start
-                </button>
+                </CometButton>
               </>
             ) : (
               <div className="flex items-center gap-3">
@@ -243,10 +262,30 @@ export function Navbar() {
           <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={(e) => { e.stopPropagation(); setMobileOpen(false); }} />
           <div className="relative w-64 h-full border-l p-6 shadow-2xl overflow-y-auto transition-transform duration-300"
             style={{ background: 'var(--bg-surface)', borderColor: 'var(--border)' }}>
-            <button className="absolute top-4 right-4 text-muted hover:text-primary" onClick={() => setMobileOpen(false)}>
-              <X size={24} />
-            </button>
-            <div className="flex flex-col gap-5 mt-8">
+            <div className="flex items-center justify-between mb-6 pb-4 border-b border-border/50">
+              <Link href="/" onClick={() => setMobileOpen(false)} className="inline-block">
+                <Image
+                  src="/logo-dark-v2.png"
+                  alt="proCraft"
+                  width={120}
+                  height={22}
+                  unoptimized
+                  className="block dark:hidden h-5 w-auto object-contain"
+                />
+                <Image
+                  src="/logo-light-v2.png"
+                  alt="proCraft"
+                  width={120}
+                  height={22}
+                  unoptimized
+                  className="hidden dark:block h-5 w-auto object-contain"
+                />
+              </Link>
+              <button className="text-muted hover:text-primary p-1" onClick={() => setMobileOpen(false)}>
+                <X size={20} />
+              </button>
+            </div>
+            <div className="flex flex-col gap-5">
               {links.map(link => (
                 <Link key={link.href} href={link.href}
                   className={cn("text-lg font-medium transition-colors",
@@ -263,10 +302,20 @@ export function Navbar() {
                     className="text-left text-lg font-medium text-muted hover:text-primary transition-colors">
                     Login
                   </button>
-                  <button onClick={() => { setMobileOpen(false); openSignup(); }}
-                    className="bg-accent text-black text-center font-semibold py-3 rounded-full hover:bg-accent-hover transition-colors">
+                  <CometButton
+                    id="mobile-navbar-signup-btn"
+                    onClick={() => { setMobileOpen(false); openSignup(); }}
+                    className="w-full"
+                    backgroundColor={isDark ? '#0b0c10' : '#111318'}
+                    hoverBackgroundColor={isDark ? '#151722' : '#1c1f2a'}
+                    textColor="#ffffff"
+                    hoverTextColor="#ffffff"
+                    padding="0.75rem 1.5rem"
+                    fontSize="1rem"
+                    fontWeight={600}
+                  >
                     Get Start
-                  </button>
+                  </CometButton>
                 </>
               ) : (
                 <>

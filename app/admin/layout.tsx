@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import AdminShell from "./AdminShell";
 
 export const metadata: Metadata = {
-  title: "Admin — proCraft",
+  title: "Admin | proCraft",
   description: "proCraft admin panel",
   robots: {
     index: false,

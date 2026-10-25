@@ -118,11 +118,21 @@ export function SubmitPromptModal({ isOpen, onClose }: SubmitPromptModalProps) {
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
                 className="w-full bg-surface border border-border rounded-md px-4 py-3 text-primary focus:border-accent/50 outline-none transition-colors appearance-none">
+                <option value="Photography">Photography</option>
+                <option value="Logos & Icons">Logos & Icons</option>
+                <option value="Vector Design">Vector Design</option>
+                <option value="Video">Video</option>
+                <option value="Viral Prompt">Viral Prompt</option>
+                <option value="Mockup Prompt">Mockup Prompt</option>
+                <option value="Master Prompt">Master Prompt</option>
+                <option value="Design">Design</option>
                 <option value="Marketing">Marketing</option>
                 <option value="Coding">Coding</option>
                 <option value="Writing">Writing</option>
-                <option value="Image Generation">Image Generation</option>
                 <option value="Business">Business</option>
+                <option value="Education">Education</option>
+                <option value="Health">Health</option>
+                <option value="Finance">Finance</option>
               </select>
             </div>
           </div>

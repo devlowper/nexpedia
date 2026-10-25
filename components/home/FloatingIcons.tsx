@@ -47,8 +47,8 @@ const TILE_CONFIGS: TileConfig[] = [
     tilt: -2,
     position: { left: "3%", top: "12%" },
     mobileVisible: true,
-    mobileSize: 44,
-    mobilePosition: { left: "3%", top: "3%" },
+    mobileSize: 36,
+    mobilePosition: { left: "4%", top: "13%" },
     bgGradient: "linear-gradient(180deg, #FFFFFF 0%, #F5F5F7 100%)",
     border: "1px solid rgba(0, 0, 0, 0.08)",
     shadowColor: "rgba(16, 163, 127, 0.25)",
@@ -66,8 +66,8 @@ const TILE_CONFIGS: TileConfig[] = [
     tilt: 2,
     position: { left: "10.5%", top: "24%" },
     mobileVisible: true,
-    mobileSize: 44,
-    mobilePosition: { right: "3%", top: "3%" },
+    mobileSize: 36,
+    mobilePosition: { right: "4%", top: "13%" },
     bgGradient: "linear-gradient(180deg, #EA724F 0%, #D85834 100%)",
     border: "1px solid rgba(255, 255, 255, 0.25)",
     shadowColor: "rgba(217, 119, 87, 0.30)",
@@ -85,8 +85,8 @@ const TILE_CONFIGS: TileConfig[] = [
     tilt: -2,
     position: { left: "3.5%", top: "44%" },
     mobileVisible: true,
-    mobileSize: 42,
-    mobilePosition: { left: "3%", bottom: "3%" },
+    mobileSize: 34,
+    mobilePosition: { left: "3.5%", top: "48%" },
     bgGradient: "linear-gradient(180deg, #FFFFFF 0%, #F3F4F8 100%)",
     border: "1px solid rgba(0, 0, 0, 0.08)",
     shadowColor: "rgba(49, 134, 255, 0.25)",
@@ -193,8 +193,8 @@ const TILE_CONFIGS: TileConfig[] = [
     tilt: -2,
     position: { right: "10%", top: "68%" },
     mobileVisible: true,
-    mobileSize: 44,
-    mobilePosition: { right: "3%", bottom: "3%" },
+    mobileSize: 34,
+    mobilePosition: { right: "3.5%", top: "48%" },
     bgGradient: "linear-gradient(180deg, #7C4CF5 0%, #5925D2 100%)",
     border: "1px solid rgba(255, 255, 255, 0.22)",
     shadowColor: "rgba(105, 50, 213, 0.30)",
@@ -209,7 +209,9 @@ const TILE_CONFIGS: TileConfig[] = [
 export function FloatingIcons() {
   const shouldReduceMotion = useReducedMotion();
   const [mouseOffset, setMouseOffset] = useState({ x: 0, y: 0 });
-  const [isMobile, setIsMobile] = useState(false);
+  const [isMobile, setIsMobile] = useState(() =>
+    typeof window !== 'undefined' ? window.innerWidth < 768 : false
+  );
 
   useEffect(() => {
     const checkMobile = () => {
@@ -285,6 +287,9 @@ export function FloatingIcons() {
               top: tile.position.top,
             };
 
+        const floatY = isMobile ? Math.min(3.5, tile.floatY * 0.5) : tile.floatY;
+        const floatRot = isMobile ? tile.floatRotate * 0.6 : tile.floatRotate;
+
         return (
           <motion.div
             key={tile.id}
@@ -301,12 +306,12 @@ export function FloatingIcons() {
               shouldReduceMotion
                 ? { rotate: tile.tilt }
                 : {
-                    y: [0, -tile.floatY, 0, tile.floatY, 0],
+                    y: [0, -floatY, 0, floatY, 0],
                     rotate: [
                       tile.tilt,
-                      tile.tilt + tile.floatRotate,
+                      tile.tilt + floatRot,
                       tile.tilt,
-                      tile.tilt - tile.floatRotate,
+                      tile.tilt - floatRot,
                       tile.tilt,
                     ],
                   }
