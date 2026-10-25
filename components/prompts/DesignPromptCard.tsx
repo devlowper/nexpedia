@@ -116,6 +116,13 @@ export function DesignPromptCard({ prompt, index = 0, masonry = false }: DesignP
             {cleanTitle(prompt.page_name)}
           </h3>
 
+          {/* Description */}
+          {prompt.description && (
+            <p className="text-white/80 text-xs leading-relaxed line-clamp-2 drop-shadow-sm font-normal">
+              {prompt.description}
+            </p>
+          )}
+
           {/* Footer row (Tools & Views) */}
           <div className="flex items-center justify-between mt-1">
             {/* Tool logos only */}

@@ -13,6 +13,7 @@ import { Prompt, PromptCard, cardVariants, cleanTitle, getPromptTools } from "@/
 import { useAuth } from "@/hooks/useAuth";
 import { getApiBaseUrl } from "@/lib/apiClient";
 import { formatViewCount } from "@/lib/utils";
+import { AdsterraBanner, AdsterraResponsiveBanner } from "@/components/ads/AdsterraBanner";
 
 
 function BulletList({ text, bulletColor = "text-accent" }: { text: string; bulletColor?: string }) {
@@ -404,7 +405,15 @@ export default function PromptDetailPage() {
             <BulletList text={prompt.how_to_use_the_prompt} bulletColor="text-blue-400" />
           </SectionCard>
         )}
+
+        {/* 300x250 Ad Banner */}
+        <div className="flex justify-center items-center">
+          <AdsterraBanner format="300x250" />
+        </div>
       </div>
+
+      {/* Responsive Leaderboard Banner */}
+      <AdsterraResponsiveBanner className="my-8" />
 
       {/* ── Prompt body ── */}
       {prompt.prompt_body && (() => {

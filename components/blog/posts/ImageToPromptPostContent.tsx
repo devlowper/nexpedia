@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { 
   CheckCircle2, AlertTriangle, BookOpen, Sparkles, ArrowRight 
 } from 'lucide-react';
+import { AdsterraResponsiveBanner } from '@/components/ads/AdsterraBanner';
 
 export default function ImageToPromptPostContent() {
   return (
@@ -215,6 +216,9 @@ export default function ImageToPromptPostContent() {
             </div>
           </div>
         </div>
+
+        {/* Mid-Article Responsive Banner */}
+        <AdsterraResponsiveBanner className="my-10" />
 
         {/* Tip 6 */}
         <div className="space-y-4">

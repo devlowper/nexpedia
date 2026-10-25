@@ -5,6 +5,7 @@ import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { ThemeProvider } from "@/hooks/useTheme";
 import { AuthProvider } from "@/hooks/useAuth";
+import { AdsterraGlobals } from "@/components/ads/AdsterraGlobals";
 
 const inter = Inter({ subsets: ["latin"] });
 const bricolage = Bricolage_Grotesque({
@@ -133,6 +134,7 @@ export default function RootLayout({
                 {children}
               </main>
               <Footer />
+              <AdsterraGlobals />
             </div>
           </ThemeProvider>
         </AuthProvider>

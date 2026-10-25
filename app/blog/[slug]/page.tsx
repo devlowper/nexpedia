@@ -7,6 +7,7 @@ import { ArrowLeft, Clock, Calendar } from 'lucide-react';
 import { getBlogPostBySlug, BLOG_POSTS } from '@/lib/blogData';
 import ImageToPromptPostContent from '@/components/blog/posts/ImageToPromptPostContent';
 import PromptEngineeringGuidePostContent from '@/components/blog/posts/PromptEngineeringGuidePostContent';
+import { AdsterraBanner, AdsterraResponsiveBanner, AdsterraNativeBanner } from '@/components/ads/AdsterraBanner';
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -181,9 +182,19 @@ export default async function BlogPostPage({ params }: PageProps) {
           </figcaption>
         </figure>
 
+        {/* Top/Mid-Article Responsive Banner */}
+        <AdsterraResponsiveBanner className="mb-10" />
+
         {/* Article Body Content */}
         {post.slug === 'image-to-prompt-tips-and-tricks' && <ImageToPromptPostContent />}
         {post.slug === 'prompt-engineering-guide' && <PromptEngineeringGuidePostContent />}
+
+        {/* Bottom Article Ads */}
+        <div className="w-full flex flex-col items-center mt-12 pt-8 border-t border-black/10 dark:border-white/10">
+          <AdsterraBanner format="300x250" />
+          <AdsterraNativeBanner />
+          <AdsterraResponsiveBanner className="mt-8" />
+        </div>
       </article>
     </>
   );

@@ -5,6 +5,7 @@ import {
   CheckCircle2, AlertTriangle, BookOpen, Sparkles, ArrowRight,
   Layers, Lightbulb, RefreshCw, Library, Zap, Copy, Check
 } from 'lucide-react';
+import { AdsterraResponsiveBanner } from '@/components/ads/AdsterraBanner';
 
 export default function PromptEngineeringGuidePostContent() {
   return (
@@ -327,6 +328,9 @@ export default function PromptEngineeringGuidePostContent() {
           </Link>
         </div>
       </section>
+
+      {/* Mid-Article Responsive Banner */}
+      <AdsterraResponsiveBanner className="my-10" />
 
       {/* ================= PART 3: REVERSE PROMPT ENGINEERING ================= */}
       <section id="part-3-reverse-prompting" className="space-y-6 pt-6 border-t border-black/10 dark:border-white/10">

@@ -6,11 +6,13 @@ import Link from "next/link";
 import { Search, ArrowRight } from "lucide-react";
 import { PromptCard, Prompt } from "@/components/prompts/PromptCard";
 import { DesignPromptCard } from "@/components/prompts/DesignPromptCard";
+import { PhotographyPromptCard } from "@/components/prompts/PhotographyPromptCard";
 import { LatestPromptsSection } from "@/components/prompts/LatestPromptsSection";
 import { PopularCategories } from "@/components/home/PopularCategories";
 import { SkeletonCard } from "@/components/ui/SkeletonCard";
 import { ImageToPromptSection } from "@/components/prompts/ImageToPromptSection";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
+import { AdsterraResponsiveBanner } from "@/components/ads/AdsterraBanner";
 
 const MARQUEE_TOOLS = [
   { name: "ChatGPT", logo: "/models/chatgpt.svg", color: "#10a37f" },
@@ -134,9 +136,37 @@ function renderDesignSection(category: string, prompts: Prompt[]) {
   );
 }
 
-
+function renderPhotographySection(category: string, prompts: Prompt[]) {
+  return (
+    <ScrollReveal key={category} variant="slide-up" duration={0.6} className="space-y-6 pt-10">
+      <div className="flex flex-col md:flex-row items-start md:items-end justify-between border-b border-border/50 pb-4 gap-4">
+        <div>
+          <h2 className="text-2xl font-bold text-primary flex items-center gap-2 mb-1">
+            {category}
+          </h2>
+          <p className="text-muted text-sm">Capture studio lighting, cinematic portraits, and high-res photography.</p>
+        </div>
+        <Link
+          href={`/prompt-library/explore?category=${encodeURIComponent(category)}`}
+          className="text-sm font-medium text-muted hover:text-accent flex items-center gap-1 transition-colors group whitespace-nowrap"
+        >
+          See more
+          <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+        </Link>
+      </div>
+      
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
+        {prompts.slice(0, 4).map((p, i) => (
+          <PhotographyPromptCard key={p.slug} prompt={p} index={i} />
+        ))}
+      </div>
+    </ScrollReveal>
+  );
+}
 
 function renderStandardSection(category: string, prompts: Prompt[], description: string) {
+  const showBanner = ["Finance", "Education", "Coding", "Writing", "Marketing", "Business"].includes(category);
+
   return (
     <ScrollReveal key={category} variant="slide-up" duration={0.6} className="space-y-6 pt-10">
       <div className="flex flex-col md:flex-row items-start md:items-end justify-between border-b border-border/50 pb-4 gap-4">
@@ -160,6 +190,12 @@ function renderStandardSection(category: string, prompts: Prompt[], description:
           <PromptCard key={p.slug} prompt={p} index={i} />
         ))}
       </div>
+
+      {showBanner && (
+        <div className="w-full flex justify-center pt-2">
+          <AdsterraResponsiveBanner />
+        </div>
+      )}
     </ScrollReveal>
   );
 }
@@ -307,9 +343,10 @@ function PromptLibraryContent() {
                 
                 if (category === "Design") {
                   return renderDesignSection(category, prompts);
+                } else if (category === "Photography") {
+                  return renderPhotographySection(category, prompts);
                 } else {
                   let description = "Explore specialized prompts for this category.";
-                  if (category === "Photography") description = "Capture studio lighting, cinematic portraits, and high-res photography.";
                   if (category === "Logos & Icons") description = "Generate scalable vector logos, app icons, and modern brand emblems.";
                   if (category === "Vector Design") description = "Create crisp vector art, illustrations, and digital graphics.";
                   if (category === "Video") description = "Craft dynamic prompts for AI video generators like Sora, Runway, and Kling.";
@@ -330,6 +367,8 @@ function PromptLibraryContent() {
             )}
           </div>
         )}
+        {/* Bottom Ad Banner */}
+        <AdsterraResponsiveBanner className="mt-12 mb-6" />
       </div>
     </div>
   );
