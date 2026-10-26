@@ -123,7 +123,7 @@ export function Navbar() {
               height={26}
               priority
               unoptimized
-              className="block dark:hidden h-7 w-auto object-contain"
+              className={cn("h-7 w-auto object-contain", scrolled ? "hidden" : "block dark:hidden")}
             />
             <Image
               src="/logo-light-v2.png"
@@ -132,7 +132,7 @@ export function Navbar() {
               height={26}
               priority
               unoptimized
-              className="hidden dark:block h-7 w-auto object-contain"
+              className={cn("h-7 w-auto object-contain", scrolled ? "block" : "hidden dark:block")}
             />
           </Link>
 
