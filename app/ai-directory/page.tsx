@@ -11,6 +11,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { getApiBaseUrl } from '@/lib/apiClient';
 import { AIDirectoryHero } from '@/components/ai-directory/AIDirectoryHero';
 import { handleDetailsAdClick } from '@/lib/monetagAd';
+import { SponsoredCard } from '@/components/ads/SponsoredCard';
 
 
 
@@ -640,55 +641,53 @@ function AIDirectoryContent() {
             const Icon = config.icon;
             
             return (
-              <ScrollReveal variant="slide-up" duration={0.6} key={sectionName} id={sectionName.replace(/\s+/g, '-').toLowerCase()} className="flex flex-col pt-4">
-                <div className="flex items-center justify-between w-full mb-8 border-b border-black/5 dark:border-white/5 pb-4">
-                  <div className="flex items-center gap-4">
-                    <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${config?.from || 'from-gray-500'} ${config?.to || 'to-gray-400'} p-[1px] shadow-lg`}>
-                      <div className="w-full h-full rounded-2xl bg-white dark:bg-[#0B0C10] flex items-center justify-center relative">
-                        <Icon size={22} className={config?.iconColor || "text-gray-500"} />
+              <React.Fragment key={sectionName}>
+                <ScrollReveal variant="slide-up" duration={0.6} id={sectionName.replace(/\s+/g, '-').toLowerCase()} className="flex flex-col pt-4">
+                  <div className="flex items-center justify-between w-full mb-8 border-b border-black/5 dark:border-white/5 pb-4">
+                    <div className="flex items-center gap-4">
+                      <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${config?.from || 'from-gray-500'} ${config?.to || 'to-gray-400'} p-[1px] shadow-lg`}>
+                        <div className="w-full h-full rounded-2xl bg-white dark:bg-[#0B0C10] flex items-center justify-center relative">
+                          <Icon size={22} className={config?.iconColor || "text-gray-500"} />
+                        </div>
+                      </div>
+                      <div>
+                        <h2 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{sectionName}</h2>
+                        <p className="text-sm text-gray-500 dark:text-white/40 mt-1">
+                          Explore the best {sectionName.toLowerCase()} to boost your productivity.
+                        </p>
                       </div>
                     </div>
-                    <div>
-                      <h2 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{sectionName}</h2>
-                      <p className="text-sm text-gray-500 dark:text-white/40 mt-1">
-                        Explore the best {sectionName.toLowerCase()} to boost your productivity.
-                      </p>
-                    </div>
+                    
+                    {toolsInSection.length > 4 && (
+                      <button 
+                        onClick={() => selectCategory(sectionName)}
+                        className="text-sm font-semibold text-blue-500 hover:text-blue-600 dark:text-white/50 dark:hover:text-white transition-colors flex items-center gap-1 group"
+                      >
+                        See more
+                        <span className="transform group-hover:translate-x-1 transition-transform inline-block">
+                          &rarr;
+                        </span>
+                      </button>
+                    )}
                   </div>
                   
-                  {toolsInSection.length > 4 && (
-                    <button 
-                      onClick={() => selectCategory(sectionName)}
-                      className="text-sm font-semibold text-blue-500 hover:text-blue-600 dark:text-white/50 dark:hover:text-white transition-colors flex items-center gap-1 group"
-                    >
-                      See more
-                      <span className="transform group-hover:translate-x-1 transition-transform inline-block">
-                        &rarr;
-                      </span>
-                    </button>
-                  )}
-                </div>
-                
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                  {displayTools.map((tool) => (
-                    <ToolCard key={tool._id} tool={tool} />
-                  ))}
-                </div>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                    {displayTools.map((tool) => (
+                      <ToolCard key={tool._id} tool={tool} />
+                    ))}
+                  </div>
+                </ScrollReveal>
 
-                {/* Long Banner Under Category Cards */}
-                {[
-                  "AI Text Generators",
-                  "AI Business Tools",
-                  "AI Image Tools",
-                  "Automation Tools",
-                  "AI Audio Generators",
-                  "AI Code Tools",
-                  "AI Art Generators",
-                  "Other AI Tools"
-                ].includes(sectionName) && null}
-              </ScrollReveal>
+                {/* Sponsored Card: 2 categories por por 1 ta */}
+                {(index + 1) % 2 === 0 && (
+                  <ScrollReveal variant="slide-up" duration={0.5}>
+                    <SponsoredCard variant="directory" />
+                  </ScrollReveal>
+                )}
+              </React.Fragment>
             );
           })}
+
           
           {/* Uncategorized Tools */}
           {groupedTools.uncategorized.length > 0 && (

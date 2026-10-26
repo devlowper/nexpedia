@@ -7,6 +7,8 @@ import { PopularCategories } from "@/components/home/PopularCategories";
 import { AIPromptWorkspace } from "@/components/home/AIPromptWorkspace";
 import { FAQ } from "@/components/home/FAQ";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
+import { SponsoredCard } from "@/components/ads/SponsoredCard";
+
 export default function Home() {
   return (
     <div className="flex flex-col items-center w-full">
@@ -38,6 +40,11 @@ export default function Home() {
 
       <ScrollReveal className="w-full" delay={0.2}>
         <FAQ />
+      </ScrollReveal>
+
+      {/* Sponsored Partner Card under FAQ */}
+      <ScrollReveal className="w-full px-4" delay={0.2}>
+        <SponsoredCard variant="banner" />
       </ScrollReveal>
     </div>
   );

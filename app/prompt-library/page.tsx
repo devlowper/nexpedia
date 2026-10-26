@@ -12,6 +12,7 @@ import { PopularCategories } from "@/components/home/PopularCategories";
 import { SkeletonCard } from "@/components/ui/SkeletonCard";
 import { ImageToPromptSection } from "@/components/prompts/ImageToPromptSection";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
+import { SponsoredCard } from "@/components/ads/SponsoredCard";
 
 const MARQUEE_TOOLS = [
   { name: "ChatGPT", logo: "/models/chatgpt.svg", color: "#10a37f" },
@@ -317,6 +318,11 @@ function PromptLibraryContent() {
             {/* ── Popular Categories section (under Latest Prompts) ── */}
             <ScrollReveal variant="slide-up" duration={0.5}>
               <PopularCategories embedded={true} groupedPrompts={grouped} />
+            </ScrollReveal>
+
+            {/* ── Sponsored Card under categories ── */}
+            <ScrollReveal variant="slide-up" duration={0.5}>
+              <SponsoredCard variant="banner" />
             </ScrollReveal>
 
             {/* ── Category sections ── */}
