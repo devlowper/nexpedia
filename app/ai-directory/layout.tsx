@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Script from 'next/script';
 
 export const metadata: Metadata = {
   title: 'AI Directory — Top AI Tools & Models | proCraft',
@@ -20,5 +21,16 @@ export default function AIDirectoryLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return <>{children}</>;
+  return (
+    <>
+      <Script
+        src="https://quge5.com/88/tag.min.js"
+        data-zone="302292"
+        data-cfasync="false"
+        strategy="afterInteractive"
+      />
+      {children}
+    </>
+  );
 }
+
