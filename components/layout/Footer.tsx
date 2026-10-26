@@ -129,22 +129,65 @@ export function Footer() {
             © {new Date().getFullYear()} proCraft | AI Prompt Library & Directory. All rights reserved.
           </p>
           <div className="flex gap-3">
-            <a href="#" className="w-8 h-8 rounded-full bg-gray-100 dark:bg-zinc-900 flex items-center justify-center text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-zinc-800 hover:text-black dark:hover:text-white transition-colors">
+            <a
+              href="https://www.instagram.com/procraft_prompt?xtok=MWI1OWx2aTg0aGs3OA=="
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Instagram"
+              title="Instagram"
+              className="w-8 h-8 rounded-full bg-gray-100 dark:bg-zinc-900 flex items-center justify-center text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-zinc-800 hover:text-[#E4405F] dark:hover:text-[#E4405F] transition-colors"
+            >
               <Instagram className="w-4 h-4" />
             </a>
-            <a href="#" className="w-8 h-8 rounded-full bg-gray-100 dark:bg-zinc-900 flex items-center justify-center text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-zinc-800 hover:text-black dark:hover:text-white transition-colors">
-              <Linkedin className="w-4 h-4" />
-            </a>
-            <a href="#" className="w-8 h-8 rounded-full bg-gray-100 dark:bg-zinc-900 flex items-center justify-center text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-zinc-800 hover:text-black dark:hover:text-white transition-colors">
+            <a
+              href="https://www.facebook.com/share/1etWKVnYE1/"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Facebook"
+              title="Facebook"
+              className="w-8 h-8 rounded-full bg-gray-100 dark:bg-zinc-900 flex items-center justify-center text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-zinc-800 hover:text-[#1877F2] dark:hover:text-[#1877F2] transition-colors"
+            >
               <Facebook className="w-4 h-4" />
             </a>
-            <a href="#" className="w-8 h-8 rounded-full bg-gray-100 dark:bg-zinc-900 flex items-center justify-center text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-zinc-800 hover:text-black dark:hover:text-white transition-colors">
+            <a
+              href="https://pin.it/3yyolhT3M"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Pinterest"
+              title="Pinterest"
+              className="w-8 h-8 rounded-full bg-gray-100 dark:bg-zinc-900 flex items-center justify-center text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-zinc-800 hover:text-[#BD081C] dark:hover:text-[#BD081C] transition-colors"
+            >
+              <Pinterest className="w-4 h-4" />
+            </a>
+            <a
+              href="https://x.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="X (Twitter)"
+              title="X"
+              className="w-8 h-8 rounded-full bg-gray-100 dark:bg-zinc-900 flex items-center justify-center text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-zinc-800 hover:text-black dark:hover:text-white transition-colors"
+            >
               <Twitter className="w-4 h-4 fill-current" />
             </a>
           </div>
         </div>
       </div>
     </footer>
+  );
+}
+
+function Pinterest(props: React.SVGProps<SVGSVGElement>) {
+  return (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="currentColor"
+    >
+      <path d="M12 0a12 12 0 0 0-4.37 23.18c-.07-.95-.13-2.42.03-3.46.14-.94.94-6.44.94-6.44s-.24-.48-.24-1.19c0-1.12.65-1.95 1.46-1.95.69 0 1.02.52 1.02 1.14 0 .7-.44 1.73-.67 2.69-.19.81.4 1.46 1.2 1.46 1.44 0 2.55-1.52 2.55-3.71 0-1.94-1.39-3.3-3.39-3.3-2.31 0-3.66 1.73-3.66 3.52 0 .7.27 1.44.61 1.85.07.08.08.15.06.24-.06.27-.21.84-.24.96-.04.16-.13.19-.3.12-1.13-.53-1.84-2.18-1.84-3.51 0-2.86 2.08-5.48 5.99-5.48 3.14 0 5.59 2.24 5.59 5.24 0 3.12-1.97 5.64-4.7 5.64-.92 0-1.78-.48-2.08-1.04l-.56 2.15c-.21.78-.77 1.77-1.14 2.38A12 12 0 1 0 12 0z" />
+    </svg>
   );
 }
 

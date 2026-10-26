@@ -5,11 +5,9 @@ import { api } from "@/lib/apiClient";
 import { 
   signInWithPopup, 
   GoogleAuthProvider, 
-  signInWithEmailAndPassword, 
-  createUserWithEmailAndPassword,
   signOut as firebaseSignOut
 } from "firebase/auth";
-import { auth } from "@/lib/firebase";
+import { getFirebaseAuth } from "@/lib/firebase";
 
 export interface AuthUser {
   id: string;
@@ -77,14 +75,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const register = async (name: string, email: string, password: string) => {
-    // 1. Create account in Firebase Auth
-    try {
-      await createUserWithEmailAndPassword(auth, email.trim(), password);
-    } catch (fbErr: any) {
-      console.warn("Firebase signup notice:", fbErr?.message);
-    }
-
-    // 2. Persist in MongoDB
+    // Authenticate directly with MongoDB backend (fast, reliable, no 403 errors)
     const data = await api.post<{ token: string; user: any }>("/api/users/register", { 
       name: name.trim(), 
       email: email.trim(), 
@@ -95,14 +86,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   const login = async (email: string, password: string) => {
-    // 1. Sign in with Firebase Auth
-    try {
-      await signInWithEmailAndPassword(auth, email.trim(), password);
-    } catch (fbErr: any) {
-      console.warn("Firebase login notice:", fbErr?.message);
-    }
-
-    // 2. Authenticate with MongoDB backend
+    // Authenticate directly with MongoDB backend
     const data = await api.post<{ token: string; user: any }>("/api/users/login", { 
       email: email.trim(), 
       password 
@@ -112,12 +96,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   const loginWithGoogle = async () => {
+    const fbAuth = getFirebaseAuth();
+    if (!fbAuth) {
+      throw new Error("Google authentication is currently not available. Please sign in with email and password.");
+    }
+
     try {
       const provider = new GoogleAuthProvider();
       provider.setCustomParameters({ prompt: 'select_account' });
 
       // Trigger Firebase Google Sign-In Popup
-      const result = await signInWithPopup(auth, provider);
+      const result = await signInWithPopup(fbAuth, provider);
       const fbUser = result.user;
 
       const profile = {
@@ -137,7 +126,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         throw new Error('Google sign-in popup was closed.');
       }
       if (err.code === 'auth/unauthorized-domain') {
-        throw new Error('This domain is not authorized in your Firebase console. Please add localhost to Authorized Domains in Firebase Authentication Settings.');
+        throw new Error('This domain is not authorized in Firebase. Please use email and password to sign in.');
+      }
+      if (
+        (err.message && (err.message.includes('Requests from referer') || err.message.includes('API_KEY_HTTP_REFERRER_BLOCKED'))) ||
+        err.code === 'auth/requests-from-referer-are-blocked'
+      ) {
+        throw new Error('Google Sign-In is blocked by Google API Key Website restrictions. Please add https://necpedia.firebaseapp.com/* and localhost to Google Cloud Console credentials, or sign in with email & password.');
       }
       console.error("Google Auth Error:", err);
       throw new Error(err.message || 'Failed to sign in with Google');
@@ -145,12 +140,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   const logout = useCallback(async () => {
-    try {
-      await firebaseSignOut(auth);
-    } catch (e) {
-      console.warn("Firebase sign out warning:", e);
+    const fbAuth = getFirebaseAuth();
+    if (fbAuth) {
+      try {
+        await firebaseSignOut(fbAuth);
+      } catch (e) {
+        console.warn("Firebase sign out warning:", e);
+      }
     }
     localStorage.removeItem("token");
+    sessionStorage.removeItem("token");
     setUser(null);
   }, []);
 

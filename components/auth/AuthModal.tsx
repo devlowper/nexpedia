@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { X, Eye, EyeOff, RefreshCw, AlertTriangle, CheckCircle } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
@@ -25,6 +25,15 @@ export function AuthModal({ isOpen, onClose, defaultView = 'login' }: AuthModalP
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
+  // Sync view state with defaultView prop when modal opens or view changes
+  useEffect(() => {
+    if (isOpen) {
+      setView(defaultView);
+      setError('');
+      setSuccess('');
+    }
+  }, [isOpen, defaultView]);
+
   if (!isOpen) return null;
 
   const reset = () => {
@@ -36,7 +45,8 @@ export function AuthModal({ isOpen, onClose, defaultView = 'login' }: AuthModalP
   };
 
   const switchView = (v: 'login' | 'signup') => {
-    reset();
+    setError('');
+    setSuccess('');
     setView(v);
   };
 
@@ -52,7 +62,12 @@ export function AuthModal({ isOpen, onClose, defaultView = 'login' }: AuthModalP
         reset();
       }, 800);
     } catch (err: any) {
-      setError(err?.message || 'Google sign-in failed. Please try again.');
+      const msg = err?.message || 'Google sign-in failed. Please try again.';
+      if (msg.includes('Failed to fetch') || msg.includes('NetworkError') || msg.includes('Load failed')) {
+        setError('Unable to connect to server. Please try again in a moment.');
+      } else {
+        setError(msg);
+      }
     } finally {
       setLoading(false);
     }
@@ -62,6 +77,22 @@ export function AuthModal({ isOpen, onClose, defaultView = 'login' }: AuthModalP
     e.preventDefault();
     setError('');
     setSuccess('');
+
+    if (view === 'signup' && !name.trim()) {
+      setError('Please enter your full name.');
+      return;
+    }
+
+    if (!email.trim()) {
+      setError('Please enter your email address.');
+      return;
+    }
+
+    if (password.length < 6) {
+      setError('Password must be at least 6 characters.');
+      return;
+    }
+
     setLoading(true);
 
     try {
@@ -75,7 +106,12 @@ export function AuthModal({ isOpen, onClose, defaultView = 'login' }: AuthModalP
         setTimeout(() => { onClose(); reset(); }, 800);
       }
     } catch (err: any) {
-      setError(err.message || 'Something went wrong. Please try again.');
+      const msg = err?.message || 'Something went wrong. Please try again.';
+      if (msg.includes('Failed to fetch') || msg.includes('NetworkError') || msg.includes('Load failed')) {
+        setError('Unable to connect to server. The backend may be waking up or offline, please try again in a few moments.');
+      } else {
+        setError(msg);
+      }
     } finally {
       setLoading(false);
     }

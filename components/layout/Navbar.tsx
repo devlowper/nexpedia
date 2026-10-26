@@ -47,7 +47,7 @@ export function Navbar() {
     if (isLoggedIn) {
       const fetchNotifs = async () => {
         try {
-          const token = sessionStorage.getItem('token');
+          const token = localStorage.getItem('token') || sessionStorage.getItem('token');
           if (!token) return;
           const res = await fetch(`${API}/api/users/notifications`, {
             headers: { Authorization: `Bearer ${token}` }
@@ -70,7 +70,7 @@ export function Navbar() {
 
   const markAsRead = async (id: string) => {
     try {
-      const token = sessionStorage.getItem('token');
+      const token = localStorage.getItem('token') || sessionStorage.getItem('token');
       if (!token) return;
       await fetch(`${API}/api/users/notifications/${id}/read`, {
         method: 'PUT',

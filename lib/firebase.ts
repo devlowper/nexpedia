@@ -11,22 +11,36 @@ const firebaseConfig = {
   measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID || "G-93Z63PVMEE",
 };
 
-let app: FirebaseApp;
-let auth: Auth;
+let app: FirebaseApp | null = null;
+let auth: Auth | null = null;
 
-try {
-  if (firebaseConfig.apiKey) {
-    app = getApps().length ? getApp() : initializeApp(firebaseConfig);
-    auth = getAuth(app);
-  } else {
-    app = (getApps().length ? getApp() : {}) as FirebaseApp;
-    auth = {} as Auth;
+export function getFirebaseApp(): FirebaseApp | null {
+  if (typeof window === "undefined" || !firebaseConfig.apiKey) return null;
+  if (!app) {
+    try {
+      app = getApps().length ? getApp() : initializeApp(firebaseConfig);
+    } catch (error) {
+      console.warn("Firebase app init warning:", error);
+    }
   }
-} catch (error) {
-  // Gracefully handle server-side build prerender without crashing
-  app = (getApps().length ? getApp() : {}) as FirebaseApp;
-  auth = {} as Auth;
+  return app;
 }
 
-export { auth };
+export function getFirebaseAuth(): Auth | null {
+  if (typeof window === "undefined" || !firebaseConfig.apiKey) return null;
+  if (!auth) {
+    try {
+      const fApp = getFirebaseApp();
+      if (fApp) {
+        auth = getAuth(fApp);
+      }
+    } catch (error) {
+      console.warn("Firebase auth init warning:", error);
+    }
+  }
+  return auth;
+}
+
+// For backward compatibility
+export { auth, app };
 export default app;
