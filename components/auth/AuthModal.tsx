@@ -34,6 +34,29 @@ export function AuthModal({ isOpen, onClose, defaultView = 'login' }: AuthModalP
     }
   }, [isOpen, defaultView]);
 
+  // Block any third-party ad popunder / click hijacking inside AuthModal
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const stopAdInterception = (e: Event) => {
+      const target = e.target as HTMLElement | null;
+      if (target && target.closest('#auth-modal')) {
+        // Prevent external ad listeners on window/document from capturing this event
+        e.stopPropagation();
+      }
+    };
+
+    window.addEventListener('click', stopAdInterception, true);
+    window.addEventListener('mousedown', stopAdInterception, true);
+    window.addEventListener('pointerdown', stopAdInterception, true);
+
+    return () => {
+      window.removeEventListener('click', stopAdInterception, true);
+      window.removeEventListener('mousedown', stopAdInterception, true);
+      window.removeEventListener('pointerdown', stopAdInterception, true);
+    };
+  }, [isOpen]);
+
   if (!isOpen) return null;
 
   const reset = () => {
@@ -118,22 +141,32 @@ export function AuthModal({ isOpen, onClose, defaultView = 'login' }: AuthModalP
   };
 
   return (
-    <div id="auth-modal" data-ads-free="true" className="fixed inset-0 z-[99999] flex items-center justify-center p-4">
+    <div
+      id="auth-modal"
+      data-ads-free="true"
+      onClick={(e) => e.stopPropagation()}
+      onMouseDown={(e) => e.stopPropagation()}
+      className="fixed inset-0 z-[99999] flex items-center justify-center p-4"
+    >
       {/* Backdrop with rich blur */}
       <div
         className="absolute inset-0 bg-black/60 backdrop-blur-md transition-all duration-300"
-        onClick={() => { onClose(); reset(); }}
+        onClick={(e) => { e.stopPropagation(); onClose(); reset(); }}
       />
 
       {/* Modal */}
-      <div className="relative w-full max-w-[420px] animate-in fade-in zoom-in-95 duration-200"
+      <div
+        className="relative w-full max-w-[420px] animate-in fade-in zoom-in-95 duration-200"
+        onClick={(e) => e.stopPropagation()}
+        onMouseDown={(e) => e.stopPropagation()}
         style={{
           background: 'var(--bg-surface)',
           border: '1px solid var(--border)',
           borderRadius: '20px',
           padding: '32px',
           boxShadow: '0 24px 64px rgba(0,0,0,0.5)',
-        }}>
+        }}
+      >
 
         {/* Close */}
         <button

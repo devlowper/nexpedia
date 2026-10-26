@@ -251,16 +251,27 @@ export function Navbar() {
             )}
           </div>
 
-          {/* Mobile Toggle */}
-          <button
-            type="button"
-            id="navbar-hamburger-btn"
-            data-ads-free="true"
-            className="md:hidden relative z-50 p-2 -mr-2 text-muted hover:text-primary"
-            onClick={(e) => { e.stopPropagation(); setMobileOpen(true); }}
-          >
-            <Menu size={28} />
-          </button>
+          {/* Mobile Right Controls */}
+          <div className="md:hidden flex items-center gap-2 relative z-50">
+            {isLoggedIn && (
+              <Link
+                href="/profile"
+                className="w-7 h-7 rounded-full gradient-pink flex items-center justify-center text-black font-bold text-xs border border-[rgba(255,51,102,0.3)] shadow-sm"
+                title={`${user?.name} (Profile)`}
+              >
+                {initial}
+              </Link>
+            )}
+            <button
+              type="button"
+              id="navbar-hamburger-btn"
+              data-ads-free="true"
+              className="p-1.5 -mr-1 text-muted hover:text-primary transition-colors"
+              onClick={(e) => { e.stopPropagation(); setMobileOpen(true); }}
+            >
+              <Menu size={26} />
+            </button>
+          </div>
         </div>
       </nav>
 
@@ -327,13 +338,54 @@ export function Navbar() {
                 </>
               ) : (
                 <>
-                  <div className="text-sm font-medium" style={{ color: 'var(--text-muted)' }}>
-                    Signed in as <span style={{ color: 'var(--text-primary)' }}>{user?.name}</span>
+                  <Link
+                    href="/profile"
+                    onClick={() => setMobileOpen(false)}
+                    className="flex items-center gap-3 p-3 rounded-xl bg-black/5 dark:bg-white/5 border border-border hover:border-accent/40 transition-all group"
+                  >
+                    <div className="w-10 h-10 rounded-full gradient-pink flex items-center justify-center text-black font-bold text-sm shadow-sm shrink-0">
+                      {initial}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="font-bold text-sm text-primary truncate group-hover:text-accent transition-colors">
+                        {user?.name || "User Profile"}
+                      </div>
+                      <div className="text-xs text-muted truncate">
+                        {user?.email || "View profile & prompts"}
+                      </div>
+                    </div>
+                    <UserIcon size={16} className="text-muted group-hover:text-primary shrink-0" />
+                  </Link>
+
+                  <div className="flex flex-col gap-2 pt-2">
+                    <Link
+                      href="/profile"
+                      onClick={() => setMobileOpen(false)}
+                      className="text-left text-base font-medium text-primary hover:text-accent transition-colors flex items-center gap-2 py-1"
+                    >
+                      <UserIcon size={18} className="text-accent" />
+                      <span>My Profile</span>
+                    </Link>
+
+                    {user?.role === 'admin' && (
+                      <Link
+                        href="/admin"
+                        onClick={() => setMobileOpen(false)}
+                        className="text-left text-base font-medium text-primary hover:text-accent transition-colors flex items-center gap-2 py-1"
+                      >
+                        <Settings size={18} className="text-accent" />
+                        <span>Admin Dashboard</span>
+                      </Link>
+                    )}
+
+                    <button
+                      onClick={() => { setMobileOpen(false); handleLogout(); }}
+                      className="text-left text-base font-medium transition-colors flex items-center gap-2 py-2 text-red-500 hover:text-red-400 mt-2 border-t border-border/50"
+                    >
+                      <LogOut size={18} />
+                      <span>Sign Out</span>
+                    </button>
                   </div>
-                  <button onClick={() => { setMobileOpen(false); handleLogout(); }}
-                    className="text-left text-sm font-medium transition-colors" style={{ color: '#f87171' }}>
-                    Sign Out
-                  </button>
                 </>
               )}
             </div>

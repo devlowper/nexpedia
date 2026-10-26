@@ -38,7 +38,7 @@ export default function AdminLogin() {
   };
 
   return (
-    <div className="min-h-[calc(100vh-100px)] flex items-center justify-center px-4">
+    <div data-ads-free="true" onClick={(e) => e.stopPropagation()} onMouseDown={(e) => e.stopPropagation()} className="min-h-[calc(100vh-100px)] flex items-center justify-center px-4">
       {/* Glow bg */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden z-[-1]">
         <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full opacity-10"
