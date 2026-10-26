@@ -2,163 +2,83 @@
 
 import { useEffect } from 'react';
 import Script from 'next/script';
+import { MONETAG_SMARTLINK } from '@/lib/monetagAd';
 
 /**
- * Selectors for UI elements that must NEVER trigger Monetag ads or redirects.
- */
-const ADS_FREE_SELECTORS = [
-  'nav',
-  'nav *',
-  'header',
-  'header *',
-  '[data-ads-free="true"]',
-  '[data-ads-free="true"] *',
-  '#navbar-login-btn',
-  '#navbar-login-btn *',
-  '#navbar-signup-btn',
-  '#navbar-signup-btn *',
-  '#navbar-hamburger-btn',
-  '#navbar-hamburger-btn *',
-  '#mobile-navbar-signup-btn',
-  '#mobile-navbar-signup-btn *',
-  '#auth-modal',
-  '#auth-modal *',
-  '[role="dialog"]',
-  '[role="dialog"] *',
-  '.ads-free',
-  '.ads-free *',
-];
-
-/**
- * Helper to query all protected DOM elements
- */
-function getProtectedElements(): Element[] {
-  if (typeof document === 'undefined') return [];
-  try {
-    return Array.from(document.querySelectorAll(ADS_FREE_SELECTORS.join(',')));
-  } catch (e) {
-    return [];
-  }
-}
-
-/**
- * Configure Monetag's internal exclusion lists so its OnClick engine
- * marks clicks on protected UI as excludedClick and completely skips ad opening.
- */
-function setupMonetagExclusions() {
-  if (typeof window === 'undefined') return;
-
-  try {
-    // Monetag checks window.onClickExcludes during its Ho() click-validation routine
-    Object.defineProperty(window, 'onClickExcludes', {
-      get: getProtectedElements,
-      set: () => {},
-      configurable: true,
-      enumerable: true,
-    });
-
-    // Monetag checks window.stitialExcludes for interstitial / pop exclusions
-    Object.defineProperty(window, 'stitialExcludes', {
-      get: () => ADS_FREE_SELECTORS,
-      set: () => {},
-      configurable: true,
-      enumerable: true,
-    });
-
-    // Fallback general excludes
-    Object.defineProperty(window, 'excludes', {
-      get: () => ADS_FREE_SELECTORS,
-      set: () => {},
-      configurable: true,
-      enumerable: true,
-    });
-  } catch (e) {
-    console.debug('Monetag exclusion setup notice:', e);
-  }
-}
-
-// Run immediately upon script load if in browser
-if (typeof window !== 'undefined') {
-  setupMonetagExclusions();
-}
-
-/**
- * Monetag Global Ad Scripts with Multi-Layer Ads-Free Protection
- * Guarantees Navigation Bar, Login/Signup Buttons, Hamburger Menu, and Auth Modal are 100% ad-free.
+ * Monetag Global Ads Manager
+ * - Retains In-Page Push / MultiTag (Zone: 302292)
+ * - Removes OnClick/Popunder so NO button or card on the site redirects to ads
+ * - Guarantees ONLY the "Copy Prompt" button triggers the Monetag Smartlink (https://uplcm.com/4/12127029)
  */
 export function MonetagGlobals() {
   useEffect(() => {
     if (typeof window === 'undefined') return;
 
-    setupMonetagExclusions();
-
     const originalOpen = window.open;
     const originalAnchorClick = HTMLAnchorElement.prototype.click;
     const originalFormSubmit = HTMLFormElement.prototype.submit;
 
-    let isAdsFreeActive = false;
-    let resetTimer: any = null;
-
-    const isProtectedTarget = (target: EventTarget | null): boolean => {
-      if (!target || !(target instanceof Element)) return false;
-      return !!target.closest(
-        'nav, header, [data-ads-free="true"], #navbar-login-btn, #navbar-signup-btn, #navbar-hamburger-btn, #mobile-navbar-signup-btn, #auth-modal, #auth-modal-close, #auth-submit-btn, [role="dialog"], .ads-free'
-      );
-    };
-
-    // Layer 1: Guard window.open to prevent ANY popunder or redirect from protected elements
+    // Strict window.open guard:
+    // Only allow legitimate application actions and the official Copy Prompt Monetag Smartlink.
+    // Completely block any ad popunder or unauthorized redirect on any other button/element!
     window.open = function (url?: string | URL, target?: string, features?: string) {
-      if (isAdsFreeActive) {
-        console.debug('[AdsFreeGuard] Suppressed window.open from protected UI click:', url);
+      const urlStr = url ? String(url) : '';
+
+      // Allow Monetag Smartlink explicitly triggered by copy button
+      if (urlStr.includes('uplcm.com/4/12127029') || urlStr.includes(MONETAG_SMARTLINK)) {
+        return originalOpen.call(window, url, target, features);
+      }
+
+      // Check if URL is an ad network popunder/redirect
+      const isAdUrl =
+        urlStr.includes('al5sm.com') ||
+        urlStr.includes('quge5.com') ||
+        urlStr.includes('3nbf4.com') ||
+        urlStr.includes('abscloud.org') ||
+        urlStr.includes('bauval.org') ||
+        urlStr.includes('exdynsrv.com') ||
+        urlStr.includes('highperformancegate.com') ||
+        urlStr.includes('deloplen.com') ||
+        urlStr.includes('onclickalgo.com') ||
+        urlStr.includes('go.pub2srv.com') ||
+        urlStr.includes('/act/files/');
+
+      if (isAdUrl || urlStr === '' || urlStr === 'about:blank') {
+        console.debug('[AdsGuard] Suppressed unauthorized ad redirect/popunder:', url);
         return null;
       }
+
       return originalOpen.call(window, url, target, features);
     };
 
-    // Layer 2: Guard synthetic anchor clicks created by ad scripts
+    // Guard synthetic anchor clicks created by ad scripts
     HTMLAnchorElement.prototype.click = function () {
-      if (isAdsFreeActive) {
-        const href = this.getAttribute('href') || '';
-        const isExternal = href.startsWith('http://') || href.startsWith('https://');
-        const isLocalHost = isExternal && href.includes(window.location.host);
+      const href = this.getAttribute('href') || '';
+      const isExternal = href.startsWith('http://') || href.startsWith('https://');
+      const isLocalHost = isExternal && href.includes(window.location.host);
+      const isSmartlink = href.includes('uplcm.com/4/12127029');
 
-        if (isExternal && !isLocalHost) {
-          console.debug('[AdsFreeGuard] Suppressed synthetic ad anchor click:', href);
-          return;
-        }
+      if (isExternal && !isLocalHost && !isSmartlink) {
+        console.debug('[AdsGuard] Suppressed synthetic external anchor click:', href);
+        return;
       }
       return originalAnchorClick.call(this);
     };
 
-    // Layer 3: Guard synthetic form submissions created by ad scripts
+    // Guard synthetic form submissions created by ad scripts
     HTMLFormElement.prototype.submit = function () {
-      if (isAdsFreeActive) {
-        console.debug('[AdsFreeGuard] Suppressed synthetic form submit on protected click');
+      const action = this.getAttribute('action') || '';
+      if (action.startsWith('http://') || action.startsWith('https://')) {
+        console.debug('[AdsGuard] Suppressed synthetic form submit to external URL:', action);
         return;
       }
       return originalFormSubmit.call(this);
     };
 
-    // Mark interactions on protected areas in capture phase
-    const handleCapture = (e: Event) => {
-      if (isProtectedTarget(e.target)) {
-        isAdsFreeActive = true;
-        if (resetTimer) clearTimeout(resetTimer);
-        resetTimer = setTimeout(() => {
-          isAdsFreeActive = false;
-        }, 800);
-      }
-    };
-
-    const events = ['click', 'pointerdown', 'pointerup', 'mousedown', 'mouseup', 'touchstart', 'touchend'];
-    events.forEach((ev) => window.addEventListener(ev, handleCapture, true));
-
     return () => {
       window.open = originalOpen;
       HTMLAnchorElement.prototype.click = originalAnchorClick;
       HTMLFormElement.prototype.submit = originalFormSubmit;
-      if (resetTimer) clearTimeout(resetTimer);
-      events.forEach((ev) => window.removeEventListener(ev, handleCapture, true));
     };
   }, []);
 
@@ -170,15 +90,6 @@ export function MonetagGlobals() {
         strategy="lazyOnload"
         src="https://quge5.com/88/tag.min.js"
         data-zone="302292"
-        data-cfasync="false"
-      />
-
-      {/* Monetag OnClick / Popunder Tag (Zone: 12127030) */}
-      <Script
-        id="monetag-onclick-tag"
-        strategy="lazyOnload"
-        src="https://al5sm.com/tag.min.js"
-        data-zone="12127030"
         data-cfasync="false"
       />
     </>
