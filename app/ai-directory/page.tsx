@@ -10,7 +10,6 @@ import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { getApiBaseUrl } from '@/lib/apiClient';
 import { AIDirectoryHero } from '@/components/ai-directory/AIDirectoryHero';
-import { AdsterraResponsiveBanner, AdsterraNativeBanner } from '@/components/ads/AdsterraBanner';
 import { handleDetailsAdClick } from '@/lib/monetagAd';
 
 
@@ -686,11 +685,7 @@ function AIDirectoryContent() {
                   "AI Code Tools",
                   "AI Art Generators",
                   "Other AI Tools"
-                ].includes(sectionName) && (
-                  <div className="w-full flex justify-center pt-6">
-                    <AdsterraResponsiveBanner />
-                  </div>
-                )}
+                ].includes(sectionName) && null}
               </ScrollReveal>
             );
           })}
@@ -728,21 +723,12 @@ function AIDirectoryContent() {
                     <ToolCard key={tool._id} tool={tool} />
                   ))}
                 </div>
-
-                {/* Long Banner Under Other AI Tools */}
-                <div className="w-full flex justify-center pt-6">
-                  <AdsterraResponsiveBanner />
-                </div>
               </section>
           )}
         </div>
       )}
 
-      {/* Bottom Ad Section */}
-      <div className="w-full flex flex-col items-center mt-12 mb-6 max-w-7xl mx-auto px-4">
-        <AdsterraResponsiveBanner />
-        <AdsterraNativeBanner />
-      </div>
+      {/* End AI Directory Content */}
     </div>
   );
 }

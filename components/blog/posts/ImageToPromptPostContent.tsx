@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { 
   CheckCircle2, AlertTriangle, BookOpen, Sparkles, ArrowRight 
 } from 'lucide-react';
-import { AdsterraResponsiveBanner } from '@/components/ads/AdsterraBanner';
+import { AdsterraBanner, AdsterraResponsiveBanner } from '@/components/ads/AdsterraBanner';
 
 export default function ImageToPromptPostContent() {
   return (
@@ -162,6 +162,9 @@ export default function ImageToPromptPostContent() {
             Watermarks, text overlays, timestamps, logos, and black borders often sneak into the generated prompt. Crop them out first so the prompt focuses solely on the visual style, not unwanted interface clutter.
           </p>
         </div>
+
+        {/* In-Article Ad Banner between Tip 3 & 4 */}
+        <AdsterraResponsiveBanner className="my-8" />
 
         {/* Tip 4 */}
         <div className="space-y-2 p-5 rounded-2xl bg-accent/10 border border-accent/20">
@@ -347,6 +350,11 @@ export default function ImageToPromptPostContent() {
           </p>
         </div>
       </section>
+
+      {/* In-Article Banner before Common Mistakes */}
+      <div className="w-full flex justify-center my-8">
+        <AdsterraBanner format="300x250" />
+      </div>
 
       {/* Section: Common Mistakes */}
       <section id="common-mistakes" className="space-y-4 pt-6">

@@ -6,7 +6,6 @@ import { AITool } from '../page';
 import { Loader2, ArrowLeft, CheckCircle2, Star, Sparkles, ExternalLink, ShieldCheck } from 'lucide-react';
 import { Toast } from '@/components/ui/Toast';
 import { getApiBaseUrl } from '@/lib/apiClient';
-import { AdsterraBanner, AdsterraResponsiveBanner, AdsterraNativeBanner } from '@/components/ads/AdsterraBanner';
 
 // Custom SVG Icons matching the visual design
 const ShareIcon = (props: React.SVGProps<SVGSVGElement>) => (
@@ -320,8 +319,6 @@ export default function AIDetailsPage() {
         )}
       </div>
 
-      {/* Mid-page Responsive Banner */}
-      <AdsterraResponsiveBanner className="my-8" />
 
       <div className="space-y-8">
         {/* Main Content Area */}
@@ -363,11 +360,6 @@ export default function AIDetailsPage() {
         )}
       </div>
 
-      {/* Bottom Ad Section */}
-      <div className="w-full flex flex-col items-center mt-12 mb-4">
-        <AdsterraBanner format="300x250" />
-        <AdsterraNativeBanner />
-      </div>
 
       {toastMessage && (
         <Toast message={toastMessage} onClose={() => setToastMessage(null)} />

@@ -5,7 +5,7 @@ import {
   CheckCircle2, AlertTriangle, BookOpen, Sparkles, ArrowRight,
   Layers, Lightbulb, RefreshCw, Library, Zap, Copy, Check
 } from 'lucide-react';
-import { AdsterraResponsiveBanner } from '@/components/ads/AdsterraBanner';
+import { AdsterraBanner, AdsterraResponsiveBanner } from '@/components/ads/AdsterraBanner';
 
 export default function PromptEngineeringGuidePostContent() {
   return (
@@ -236,6 +236,9 @@ export default function PromptEngineeringGuidePostContent() {
         </div>
       </section>
 
+      {/* In-Article Ad Banner between Part 1 & 2 */}
+      <AdsterraResponsiveBanner className="my-10" />
+
       {/* ================= PART 2: IMAGE TO PROMPT ================= */}
       <section id="part-2-image-to-prompt" className="space-y-6 pt-6 border-t border-black/10 dark:border-white/10">
         <div className="space-y-2">
@@ -431,6 +434,11 @@ export default function PromptEngineeringGuidePostContent() {
           </p>
         </div>
       </section>
+
+      {/* In-Article Banner before Part 4 */}
+      <div className="w-full flex justify-center my-8">
+        <AdsterraBanner format="300x250" />
+      </div>
 
       {/* ================= PART 4: PROMPT LIBRARY ================= */}
       <section id="part-4-prompt-library" className="space-y-6 pt-6 border-t border-black/10 dark:border-white/10">

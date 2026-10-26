@@ -12,7 +12,6 @@ import { PopularCategories } from "@/components/home/PopularCategories";
 import { SkeletonCard } from "@/components/ui/SkeletonCard";
 import { ImageToPromptSection } from "@/components/prompts/ImageToPromptSection";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
-import { AdsterraResponsiveBanner } from "@/components/ads/AdsterraBanner";
 
 const MARQUEE_TOOLS = [
   { name: "ChatGPT", logo: "/models/chatgpt.svg", color: "#10a37f" },
@@ -190,12 +189,6 @@ function renderStandardSection(category: string, prompts: Prompt[], description:
           <PromptCard key={p.slug} prompt={p} index={i} />
         ))}
       </div>
-
-      {showBanner && (
-        <div className="w-full flex justify-center pt-2">
-          <AdsterraResponsiveBanner />
-        </div>
-      )}
     </ScrollReveal>
   );
 }
@@ -367,8 +360,6 @@ function PromptLibraryContent() {
             )}
           </div>
         )}
-        {/* Bottom Ad Banner */}
-        <AdsterraResponsiveBanner className="mt-12 mb-6" />
       </div>
     </div>
   );

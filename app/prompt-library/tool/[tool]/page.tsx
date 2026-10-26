@@ -7,7 +7,6 @@ import { Search, ArrowLeft } from "lucide-react";
 import { PromptCard, Prompt } from "@/components/prompts/PromptCard";
 import { SkeletonCard } from "@/components/ui/SkeletonCard";
 import { getApiBaseUrl } from "@/lib/apiClient";
-import { AdsterraResponsiveBanner } from "@/components/ads/AdsterraBanner";
 
 const API = getApiBaseUrl();
 
@@ -206,9 +205,6 @@ function ToolPromptsContent() {
           </button>
         </div>
       )}
-
-      {/* Bottom Ad Banner */}
-      <AdsterraResponsiveBanner className="mt-10 mb-4" />
     </div>
   );
 }

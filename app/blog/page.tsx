@@ -1,6 +1,6 @@
 import React from 'react';
 import BlogList from './BlogList';
-import { AdsterraResponsiveBanner, AdsterraNativeBanner } from '@/components/ads/AdsterraBanner';
+import { AdsterraBanner, AdsterraResponsiveBanner, AdsterraNativeBanner } from '@/components/ads/AdsterraBanner';
 
 export const metadata = {
   title: 'Blog | AI Trends, Best Prompts & Guides | proCraft',
@@ -28,8 +28,15 @@ export default function BlogPage() {
       
       <BlogList />
 
+      {/* Extra Adsterra Ad Unit */}
+      <div className="w-full flex flex-col items-center mt-12 mb-6">
+        <AdsterraBanner format="300x250" />
+        <AdsterraResponsiveBanner className="mt-6" />
+      </div>
+
       {/* Bottom Native Recommendations Banner */}
-      <AdsterraNativeBanner className="mt-12" />
+      <AdsterraNativeBanner className="mt-8" />
     </div>
   );
 }
+

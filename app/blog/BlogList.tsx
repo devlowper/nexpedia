@@ -5,16 +5,17 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Clock, ArrowRight, Sparkles } from 'lucide-react';
 import { BLOG_POSTS } from '@/lib/blogData';
+import { AdsterraResponsiveBanner } from '@/components/ads/AdsterraBanner';
 
 export default function BlogList() {
   return (
     <div className="flex flex-col items-center w-full max-w-4xl mx-auto">
       <div className="grid grid-cols-1 gap-8 w-full">
-        {BLOG_POSTS.map((post) => (
-          <article
-            key={post.slug}
-            className="group flex flex-col md:flex-row bg-white/70 dark:bg-zinc-900/70 backdrop-blur-xl rounded-2xl overflow-hidden border border-black/5 dark:border-white/10 transition-all duration-300 hover:shadow-2xl hover:-translate-y-1"
-          >
+        {BLOG_POSTS.map((post, idx) => (
+          <React.Fragment key={post.slug}>
+            <article
+              className="group flex flex-col md:flex-row bg-white/70 dark:bg-zinc-900/70 backdrop-blur-xl rounded-2xl overflow-hidden border border-black/5 dark:border-white/10 transition-all duration-300 hover:shadow-2xl hover:-translate-y-1"
+            >
             <Link
               href={`/blog/${post.slug}`}
               className="w-full md:w-[42%] h-64 md:h-auto relative overflow-hidden flex-shrink-0 bg-black/5 dark:bg-white/5 block"
@@ -73,7 +74,13 @@ export default function BlogList() {
               </div>
             </div>
           </article>
-        ))}
+          {idx === 0 && (
+            <div className="py-2">
+              <AdsterraResponsiveBanner />
+            </div>
+          )}
+        </React.Fragment>
+      ))}
       </div>
     </div>
   );
