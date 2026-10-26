@@ -118,7 +118,7 @@ export function AuthModal({ isOpen, onClose, defaultView = 'login' }: AuthModalP
   };
 
   return (
-    <div className="fixed inset-0 z-[99999] flex items-center justify-center p-4">
+    <div id="auth-modal" data-ads-free="true" className="fixed inset-0 z-[99999] flex items-center justify-center p-4">
       {/* Backdrop with rich blur */}
       <div
         className="absolute inset-0 bg-black/60 backdrop-blur-md transition-all duration-300"

@@ -14,6 +14,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { getApiBaseUrl } from "@/lib/apiClient";
 import { formatViewCount } from "@/lib/utils";
 import { AdsterraBanner, AdsterraResponsiveBanner } from "@/components/ads/AdsterraBanner";
+import { triggerMonetagSmartlink } from "@/lib/monetagAd";
 
 
 function BulletList({ text, bulletColor = "text-accent" }: { text: string; bulletColor?: string }) {
@@ -70,9 +71,14 @@ function CopyButton({ text }: { text: string }) {
   const [copied, setCopied] = useState(false);
 
   const handleCopy = async () => {
-    await navigator.clipboard.writeText(text);
+    try {
+      await navigator.clipboard.writeText(text);
+    } catch (err) {
+      console.error("Clipboard copy error", err);
+    }
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
+    triggerMonetagSmartlink();
   };
 
   return (

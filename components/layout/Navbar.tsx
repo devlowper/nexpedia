@@ -104,7 +104,9 @@ export function Navbar() {
 
   return (
     <>
-      <nav className={cn(
+      <nav
+        data-ads-free="true"
+        className={cn(
         "fixed z-40 transition-all duration-300 h-[60px] left-1/2 -translate-x-1/2",
         scrolled
           ? "top-4 w-[calc(100%-2rem)] max-w-5xl rounded-full bg-black/5 dark:bg-black/5 dark:bg-white/5 backdrop-blur-xl border border-border shadow-lg scrolled"
@@ -250,7 +252,13 @@ export function Navbar() {
           </div>
 
           {/* Mobile Toggle */}
-          <button type="button" className="md:hidden relative z-50 p-2 -mr-2 text-muted hover:text-primary" onClick={(e) => { e.stopPropagation(); setMobileOpen(true); }}>
+          <button
+            type="button"
+            id="navbar-hamburger-btn"
+            data-ads-free="true"
+            className="md:hidden relative z-50 p-2 -mr-2 text-muted hover:text-primary"
+            onClick={(e) => { e.stopPropagation(); setMobileOpen(true); }}
+          >
             <Menu size={28} />
           </button>
         </div>
@@ -258,7 +266,7 @@ export function Navbar() {
 
       {/* Mobile Drawer */}
       {mobileOpen && (
-        <div className="fixed inset-0 z-[100] flex justify-end">
+        <div data-ads-free="true" className="fixed inset-0 z-[100] flex justify-end">
           <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={(e) => { e.stopPropagation(); setMobileOpen(false); }} />
           <div className="relative w-64 h-full border-l p-6 shadow-2xl overflow-y-auto transition-transform duration-300"
             style={{ background: 'var(--bg-surface)', borderColor: 'var(--border)' }}>

@@ -7,6 +7,7 @@ import { Footer } from "@/components/layout/Footer";
 import { ThemeProvider } from "@/hooks/useTheme";
 import { AuthProvider } from "@/hooks/useAuth";
 import { AdsterraGlobals } from "@/components/ads/AdsterraGlobals";
+import { MonetagGlobals } from "@/components/ads/MonetagGlobals";
 
 const inter = Inter({ subsets: ["latin"] });
 const bricolage = Bricolage_Grotesque({
@@ -105,6 +106,56 @@ export default function RootLayout({
         <link rel="apple-touch-icon" sizes="180x180" href="/apple-icon.png" />
         <link rel="shortcut icon" href="/favicon.ico" />
 
+        {/* Early Monetag Exclusion Engine for Ads-Free Navigation and Buttons */}
+        <Script
+          id="monetag-exclusion-init"
+          strategy="beforeInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                var selectors = [
+                  'nav', 'nav *',
+                  'header', 'header *',
+                  '#navbar-login-btn', '#navbar-login-btn *',
+                  '#navbar-signup-btn', '#navbar-signup-btn *',
+                  '#navbar-hamburger-btn', '#navbar-hamburger-btn *',
+                  '#mobile-navbar-signup-btn', '#mobile-navbar-signup-btn *',
+                  '#auth-modal', '#auth-modal *',
+                  '[data-ads-free="true"]', '[data-ads-free="true"] *',
+                  '.ads-free', '.ads-free *'
+                ];
+                function getProtected() {
+                  try {
+                    return Array.from(document.querySelectorAll(selectors.join(',')));
+                  } catch (e) {
+                    return [];
+                  }
+                }
+                try {
+                  Object.defineProperty(window, 'onClickExcludes', {
+                    get: getProtected,
+                    set: function() {},
+                    configurable: true,
+                    enumerable: true
+                  });
+                  Object.defineProperty(window, 'stitialExcludes', {
+                    get: function() { return selectors; },
+                    set: function() {},
+                    configurable: true,
+                    enumerable: true
+                  });
+                  Object.defineProperty(window, 'excludes', {
+                    get: function() { return selectors; },
+                    set: function() {},
+                    configurable: true,
+                    enumerable: true
+                  });
+                } catch (e) {}
+              })();
+            `,
+          }}
+        />
+
         {/* Google AdSense Script via Next.js Script to avoid SSR hydration conflicts */}
         <Script
           id="google-adsense"
@@ -172,6 +223,7 @@ export default function RootLayout({
                 {children}
               </main>
               <Footer />
+              <MonetagGlobals />
               <AdsterraGlobals />
             </div>
           </ThemeProvider>
