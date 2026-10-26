@@ -11,6 +11,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { getApiBaseUrl } from '@/lib/apiClient';
 import { AIDirectoryHero } from '@/components/ai-directory/AIDirectoryHero';
 import { AdsterraResponsiveBanner, AdsterraNativeBanner } from '@/components/ads/AdsterraBanner';
+import { handleDetailsAdClick } from '@/lib/monetagAd';
 
 
 
@@ -171,6 +172,7 @@ const ToolCard = ({ tool }: { tool: AITool }) => {
         <div className="flex gap-2.5 mt-4 pt-4 border-t border-border relative z-10 w-full">
           <Link 
             href={`/ai-directory/${tool.slug}`}
+            onClick={(e) => handleDetailsAdClick(e, tool.slug)}
             className="flex-1 py-2 rounded-lg bg-black/5 dark:bg-white/5 border border-border text-primary text-xs font-semibold text-center hover:bg-black/10 dark:hover:bg-white/10 transition-colors"
           >
             Details

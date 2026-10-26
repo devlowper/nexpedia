@@ -8,7 +8,6 @@ import { motion } from "framer-motion";
 import { Prompt, cardVariants, cleanTitle, getPromptTools, getCategoryStyle } from "./PromptCard";
 import { useAuth } from "@/hooks/useAuth";
 import { formatViewCount } from "@/lib/utils";
-import { handleCardAdClick } from "@/lib/monetagAd";
 
 interface PhotographyPromptCardProps {
   prompt: Prompt;
@@ -166,10 +165,7 @@ export function PhotographyPromptCard({
       {/* ── Link overlay ── */}
       <Link
         href={`/prompt-library/${prompt.slug}`}
-        onClick={(e) => {
-          setViews((v) => v + 1);
-          handleCardAdClick(e, prompt.slug);
-        }}
+        onClick={() => setViews((v) => v + 1)}
         className="absolute inset-0 z-20"
         aria-label={`View prompt: ${prompt.page_name}`}
       />

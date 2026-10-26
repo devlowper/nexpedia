@@ -13,7 +13,6 @@ import { VisionModel, PRESET_MODELS } from './VisionModelSelector';
 import { useAuth } from '@/hooks/useAuth';
 import { AuthModal } from '@/components/auth/AuthModal';
 import { getApiBaseUrl } from '@/lib/apiClient';
-import { triggerMonetagSmartlink } from '@/lib/monetagAd';
 
 export interface PromptResult {
   mainPrompt: string;
@@ -217,7 +216,6 @@ export function ImageToPromptSection() {
     navigator.clipboard.writeText(full);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
-    triggerMonetagSmartlink();
   };
 
   const copySpecificField = (field: 'main' | 'style' | 'negative', text: string) => {
@@ -225,7 +223,6 @@ export function ImageToPromptSection() {
     navigator.clipboard.writeText(text);
     setCopiedField(field);
     setTimeout(() => setCopiedField(null), 2000);
-    triggerMonetagSmartlink();
   };
 
   return (

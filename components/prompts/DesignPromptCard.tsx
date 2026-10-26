@@ -8,7 +8,6 @@ import { motion } from "framer-motion";
 import { Prompt, cardVariants, getCategoryStyle, cleanTitle, getPromptTools } from "./PromptCard";
 import { useAuth } from "@/hooks/useAuth";
 import { formatViewCount } from "@/lib/utils";
-import { handleCardAdClick } from "@/lib/monetagAd";
 
 interface DesignPromptCardProps {
   prompt: Prompt;
@@ -162,10 +161,7 @@ export function DesignPromptCard({ prompt, index = 0, masonry = false }: DesignP
       {/* ── Hover CTA overlay ── */}
       <Link
         href={`/prompt-library/${prompt.slug}`}
-        onClick={(e) => {
-          setViews((v) => v + 1);
-          handleCardAdClick(e, prompt.slug);
-        }}
+        onClick={() => setViews((v) => v + 1)}
         className="absolute inset-0 z-30"
         aria-label={`View prompt: ${prompt.page_name}`}
       />

@@ -14,7 +14,6 @@ import { VisionModelSelector, VisionModel, PRESET_MODELS } from '@/components/pr
 import { useAuth } from '@/hooks/useAuth';
 import { AuthModal } from '@/components/auth/AuthModal';
 import { getApiBaseUrl } from '@/lib/apiClient';
-import { triggerMonetagSmartlink } from '@/lib/monetagAd';
 
 interface ConvertedPrompt {
   id: string;
@@ -315,7 +314,6 @@ export default function ImageToPromptPage() {
     navigator.clipboard.writeText(full);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
-    triggerMonetagSmartlink();
   };
 
   const copySpecificField = (field: 'main' | 'style' | 'negative' | 'full', text: string) => {
@@ -323,7 +321,6 @@ export default function ImageToPromptPage() {
     navigator.clipboard.writeText(text);
     setCopiedField(field);
     setTimeout(() => setCopiedField(null), 2000);
-    triggerMonetagSmartlink();
   };
 
   const loadHistoryItem = (item: ConvertedPrompt) => {

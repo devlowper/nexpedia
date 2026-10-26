@@ -5,7 +5,6 @@ import { Sparkles, Image as ImageIcon, Copy, Check, Loader2, X } from 'lucide-re
 import { useAuth } from '@/hooks/useAuth';
 import { AuthModal } from '@/components/auth/AuthModal';
 import { getApiBaseUrl } from '@/lib/apiClient';
-import { triggerMonetagSmartlink } from '@/lib/monetagAd';
 
 export const PromptEnhancer = () => {
   const { isLoggedIn } = useAuth();
@@ -81,7 +80,6 @@ export const PromptEnhancer = () => {
     navigator.clipboard.writeText(enhancedPrompt);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
-    triggerMonetagSmartlink();
   };
 
   return (

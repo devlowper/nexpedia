@@ -17,30 +17,30 @@ export function triggerMonetagSmartlink() {
   }
 }
 
-// In-memory set of cards that have already triggered their 1st click ad
-const clickedCards = new Set<string>();
+// In-memory set of details buttons that have already triggered their 1st click ad
+const clickedDetails = new Set<string>();
 
 /**
- * Handles prompt card clicks with 1-time redirect:
- * - 1st click: Triggers Monetag ad in a new tab, redirect turns off for this card.
- * - 2nd click: Directly navigates into the card to view details without redirecting.
+ * Handles AI Directory "Details" button click with 1-time redirect rule:
+ * - 1st click on "Details": Triggers Monetag ad in a new tab, marks as clicked.
+ * - 2nd click on "Details": Directly navigates to /ai-directory/[slug] without redirect.
  */
-export function handleCardAdClick(e: React.MouseEvent, cardIdOrSlug: string) {
+export function handleDetailsAdClick(e: React.MouseEvent, slug: string) {
   if (typeof window === "undefined") return;
 
-  const key = `ad_clicked_${cardIdOrSlug}`;
-  const alreadyClicked = clickedCards.has(cardIdOrSlug) || sessionStorage.getItem(key) === "1";
+  const key = `ad_details_${slug}`;
+  const alreadyClicked = clickedDetails.has(slug) || sessionStorage.getItem(key) === "1";
 
   if (!alreadyClicked) {
-    // 1st click: Trigger ad redirect once, prevent entering card immediately
+    // 1st click: Trigger ad redirect once, prevent navigating immediately
     e.preventDefault();
-    clickedCards.add(cardIdOrSlug);
+    e.stopPropagation();
+    clickedDetails.add(slug);
     try {
       sessionStorage.setItem(key, "1");
     } catch (err) {}
 
     triggerMonetagSmartlink();
   }
-  // 2nd click: alreadyClicked is true, so e.preventDefault() is NOT called,
-  // allowing Next.js <Link> to navigate directly into details page.
+  // 2nd click: alreadyClicked is true -> e.preventDefault() is NOT called -> navigates to /ai-directory/${slug}
 }

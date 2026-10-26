@@ -7,7 +7,6 @@ import { Eye, Crown, Layers, Briefcase, ShoppingCart, FileText, Code, Graduation
 import { motion, type Variants } from "framer-motion";
 import { useAuth } from "@/hooks/useAuth";
 import { formatViewCount } from "@/lib/utils";
-import { handleCardAdClick } from "@/lib/monetagAd";
 
 
 export interface RecommendedTool {
@@ -379,10 +378,7 @@ export function PromptCard({
         {/* ── Link overlay ── */}
         <Link
           href={`/prompt-library/${prompt.slug}`}
-          onClick={(e) => {
-            setViews((v) => v + 1);
-            handleCardAdClick(e, prompt.slug);
-          }}
+          onClick={() => setViews((v) => v + 1)}
           className="absolute inset-0 z-10"
           aria-label={`View prompt: ${prompt.page_name}`}
         />
