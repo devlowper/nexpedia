@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
+import Script from "next/script";
 import {
   ArrowLeft, Eye, Crown, Copy, Check, Lightbulb,
   BookOpen, Wrench, ChevronRight, Layers, Sparkles, Share2, Heart
@@ -13,7 +14,7 @@ import { Prompt, PromptCard, cardVariants, cleanTitle, getPromptTools } from "@/
 import { useAuth } from "@/hooks/useAuth";
 import { getApiBaseUrl } from "@/lib/apiClient";
 import { formatViewCount } from "@/lib/utils";
-import { triggerMonetagSmartlink } from "@/lib/monetagAd";
+import { AdsterraBanner } from "@/components/ads/AdsterraBanner";
 
 
 function BulletList({ text, bulletColor = "text-accent" }: { text: string; bulletColor?: string }) {
@@ -77,7 +78,6 @@ function CopyButton({ text }: { text: string }) {
     }
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
-    triggerMonetagSmartlink();
   };
 
   return (
@@ -447,7 +447,7 @@ export default function PromptDetailPage() {
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center gap-3">
                     <div className="w-9 h-9 rounded-xl flex items-center justify-center bg-red-500/10 border border-red-500/25">
-                      <span className="text-red-400 text-xs font-bold font-mono">NEG</span>
+                      <span className="text-red-500 dark:text-red-400 text-xs font-bold font-mono">NEG</span>
                     </div>
                     <div>
                       <h2 className="font-bold text-primary text-sm">Negative Prompt</h2>
@@ -456,7 +456,7 @@ export default function PromptDetailPage() {
                   </div>
                   <CopyButton text={negativePrompt} />
                 </div>
-                <pre className="text-red-300/80 text-xs leading-relaxed whitespace-pre-wrap font-mono overflow-x-auto bg-red-950/20 p-4 rounded-xl border border-red-500/20 max-h-60 overflow-y-auto">
+                <pre className="text-muted text-xs leading-relaxed whitespace-pre-wrap font-mono overflow-x-auto bg-red-500/5 dark:bg-red-950/20 p-4 rounded-xl border border-red-500/20 max-h-60 overflow-y-auto">
                   {negativePrompt}
                 </pre>
               </div>
@@ -483,6 +483,12 @@ export default function PromptDetailPage() {
           </div>
         </div>
       )}
+
+      {/* Bottom Ad Banners (320x50) */}
+      <div className="w-full flex flex-wrap items-center justify-center gap-4 my-8">
+        <AdsterraBanner format="320x50" />
+        <AdsterraBanner format="320x50" />
+      </div>
     </motion.div>
   );
 }

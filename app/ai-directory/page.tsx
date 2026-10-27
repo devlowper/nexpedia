@@ -10,8 +10,8 @@ import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { getApiBaseUrl } from '@/lib/apiClient';
 import { AIDirectoryHero } from '@/components/ai-directory/AIDirectoryHero';
-import { handleDetailsAdClick } from '@/lib/monetagAd';
 import { SponsoredCard } from '@/components/ads/SponsoredCard';
+import { AdsterraBanner } from '@/components/ads/AdsterraBanner';
 
 
 
@@ -172,7 +172,6 @@ const ToolCard = ({ tool }: { tool: AITool }) => {
         <div className="flex gap-2.5 mt-4 pt-4 border-t border-border relative z-10 w-full">
           <Link 
             href={`/ai-directory/${tool.slug}`}
-            onClick={(e) => handleDetailsAdClick(e, tool.slug)}
             className="flex-1 py-2 rounded-lg bg-black/5 dark:bg-white/5 border border-border text-primary text-xs font-semibold text-center hover:bg-black/10 dark:hover:bg-white/10 transition-colors"
           >
             Details
@@ -678,11 +677,17 @@ function AIDirectoryContent() {
                   </div>
                 </ScrollReveal>
 
-                {/* Sponsored Card: 2 categories por por 1 ta */}
+                {/* Sponsored Card & Adsterra Banners: 2 categories por por */}
                 {(index + 1) % 2 === 0 && (
-                  <ScrollReveal variant="slide-up" duration={0.5}>
-                    <SponsoredCard variant="directory" />
-                  </ScrollReveal>
+                  <div className="w-full flex flex-col items-center gap-6 my-6">
+                    <ScrollReveal variant="slide-up" duration={0.5} className="w-full">
+                      <SponsoredCard variant="directory" />
+                    </ScrollReveal>
+                    <div className="w-full flex flex-wrap items-center justify-center gap-4">
+                      <AdsterraBanner format="320x50" />
+                      <AdsterraBanner format="320x50" />
+                    </div>
+                  </div>
                 )}
               </React.Fragment>
             );
@@ -726,6 +731,12 @@ function AIDirectoryContent() {
           )}
         </div>
       )}
+
+      {/* Bottom Adsterra Banner Units (320x50) */}
+      <div className="w-full flex flex-wrap items-center justify-center gap-4 my-10 px-4">
+        <AdsterraBanner format="320x50" />
+        <AdsterraBanner format="320x50" />
+      </div>
 
       {/* End AI Directory Content */}
     </div>

@@ -24,7 +24,42 @@ export function Navbar() {
   const { user, isLoggedIn, isLoading, logout } = useAuth();
 
   const notifRef = useRef<HTMLDivElement>(null);
+  const hamburgerRef = useRef<HTMLButtonElement>(null);
   const API = getApiBaseUrl();
+
+  // Bulletproof mobile hamburger protection: stops any ad scripts from intercepting touch/pointer events
+  useEffect(() => {
+    const btn = hamburgerRef.current;
+    if (!btn) return;
+
+    const stopRogueInterception = (e: Event) => {
+      e.stopPropagation();
+      if ('stopImmediatePropagation' in e) {
+        e.stopImmediatePropagation();
+      }
+    };
+
+    const handleMobileTap = (e: Event) => {
+      e.stopPropagation();
+      e.preventDefault();
+      if ('stopImmediatePropagation' in e) {
+        e.stopImmediatePropagation();
+      }
+      setMobileOpen((prev) => !prev);
+    };
+
+    btn.addEventListener('pointerdown', stopRogueInterception, { capture: true });
+    btn.addEventListener('touchstart', stopRogueInterception, { capture: true });
+    btn.addEventListener('touchend', handleMobileTap, { capture: true });
+    btn.addEventListener('mousedown', stopRogueInterception, { capture: true });
+
+    return () => {
+      btn.removeEventListener('pointerdown', stopRogueInterception, { capture: true });
+      btn.removeEventListener('touchstart', stopRogueInterception, { capture: true });
+      btn.removeEventListener('touchend', handleMobileTap, { capture: true });
+      btn.removeEventListener('mousedown', stopRogueInterception, { capture: true });
+    };
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
@@ -264,10 +299,16 @@ export function Navbar() {
             )}
             <button
               type="button"
+              ref={hamburgerRef}
               id="navbar-hamburger-btn"
               data-ads-free="true"
-              className="p-1.5 -mr-1 text-muted hover:text-primary transition-colors"
-              onClick={(e) => { e.stopPropagation(); setMobileOpen(true); }}
+              aria-label="Toggle navigation menu"
+              className="p-1.5 -mr-1 text-muted hover:text-primary transition-colors cursor-pointer select-none"
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                setMobileOpen((prev) => !prev);
+              }}
             >
               <Menu size={26} />
             </button>

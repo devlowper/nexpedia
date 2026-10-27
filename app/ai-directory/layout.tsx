@@ -21,16 +21,6 @@ export default function AIDirectoryLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return (
-    <>
-      <Script
-        src="https://quge5.com/88/tag.min.js"
-        data-zone="302292"
-        data-cfasync="false"
-        strategy="afterInteractive"
-      />
-      {children}
-    </>
-  );
+  return <>{children}</>;
 }
 

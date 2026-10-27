@@ -13,6 +13,7 @@ import { SkeletonCard } from "@/components/ui/SkeletonCard";
 import { ImageToPromptSection } from "@/components/prompts/ImageToPromptSection";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
 import { SponsoredCard } from "@/components/ads/SponsoredCard";
+import { AdsterraBanner } from "@/components/ads/AdsterraBanner";
 
 const MARQUEE_TOOLS = [
   { name: "ChatGPT", logo: "/models/chatgpt.svg", color: "#10a37f" },
@@ -165,7 +166,7 @@ function renderPhotographySection(category: string, prompts: Prompt[]) {
 }
 
 function renderStandardSection(category: string, prompts: Prompt[], description: string) {
-  const showBanner = ["Finance", "Education", "Coding", "Writing", "Marketing", "Business"].includes(category);
+  const showBanner = ["Education", "Coding", "Writing", "Marketing", "Business"].includes(category);
 
   return (
     <ScrollReveal key={category} variant="slide-up" duration={0.6} className="space-y-6 pt-10">
@@ -190,6 +191,13 @@ function renderStandardSection(category: string, prompts: Prompt[], description:
           <PromptCard key={p.slug} prompt={p} index={i} />
         ))}
       </div>
+
+      {showBanner && (
+        <div className="w-full flex flex-wrap items-center justify-center gap-4 pt-6">
+          <AdsterraBanner format="320x50" />
+          <AdsterraBanner format="320x50" />
+        </div>
+      )}
     </ScrollReveal>
   );
 }
@@ -366,6 +374,12 @@ function PromptLibraryContent() {
             )}
           </div>
         )}
+      </div>
+
+      {/* Bottom Adsterra Banner Units (320x50) */}
+      <div className="w-full flex flex-wrap items-center justify-center gap-4 my-10 px-4">
+        <AdsterraBanner format="320x50" />
+        <AdsterraBanner format="320x50" />
       </div>
     </div>
   );

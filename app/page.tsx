@@ -8,6 +8,7 @@ import { AIPromptWorkspace } from "@/components/home/AIPromptWorkspace";
 import { FAQ } from "@/components/home/FAQ";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
 import { SponsoredCard } from "@/components/ads/SponsoredCard";
+import { AdsterraBanner } from "@/components/ads/AdsterraBanner";
 
 export default function Home() {
   return (
@@ -46,6 +47,12 @@ export default function Home() {
       <ScrollReveal className="w-full px-4" delay={0.2}>
         <SponsoredCard variant="banner" />
       </ScrollReveal>
+
+      {/* Bottom Ad Banners (320x50) */}
+      <div className="w-full flex flex-wrap items-center justify-center gap-4 my-6 px-4">
+        <AdsterraBanner format="320x50" />
+        <AdsterraBanner format="320x50" />
+      </div>
     </div>
   );
 }

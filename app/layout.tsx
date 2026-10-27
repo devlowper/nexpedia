@@ -85,6 +85,10 @@ export const metadata: Metadata = {
   },
   verification: {
     google: "google9b78feeff9304ba5",
+    other: {
+      "p:domain_verify": "72bb57b4ce79ce41325386fbf6e57ecf",
+      "pinterest-site-verification": "72bb57b4ce79ce41325386fbf6e57ecf",
+    },
   },
   other: {
     "google-adsense-account": "ca-pub-2157567865928309",
@@ -114,18 +118,68 @@ export default function RootLayout({
           crossOrigin="anonymous"
         />
 
-        {/* Monetag Service Worker Registration */}
+        {/* Anti-popunder & service worker cleanup guard */}
         <Script
-          id="monetag-sw-register"
-          strategy="afterInteractive"
+          id="anti-popunder-guard"
+          strategy="beforeInteractive"
           dangerouslySetInnerHTML={{
             __html: `
-              if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
-                window.addEventListener('load', function() {
-                  navigator.serviceWorker.register('/sw.js').catch(function(e) {
-                    console.debug('Monetag SW notice:', e);
+              if (typeof window !== 'undefined') {
+                // 1. Unregister lingering service workers immediately
+                if ('serviceWorker' in navigator) {
+                  navigator.serviceWorker.getRegistrations().then(function(registrations) {
+                    for (var i = 0; i < registrations.length; i++) {
+                      registrations[i].unregister();
+                    }
                   });
-                });
+                }
+                // 2. Clear caches that might hold popunder scripts
+                if ('caches' in window) {
+                  caches.keys().then(function(keys) {
+                    keys.forEach(function(k) { caches.delete(k); });
+                  });
+                }
+                // 3. Clear ad network storage
+                try {
+                  var adKeys = ['monetag', 'adsterra', 'vignette', 'popunder', '_ym'];
+                  for (var k in localStorage) {
+                    for (var a = 0; a < adKeys.length; a++) {
+                      if (k.toLowerCase().indexOf(adKeys[a]) !== -1) localStorage.removeItem(k);
+                    }
+                  }
+                  for (var sk in sessionStorage) {
+                    for (var b = 0; b < adKeys.length; b++) {
+                      if (sk.toLowerCase().indexOf(adKeys[b]) !== -1) sessionStorage.removeItem(sk);
+                    }
+                  }
+                } catch(e) {}
+
+                // 4. Popunder protection on UI elements (hamburger, navbar, modals, inputs)
+                var origOpen = window.open;
+                var blockPopupsUntil = 0;
+                var armGuard = function(e) {
+                  var t = e.target;
+                  if (t && t.closest && (
+                    t.closest('#navbar-hamburger-btn') ||
+                    t.closest('[data-ads-free="true"]') ||
+                    t.closest('nav') ||
+                    t.closest('button') ||
+                    t.closest('input')
+                  )) {
+                    blockPopupsUntil = Date.now() + 600;
+                  }
+                };
+                window.addEventListener('pointerdown', armGuard, { capture: true, passive: true });
+                window.addEventListener('touchstart', armGuard, { capture: true, passive: true });
+                window.addEventListener('mousedown', armGuard, { capture: true, passive: true });
+                window.addEventListener('click', armGuard, { capture: true, passive: true });
+
+                window.open = function(url, target, features) {
+                  if (Date.now() < blockPopupsUntil) {
+                    return null;
+                  }
+                  return origOpen.apply(this, arguments);
+                };
               }
             `,
           }}
