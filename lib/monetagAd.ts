@@ -1,23 +1,26 @@
 /**
  * Monetag Ads Configuration & Helpers
- * All aggressive click-hijacking, smartlinks, and redirect popunders are disabled
- * so that navigation, search, cards, and buttons remain 100% smooth and redirect-free.
+ * Direct link / Smartlink integration for monetization on specific user actions
  */
 
-export const MONETAG_SMARTLINK = "";
+export const MONETAG_SMARTLINK = "https://uplcm.com/4/12127029";
 
 /**
- * Disabled to prevent annoying redirects on user clicks
+ * Triggers Monetag Direct Link in a new tab safely without blocking user action
  */
 export function triggerMonetagSmartlink() {
-  // No-op: do not redirect user
-  return;
+  if (typeof window !== "undefined" && MONETAG_SMARTLINK) {
+    try {
+      window.open(MONETAG_SMARTLINK, "_blank", "noopener,noreferrer");
+    } catch (err) {
+      console.warn("Direct link trigger error", err);
+    }
+  }
 }
 
 /**
- * Direct navigation without any click hijacking
+ * Handles Details button click with Monetag Direct Link
  */
-export function handleDetailsAdClick(e: React.MouseEvent, slug: string) {
-  // No-op: do not prevent default, allow normal navigation
-  return;
+export function handleDetailsAdClick(e?: React.MouseEvent) {
+  triggerMonetagSmartlink();
 }

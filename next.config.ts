@@ -45,6 +45,8 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "ph-avatars.imgix.net" },
       // ProductHunt thumbnails
       { protocol: "https", hostname: "*.imgix.net" },
+      // Cloudflare R2 CDN
+      { protocol: "https", hostname: "cdn.procraft.site" },
       // ImgBB
       { protocol: "https", hostname: "i.ibb.co" },
       // GitHub Avatars
