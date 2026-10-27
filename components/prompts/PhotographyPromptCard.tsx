@@ -22,6 +22,7 @@ export function PhotographyPromptCard({
 }: PhotographyPromptCardProps) {
   const { toggleSavedPrompt, isPromptSaved } = useAuth();
   const [views, setViews] = useState(prompt.views_count ?? 0);
+  const [imgError, setImgError] = useState(false);
   const tools = getPromptTools(prompt);
   const imageUrl = prompt.example_output_image_url ?? prompt.example_output_image ?? null;
   const promptId = prompt._id || prompt.id || prompt.slug || '';
@@ -42,14 +43,15 @@ export function PhotographyPromptCard({
       className={`group relative w-full aspect-[3/4] min-h-[380px] sm:min-h-[400px] rounded-2xl overflow-hidden cursor-pointer bg-surface dark:bg-[#0D1117] border border-black/10 dark:border-white/10 hover:border-accent/60 transition-all duration-500 shadow-md hover:shadow-2xl ${className}`}
     >
       {/* ── Background Photo Image ── */}
-      {imageUrl ? (
+      {imageUrl && !imgError ? (
         <Image
           src={imageUrl}
-          alt={prompt.page_name}
+          alt={prompt.page_name || "AI Prompt"}
           fill
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
           className="object-cover group-hover:scale-108 transition-transform duration-700 ease-out"
           unoptimized
+          onError={() => setImgError(true)}
         />
       ) : (
         (() => {

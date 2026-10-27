@@ -39,6 +39,8 @@ function LatestPromptCard({ prompt, index }: LatestPromptCardProps) {
   const { toggleSavedPrompt, isPromptSaved } = useAuth();
   const [views, setViews] = useState(prompt.views_count ?? 0);
   const imageUrl = prompt.example_output_image_url ?? prompt.example_output_image ?? null;
+  const [imgSrc, setImgSrc] = useState(imageUrl);
+  const [imgError, setImgError] = useState(false);
   const tools = getPromptTools(prompt);
   const promptId = prompt._id || prompt.id || prompt.slug || '';
   const isSaved = isPromptSaved(promptId) || (prompt.slug ? isPromptSaved(prompt.slug) : false);
@@ -59,13 +61,14 @@ function LatestPromptCard({ prompt, index }: LatestPromptCardProps) {
       className="group relative w-full aspect-[4/5] rounded-2xl overflow-hidden cursor-pointer border border-border/60 bg-surface dark:bg-[#0D1117] shadow-sm hover:shadow-[0_22px_45px_-12px_rgba(234,76,137,0.32)] hover:border-accent/60 transition-all duration-300"
     >
       {/* ── Background Image ── */}
-      {imageUrl ? (
+      {imageUrl && !imgError ? (
         <Image
-          src={imageUrl}
-          alt={prompt.page_name}
+          src={imgSrc || imageUrl}
+          alt={prompt.page_name || "AI Prompt"}
           fill
           className="object-cover group-hover:scale-108 transition-transform duration-700 ease-out"
           unoptimized
+          onError={() => setImgError(true)}
         />
       ) : (
         (() => {

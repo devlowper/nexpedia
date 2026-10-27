@@ -18,6 +18,7 @@ interface DesignPromptCardProps {
 export function DesignPromptCard({ prompt, index = 0, masonry = false }: DesignPromptCardProps) {
   const { toggleSavedPrompt, isPromptSaved } = useAuth();
   const [views, setViews] = useState(prompt.views_count ?? 0);
+  const [imgError, setImgError] = useState(false);
   const tools = getPromptTools(prompt);
   const imageUrl = prompt.example_output_image_url ?? prompt.example_output_image ?? null;
   const promptId = prompt._id || prompt.id || prompt.slug || '';
@@ -38,22 +39,24 @@ export function DesignPromptCard({ prompt, index = 0, masonry = false }: DesignP
       className={`group relative w-full rounded-2xl overflow-hidden cursor-pointer ${masonry ? "h-auto mb-6 inline-block" : "aspect-[3/4] md:aspect-[4/5]"}`}
     >
       {/* ── Background Image ── */}
-      {imageUrl ? (
+      {imageUrl && !imgError ? (
         masonry ? (
           <img
             src={imageUrl}
-            alt={prompt.page_name}
+            alt={prompt.page_name || "AI Prompt"}
             loading="lazy"
             decoding="async"
             className="w-full h-auto block object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+            onError={() => setImgError(true)}
           />
         ) : (
           <Image
             src={imageUrl}
-            alt={prompt.page_name}
+            alt={prompt.page_name || "AI Prompt"}
             fill
             className="object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
             unoptimized
+            onError={() => setImgError(true)}
           />
         )
       ) : (

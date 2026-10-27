@@ -239,6 +239,7 @@ export function PromptCard({
 }: PromptCardProps) {
   const { toggleSavedPrompt, isPromptSaved } = useAuth();
   const [views, setViews] = useState(prompt.views_count ?? 0);
+  const [imgError, setImgError] = useState(false);
   const imageUrl =
     prompt.example_output_image_url ?? prompt.example_output_image ?? null;
   const tools = getPromptTools(prompt);
@@ -262,13 +263,14 @@ export function PromptCard({
     >
       {/* ── Cover image ── */}
       <div className={`relative w-full ${imageAspect} overflow-hidden shrink-0 bg-black/5 dark:bg-white/5 border-b border-black/5 dark:border-white/5`}>
-        {imageUrl ? (
+        {imageUrl && !imgError ? (
           <Image
             src={imageUrl}
-            alt={prompt.page_name}
+            alt={prompt.page_name || "AI Prompt"}
             fill
             className="object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
             unoptimized
+            onError={() => setImgError(true)}
           />
         ) : (
           (() => {
