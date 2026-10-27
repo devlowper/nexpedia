@@ -63,48 +63,53 @@ export function AdsterraBanner({
     iframe.scrolling = 'no';
     iframe.setAttribute('loading', 'lazy');
     iframe.setAttribute('title', `Advertisement ${format}`);
-    // Strict sandbox: allows scripts to render and user to click ads to open in new tab (_blank),
-    // but completely denies allow-same-origin and allow-top-navigation.
-    // This blocks third-party scripts from attaching listeners to the parent window or intercepting hamburger/menu clicks.
-    iframe.setAttribute('sandbox', 'allow-scripts allow-popups allow-forms');
-
-    iframe.srcdoc = `
-      <!DOCTYPE html>
-      <html>
-        <head>
-          <meta charset="utf-8">
-          <meta name="viewport" content="width=device-width, initial-scale=1.0">
-          <style>
-            * { box-sizing: border-box; }
-            html, body {
-              margin: 0;
-              padding: 0;
-              background: transparent;
-              display: flex;
-              align-items: center;
-              justify-content: center;
-              overflow: hidden;
-              width: 100%;
-              height: 100%;
-            }
-          </style>
-        </head>
-        <body>
-          <script type="text/javascript">
-            atOptions = {
-              'key' : '${config.key}',
-              'format' : 'iframe',
-              'height' : ${config.height},
-              'width' : ${config.width},
-              'params' : {}
-            };
-          </script>
-          <script type="text/javascript" src="https://bauval.org/22/${config.key}"></script>
-        </body>
-      </html>
-    `;
 
     container.appendChild(iframe);
+
+    try {
+      const doc = iframe.contentWindow?.document || iframe.contentDocument;
+      if (doc) {
+        doc.open();
+        doc.write(`
+          <!DOCTYPE html>
+          <html>
+            <head>
+              <meta charset="utf-8">
+              <meta name="viewport" content="width=device-width, initial-scale=1.0">
+              <style>
+                * { box-sizing: border-box; }
+                html, body {
+                  margin: 0;
+                  padding: 0;
+                  background: transparent;
+                  display: flex;
+                  align-items: center;
+                  justify-content: center;
+                  overflow: hidden;
+                  width: 100%;
+                  height: 100%;
+                }
+              </style>
+            </head>
+            <body>
+              <script type="text/javascript">
+                atOptions = {
+                  'key' : '${config.key}',
+                  'format' : 'iframe',
+                  'height' : ${config.height},
+                  'width' : ${config.width},
+                  'params' : {}
+                };
+              </script>
+              <script type="text/javascript" src="https://bauval.org/22/${config.key}"></script>
+            </body>
+          </html>
+        `);
+        doc.close();
+      }
+    } catch (err) {
+      console.warn('Adsterra iframe initialization warning:', err);
+    }
 
     return () => {
       if (container) {
@@ -183,34 +188,42 @@ export function AdsterraNativeBanner({
     iframe.scrolling = 'no';
     iframe.setAttribute('loading', 'lazy');
     iframe.setAttribute('title', 'Sponsored Recommendations');
-    iframe.setAttribute('sandbox', 'allow-scripts allow-popups allow-forms');
-
-    iframe.srcdoc = `
-      <!DOCTYPE html>
-      <html>
-        <head>
-          <meta charset="utf-8">
-          <meta name="viewport" content="width=device-width, initial-scale=1.0">
-          <style>
-            * { box-sizing: border-box; margin: 0; padding: 0; }
-            html, body {
-              background: transparent;
-              width: 100%;
-              overflow: hidden;
-              display: flex;
-              justify-content: center;
-              align-items: center;
-            }
-          </style>
-        </head>
-        <body>
-          <div id="container-e1f6812d1a6a17f547fa2eea499f1732" style="width:100%; display:flex; justify-content:center;"></div>
-          <script async="async" data-cfasync="false" src="https://bauval.org/21/e1f6812d1a6a17f547fa2eea499f1732"></script>
-        </body>
-      </html>
-    `;
 
     container.appendChild(iframe);
+
+    try {
+      const doc = iframe.contentWindow?.document || iframe.contentDocument;
+      if (doc) {
+        doc.open();
+        doc.write(`
+          <!DOCTYPE html>
+          <html>
+            <head>
+              <meta charset="utf-8">
+              <meta name="viewport" content="width=device-width, initial-scale=1.0">
+              <style>
+                * { box-sizing: border-box; margin: 0; padding: 0; }
+                html, body {
+                  background: transparent;
+                  width: 100%;
+                  overflow: hidden;
+                  display: flex;
+                  justify-content: center;
+                  align-items: center;
+                }
+              </style>
+            </head>
+            <body>
+              <div id="container-e1f6812d1a6a17f547fa2eea499f1732" style="width:100%; display:flex; justify-content:center;"></div>
+              <script async="async" data-cfasync="false" src="https://bauval.org/21/e1f6812d1a6a17f547fa2eea499f1732"></script>
+            </body>
+          </html>
+        `);
+        doc.close();
+      }
+    } catch (err) {
+      console.warn('Native ad initialization warning:', err);
+    }
 
     return () => {
       if (container) {
