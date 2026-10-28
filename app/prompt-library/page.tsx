@@ -165,8 +165,10 @@ function renderPhotographySection(category: string, prompts: Prompt[]) {
   );
 }
 
-function renderStandardSection(category: string, prompts: Prompt[], description: string) {
+function renderStandardSection(category: string, prompts: Prompt[], description: string, imageAspect?: string) {
   const showBanner = ["Education", "Coding", "Writing", "Marketing", "Business"].includes(category);
+  const isLogoCategory = category === "Logos & Icons";
+  const finalAspect = imageAspect || (isLogoCategory ? "aspect-square" : "aspect-[16/9]");
 
   return (
     <ScrollReveal key={category} variant="slide-up" duration={0.6} className="space-y-6 pt-10">
@@ -188,7 +190,7 @@ function renderStandardSection(category: string, prompts: Prompt[], description:
       
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
         {prompts.slice(0, 4).map((p, i) => (
-          <PromptCard key={p.slug} prompt={p} index={i} />
+          <PromptCard key={p.slug} prompt={p} index={i} imageAspect={finalAspect} />
         ))}
       </div>
 
@@ -354,11 +356,22 @@ function PromptLibraryContent() {
                   return renderPhotographySection(category, prompts);
                 } else {
                   let description = "Explore specialized prompts for this category.";
-                  if (category === "Logos & Icons") description = "Generate scalable vector logos, app icons, and modern brand emblems.";
-                  if (category === "Vector Design") description = "Create crisp vector art, illustrations, and digital graphics.";
+                  let aspect: string | undefined = undefined;
+
+                  if (category === "Logos & Icons") {
+                    description = "Generate scalable vector logos, app icons, and modern brand emblems.";
+                    aspect = "aspect-square"; // 1:1 square ratio height gives plenty of room for logos & icons
+                  }
+                  if (category === "Vector Design") {
+                    description = "Create crisp vector art, illustrations, and digital graphics.";
+                    aspect = "aspect-[4/3]";
+                  }
+                  if (category === "Mockup Prompt") {
+                    description = "Realistic 3D packaging, apparel, stationery, and product mockups.";
+                    aspect = "aspect-[4/3]";
+                  }
                   if (category === "Video") description = "Craft dynamic prompts for AI video generators like Sora, Runway, and Kling.";
                   if (category === "Viral Prompt") description = "Trending prompts generating viral engagement across social platforms.";
-                  if (category === "Mockup Prompt") description = "Realistic 3D packaging, apparel, stationery, and product mockups.";
                   if (category === "Master Prompt") description = "Comprehensive mega-prompts engineered for maximum detail and quality.";
                   if (category === "Business") description = "Elevate your business strategy and operations with AI.";
                   if (category === "Marketing") description = "Supercharge your campaigns and copy with tailored prompts.";
@@ -368,7 +381,7 @@ function PromptLibraryContent() {
                   if (category === "Education") description = "Enhance learning, teaching, and course creation with powerful prompts.";
                   if (category === "Health") description = "Discover AI workflows for wellness, fitness, and health insights.";
                   
-                  return renderStandardSection(category, prompts, description);
+                  return renderStandardSection(category, prompts, description, aspect);
                 }
               })
             )}

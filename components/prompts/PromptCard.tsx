@@ -234,7 +234,7 @@ interface PromptCardProps {
 export function PromptCard({ 
   prompt, 
   index = 0, 
-  imageAspect = "aspect-[16/9]", 
+  imageAspect, 
   className = "" 
 }: PromptCardProps) {
   const { toggleSavedPrompt, isPromptSaved } = useAuth();
@@ -243,6 +243,11 @@ export function PromptCard({
   const imageUrl =
     prompt.example_output_image_url ?? prompt.example_output_image ?? null;
   const tools = getPromptTools(prompt);
+
+  // Auto-detect Logos & Icons so emblems and badges get a spacious 1:1 square aspect ratio
+  const categoryName = prompt.category?.name || "";
+  const isLogoCategory = /logo|icon/i.test(categoryName);
+  const effectiveAspect = imageAspect || (isLogoCategory ? "aspect-square" : "aspect-[16/9]");
   
   const promptId = prompt._id || prompt.id || prompt.slug || '';
   const isSaved = isPromptSaved(promptId) || (prompt.slug ? isPromptSaved(prompt.slug) : false);
@@ -262,7 +267,7 @@ export function PromptCard({
       className={`group relative flex flex-col rounded-xl bg-surface dark:bg-[#0D1117] border border-black/10 dark:border-white/10 hover:border-accent/60 transition-all duration-300 cursor-pointer overflow-hidden ${className}`}
     >
       {/* ── Cover image ── */}
-      <div className={`relative w-full ${imageAspect} overflow-hidden shrink-0 bg-black/5 dark:bg-white/5 border-b border-black/5 dark:border-white/5`}>
+      <div className={`relative w-full ${effectiveAspect} overflow-hidden shrink-0 bg-black/5 dark:bg-white/5 border-b border-black/5 dark:border-white/5`}>
         {imageUrl && !imgError ? (
           <Image
             src={imageUrl}
