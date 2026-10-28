@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import Link from "next/link";
-import { Shield, LayoutDashboard, Users, CheckSquare, FileText, BookOpen, LogOut, Menu, X } from "lucide-react";
+import { Shield, LayoutDashboard, Users, CheckSquare, FileText, BookOpen, Mail, LogOut, Menu, X } from "lucide-react";
 
 export default function AdminShell({ children }: { children: React.ReactNode }) {
   const router = useRouter();
@@ -48,6 +48,7 @@ export default function AdminShell({ children }: { children: React.ReactNode }) 
     { label: "Dashboard", href: "/admin", icon: LayoutDashboard },
     { label: "Profile Approvals", href: "/admin/approvals", icon: CheckSquare },
     { label: "Prompt Submissions", href: "/admin/submissions", icon: FileText },
+    { label: "Messages", href: "/admin/messages", icon: Mail },
     { label: "Users", href: "/admin/users", icon: Users },
     { label: "Prompt Library", href: "/admin/add-prompt", icon: BookOpen },
   ];
