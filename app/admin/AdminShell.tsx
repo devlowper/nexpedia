@@ -12,27 +12,29 @@ export default function AdminShell({ children }: { children: React.ReactNode }) 
   const [loading, setLoading] = useState(true);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
+  const isLoginPage = Boolean(pathname && pathname.startsWith("/admin/login"));
+
   useEffect(() => {
-    const token = sessionStorage.getItem("admin_token");
-    if (pathname === "/admin/login") {
+    if (isLoginPage) {
       setLoading(false);
       return;
     }
-    
+
+    const token = typeof window !== "undefined" ? sessionStorage.getItem("admin_token") : null;
     if (!token) {
       router.push("/admin/login");
     } else {
       setIsAuth(true);
     }
     setLoading(false);
-  }, [pathname, router]);
+  }, [pathname, isLoginPage, router]);
+
+  if (isLoginPage) {
+    return <>{children}</>;
+  }
 
   if (loading) {
     return <div className="min-h-screen flex items-center justify-center" style={{ background: "var(--bg-base)" }}>Loading...</div>;
-  }
-
-  if (pathname === "/admin/login") {
-    return <>{children}</>;
   }
 
   if (!isAuth) return null;

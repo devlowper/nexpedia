@@ -34,29 +34,6 @@ export function AuthModal({ isOpen, onClose, defaultView = 'login' }: AuthModalP
     }
   }, [isOpen, defaultView]);
 
-  // Block any third-party ad popunder / click hijacking inside AuthModal
-  useEffect(() => {
-    if (!isOpen) return;
-
-    const stopAdInterception = (e: Event) => {
-      const target = e.target as HTMLElement | null;
-      if (target && target.closest('#auth-modal')) {
-        // Prevent external ad listeners on window/document from capturing this event
-        e.stopPropagation();
-      }
-    };
-
-    window.addEventListener('click', stopAdInterception, true);
-    window.addEventListener('mousedown', stopAdInterception, true);
-    window.addEventListener('pointerdown', stopAdInterception, true);
-
-    return () => {
-      window.removeEventListener('click', stopAdInterception, true);
-      window.removeEventListener('mousedown', stopAdInterception, true);
-      window.removeEventListener('pointerdown', stopAdInterception, true);
-    };
-  }, [isOpen]);
-
   if (!isOpen) return null;
 
   const reset = () => {

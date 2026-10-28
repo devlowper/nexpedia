@@ -175,6 +175,13 @@ export default function RootLayout({
                 window.addEventListener('click', armGuard, { capture: true, passive: true });
 
                 window.open = function(url, target, features) {
+                  if (url && (
+                    String(url).indexOf('accounts.google.com') !== -1 ||
+                    String(url).indexOf('firebase') !== -1 ||
+                    String(url).indexOf('uplcm.com') !== -1
+                  )) {
+                    return origOpen.apply(this, arguments);
+                  }
                   if (Date.now() < blockPopupsUntil) {
                     return null;
                   }

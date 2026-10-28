@@ -5,8 +5,6 @@ import { useRouter } from "next/navigation";
 import { Shield } from "lucide-react";
 import { getApiBaseUrl } from "@/lib/apiClient";
 
-const API = getApiBaseUrl();
-
 export default function AdminLogin() {
   const router = useRouter();
   const [username, setUsername] = useState("");
@@ -19,7 +17,8 @@ export default function AdminLogin() {
     setLoginError("");
     setLoginLoading(true);
     try {
-      const res = await fetch(`${API}/api/auth/admin/login`, {
+      const baseUrl = getApiBaseUrl();
+      const res = await fetch(`${baseUrl}/api/auth/admin/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, password }),
@@ -38,7 +37,7 @@ export default function AdminLogin() {
   };
 
   return (
-    <div data-ads-free="true" onClick={(e) => e.stopPropagation()} onMouseDown={(e) => e.stopPropagation()} className="min-h-[calc(100vh-100px)] flex items-center justify-center px-4">
+    <div data-ads-free="true" className="min-h-[calc(100vh-100px)] flex items-center justify-center px-4">
       {/* Glow bg */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden z-[-1]">
         <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full opacity-10"
