@@ -20,11 +20,11 @@ const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "https://procraft.site";
 export const metadata: Metadata = {
   metadataBase: new URL(APP_URL),
   title: {
-    default: "proCraft — AI Prompt Library & Directory for Midjourney, ChatGPT & FLUX",
-    template: "%s | proCraft",
+    default: "ProCraft | Prompt Library & Directory",
+    template: "%s | ProCraft",
   },
   description:
-    "Explore 800+ curated AI prompts and verified tools for Midjourney, ChatGPT, Stable Diffusion, and FLUX. Copy prompts with one click and create stunning visuals.",
+    "Discover 800+ curated AI prompts and verified tools for Midjourney, ChatGPT, FLUX & Stable Diffusion. Copy ready-to-use prompts with 1-click on ProCraft.",
   keywords: [
     "prompt library",
     "proCraft",
@@ -64,11 +64,11 @@ export const metadata: Metadata = {
     ],
   },
   openGraph: {
-    title: "proCraft — AI Prompt Library & Directory",
+    title: "ProCraft | Prompt Library & Directory",
     description:
-      "Explore 800+ curated AI prompts and verified tools for Midjourney, ChatGPT, Stable Diffusion, and FLUX.",
+      "Discover 800+ curated AI prompts and verified tools for Midjourney, ChatGPT, FLUX & Stable Diffusion. Copy ready-to-use prompts with 1-click on ProCraft.",
     url: APP_URL,
-    siteName: "proCraft",
+    siteName: "ProCraft",
     locale: "en_US",
     type: "website",
     images: [
@@ -76,15 +76,15 @@ export const metadata: Metadata = {
         url: "https://cdn.procraft.site/create-premium-speaker-grid-advertisements.avif",
         width: 1024,
         height: 1024,
-        alt: "proCraft — AI Prompt Library & Directory",
+        alt: "ProCraft | Prompt Library & Directory",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "proCraft — AI Prompt Library & Directory",
+    title: "ProCraft | Prompt Library & Directory",
     description:
-      "Discover curated prompts and verified AI tools with proCraft.",
+      "Discover 800+ curated AI prompts and verified tools for Midjourney, ChatGPT, FLUX & Stable Diffusion. Copy ready-to-use prompts with 1-click on ProCraft.",
     creator: "@procraft",
     images: ["https://cdn.procraft.site/create-premium-speaker-grid-advertisements.avif"],
   },

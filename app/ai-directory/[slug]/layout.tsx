@@ -76,3 +76,4 @@ export async function generateMetadata({ params }: LayoutProps): Promise<Metadat
 export default function AIDirectoryDetailLayout({ children }: { children: React.ReactNode }) {
   return <>{children}</>;
 }
+

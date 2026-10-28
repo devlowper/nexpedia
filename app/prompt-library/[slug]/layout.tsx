@@ -79,3 +79,4 @@ export async function generateMetadata({ params }: LayoutProps): Promise<Metadat
 export default function PromptDetailLayout({ children }: { children: React.ReactNode }) {
   return <>{children}</>;
 }
+

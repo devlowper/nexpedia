@@ -1,9 +1,9 @@
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Prompt Library — Curated & Trending AI Prompts',
+  title: 'AI Prompt Library — Trending Prompts',
   description:
-    'Explore the ultimate AI prompt library on proCraft. Find curated prompts, image-to-prompt styles, ChatGPT system prompts, and Midjourney recipes.',
+    'Discover 800+ curated AI art prompts for Midjourney, ChatGPT, FLUX and Stable Diffusion. Copy prompts with one click on ProCraft.',
   keywords: [
     'prompt library',
     'best prompt',
@@ -18,7 +18,7 @@ export const metadata: Metadata = {
     canonical: '/prompt-library',
   },
   openGraph: {
-    title: 'Prompt Library — Curated & Trending AI Prompts | proCraft',
+    title: 'AI Prompt Library — Trending Prompts | ProCraft',
     description:
       'Explore thousands of curated, trending AI prompts ready to copy with 1-click.',
     url: '/prompt-library',

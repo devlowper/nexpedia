@@ -2,9 +2,9 @@ import type { Metadata } from 'next';
 import Script from 'next/script';
 
 export const metadata: Metadata = {
-  title: 'AI Directory — Top AI Tools & Models | proCraft',
+  title: 'AI Tools Directory — Best AI Apps & Models',
   description:
-    'Discover curated AI tools, image generators, and productivity models in the proCraft AI Directory.',
+    'Discover curated AI tools, image generators, and productivity models in the ProCraft AI Directory.',
   keywords: [
     'ai directory',
     'proCraft',
@@ -13,6 +13,12 @@ export const metadata: Metadata = {
   ],
   alternates: {
     canonical: '/ai-directory',
+  },
+  openGraph: {
+    title: 'AI Tools Directory — Best AI Apps & Models | ProCraft',
+    description:
+      'Discover curated AI tools, image generators, and productivity models in the ProCraft AI Directory.',
+    url: '/ai-directory',
   },
 };
 
