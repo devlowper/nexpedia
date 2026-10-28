@@ -23,7 +23,7 @@ export function Footer() {
             <Link href="/" className="inline-block mb-6 group transition-opacity hover:opacity-90" title="proCraft | Prompt Library">
               <Image
                 src="/logo-dark-v2.png"
-                alt="proCraft"
+                alt="proCraft — AI Prompt Library & Directory"
                 width={150}
                 height={28}
                 unoptimized
@@ -31,7 +31,7 @@ export function Footer() {
               />
               <Image
                 src="/logo-light-v2.png"
-                alt="proCraft"
+                alt="proCraft — AI Prompt Library & Directory"
                 width={150}
                 height={28}
                 unoptimized

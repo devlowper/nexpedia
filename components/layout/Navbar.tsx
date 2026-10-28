@@ -153,7 +153,7 @@ export function Navbar() {
           <Link href="/" className="flex items-center group transition-opacity hover:opacity-90 py-1" title="proCraft | Prompt Library & Directory">
             <Image
               src="/logo-dark-v2.png"
-              alt="proCraft"
+              alt="proCraft — AI Prompt Library & Directory"
               width={140}
               height={26}
               priority
@@ -162,7 +162,7 @@ export function Navbar() {
             />
             <Image
               src="/logo-light-v2.png"
-              alt="proCraft"
+              alt="proCraft — AI Prompt Library & Directory"
               width={140}
               height={26}
               priority
@@ -326,7 +326,7 @@ export function Navbar() {
               <Link href="/" onClick={() => setMobileOpen(false)} className="inline-block">
                 <Image
                   src="/logo-dark-v2.png"
-                  alt="proCraft"
+                  alt="proCraft — AI Prompt Library & Directory"
                   width={120}
                   height={22}
                   unoptimized
@@ -334,7 +334,7 @@ export function Navbar() {
                 />
                 <Image
                   src="/logo-light-v2.png"
-                  alt="proCraft"
+                  alt="proCraft — AI Prompt Library & Directory"
                   width={120}
                   height={22}
                   unoptimized

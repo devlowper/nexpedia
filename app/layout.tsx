@@ -20,57 +20,73 @@ const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "https://procraft.site";
 export const metadata: Metadata = {
   metadataBase: new URL(APP_URL),
   title: {
-    default: "proCraft | Prompt Library & Directory",
+    default: "proCraft — AI Prompt Library & Directory for Midjourney, ChatGPT & FLUX",
     template: "%s | proCraft",
   },
   description:
-    "proCraft is the ultimate AI prompt library and tools directory. Discover curated prompts and tools for Midjourney, ChatGPT, Stable Diffusion & FLUX.",
+    "Explore 800+ curated AI prompts and verified tools for Midjourney, ChatGPT, Stable Diffusion, and FLUX. Copy prompts with one click and create stunning visuals.",
   keywords: [
     "prompt library",
     "proCraft",
     "procraft",
-    "image to prompt",
-    "best AI prompts",
-    "ai prompt generator",
     "midjourney prompts",
-    "chatgpt prompt library",
-    "trending ai prompts",
-    "free prompt library"
+    "chatgpt prompts",
+    "flux prompts",
+    "stable diffusion prompts",
+    "ai tools directory",
+    "image to prompt",
+    "best ai prompts",
+    "ai prompt generator"
   ],
-  authors: [{ name: "proCraft Team" }],
+  authors: [{ name: "proCraft Team", url: APP_URL }],
   creator: "proCraft",
   publisher: "proCraft",
   applicationName: "proCraft",
   category: "technology",
+  manifest: "/site.webmanifest",
   alternates: {
-    canonical: "/",
+    canonical: APP_URL,
   },
   icons: {
     icon: [
-      { url: '/favicon-48x48.png', sizes: '48x48', type: 'image/png' },
-      { url: '/icon-192.png', sizes: '192x192', type: 'image/png' },
       { url: '/favicon.ico', sizes: 'any' },
+      { url: '/favicon.svg', type: 'image/svg+xml' },
+      { url: '/favicon-48x48.png', sizes: '48x48', type: 'image/png' },
+      { url: '/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
+      { url: '/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
+      { url: '/icon-192.png', sizes: '192x192', type: 'image/png' },
+      { url: '/icon-512.png', sizes: '512x512', type: 'image/png' },
     ],
     shortcut: '/favicon.ico',
     apple: [
+      { url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },
       { url: '/apple-icon.png', sizes: '180x180', type: 'image/png' },
     ],
   },
   openGraph: {
-    title: "proCraft | Prompt Library & Directory",
+    title: "proCraft — AI Prompt Library & Directory",
     description:
-      "Explore curated prompts, prompt styles, and AI tools with proCraft.",
+      "Explore 800+ curated AI prompts and verified tools for Midjourney, ChatGPT, Stable Diffusion, and FLUX.",
     url: APP_URL,
     siteName: "proCraft",
     locale: "en_US",
     type: "website",
+    images: [
+      {
+        url: "https://cdn.procraft.site/create-premium-speaker-grid-advertisements.avif",
+        width: 1024,
+        height: 1024,
+        alt: "proCraft — AI Prompt Library & Directory",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "proCraft | Prompt Library & Directory",
+    title: "proCraft — AI Prompt Library & Directory",
     description:
-      "Discover the best prompt library, trendy prompts, and creative tools with proCraft.",
+      "Discover curated prompts and verified AI tools with proCraft.",
     creator: "@procraft",
+    images: ["https://cdn.procraft.site/create-premium-speaker-grid-advertisements.avif"],
   },
   robots: {
     index: true,
@@ -103,11 +119,16 @@ export default function RootLayout({
   return (
     <html lang="en" data-theme="dark" suppressHydrationWarning className={bricolage.variable}>
       <head>
-        {/* Google Search Favicons & App Icons */}
+        {/* Google Search Favicons & Icons Specification */}
+        <link rel="icon" href="/favicon.ico" sizes="any" />
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
         <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48x48.png" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
         <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png" />
-        <link rel="apple-touch-icon" sizes="180x180" href="/apple-icon.png" />
-        <link rel="shortcut icon" href="/favicon.ico" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+        <link rel="manifest" href="/site.webmanifest" />
+        <meta name="theme-color" content="#ff3366" />
 
 
         {/* Google AdSense Script via Next.js Script to avoid SSR hydration conflicts */}
@@ -199,17 +220,72 @@ export default function RootLayout({
               "@context": "https://schema.org",
               "@graph": [
                 {
+                  "@type": "Organization",
+                  "@id": `${APP_URL}/#organization`,
+                  "name": "proCraft",
+                  "url": APP_URL,
+                  "logo": {
+                    "@type": "ImageObject",
+                    "url": `${APP_URL}/icon-512.png`,
+                    "width": 512,
+                    "height": 512
+                  },
+                  "sameAs": [
+                    "https://twitter.com/procraft",
+                    "https://github.com/devlowper/nexpedia"
+                  ]
+                },
+                {
                   "@type": "WebSite",
                   "@id": `${APP_URL}/#website`,
                   "url": APP_URL,
                   "name": "proCraft",
-                  "alternateName": ["procraft", "proCraft AI"],
-                  "description": "Best AI Prompt Library and Directory for creators.",
+                  "alternateName": ["proCraft AI", "procraft.site"],
+                  "description": "Best AI Prompt Library and Tools Directory for creators.",
+                  "publisher": { "@id": `${APP_URL}/#organization` },
                   "potentialAction": {
                     "@type": "SearchAction",
-                    "target": `${APP_URL}/prompt-library?search={search_term_string}`,
+                    "target": {
+                      "@type": "EntryPoint",
+                      "urlTemplate": `${APP_URL}/prompt-library?search={search_term_string}`
+                    },
                     "query-input": "required name=search_term_string"
                   }
+                },
+                {
+                  "@type": "ItemList",
+                  "@id": `${APP_URL}/#sitelinks`,
+                  "name": "proCraft Sitelinks",
+                  "itemListElement": [
+                    {
+                      "@type": "SiteNavigationElement",
+                      "position": 1,
+                      "name": "Prompt Library",
+                      "description": "Explore curated prompts for Midjourney, ChatGPT, and FLUX",
+                      "url": `${APP_URL}/prompt-library`
+                    },
+                    {
+                      "@type": "SiteNavigationElement",
+                      "position": 2,
+                      "name": "AI Directory",
+                      "description": "Discover verified AI productivity, video, and design tools",
+                      "url": `${APP_URL}/ai-directory`
+                    },
+                    {
+                      "@type": "SiteNavigationElement",
+                      "position": 3,
+                      "name": "Image to Prompt",
+                      "description": "Extract AI prompts from any uploaded picture",
+                      "url": `${APP_URL}/image-to-prompt`
+                    },
+                    {
+                      "@type": "SiteNavigationElement",
+                      "position": 4,
+                      "name": "Login",
+                      "description": "Sign in to your proCraft creator account",
+                      "url": `${APP_URL}/login`
+                    }
+                  ]
                 },
                 {
                   "@type": "WebApplication",

@@ -46,9 +46,10 @@ export function PhotographyPromptCard({
       {imageUrl && !imgError ? (
         <Image
           src={imageUrl}
-          alt={prompt.page_name || "AI Prompt"}
+          alt={`${cleanTitle(prompt.page_name) || "Photography AI Prompt"} — AI Generated Photo`}
           fill
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+          loading="lazy"
           className="object-cover group-hover:scale-108 transition-transform duration-700 ease-out"
           unoptimized
           onError={() => setImgError(true)}

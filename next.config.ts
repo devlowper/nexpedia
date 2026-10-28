@@ -54,6 +54,45 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "github.com" },
     ],
   },
+  async redirects() {
+    return [
+      // www to non-www canonical redirect
+      {
+        source: "/:path*",
+        has: [{ type: "host", value: "www.procraft.site" }],
+        destination: "https://procraft.site/:path*",
+        permanent: true,
+      },
+      // Short aliases requested by user
+      {
+        source: "/library",
+        destination: "/prompt-library",
+        permanent: true,
+      },
+      {
+        source: "/directory",
+        destination: "/ai-directory",
+        permanent: true,
+      },
+    ];
+  },
+  async headers() {
+    return [
+      {
+        source: "/:path*",
+        headers: [
+          {
+            key: "Strict-Transport-Security",
+            value: "max-age=31536000; includeSubDomains; preload",
+          },
+          {
+            key: "X-Content-Type-Options",
+            value: "nosniff",
+          },
+        ],
+      },
+    ];
+  },
 };
 
 export default nextConfig;

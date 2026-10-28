@@ -115,7 +115,7 @@ export default function PromptEngineeringGuidePostContent() {
         <figure className="my-6 rounded-2xl overflow-hidden border border-black/10 dark:border-white/10 shadow-xl bg-black/5 dark:bg-white/5">
           <div className="relative aspect-[4/5] sm:aspect-[4/3] max-w-lg mx-auto w-full">
             <Image
-              src="https://i.ibb.co/hFbJTBvX/prompt-making-formula-infographic.webp"
+              src="https://cdn.procraft.site/blog/prompt-making-how-to-write-a-great-prompt.webp"
               alt="prompt engineering formula infographic"
               fill
               sizes="(max-width: 600px) 100vw, 600px"
@@ -260,7 +260,7 @@ export default function PromptEngineeringGuidePostContent() {
         <figure className="my-6 rounded-2xl overflow-hidden border border-black/10 dark:border-white/10 shadow-xl bg-black/5 dark:bg-white/5">
           <div className="relative aspect-[16/9] w-full">
             <Image
-              src="https://i.ibb.co/LXRmKVD8/image-to-prompt-tool-example.webp"
+              src="https://cdn.procraft.site/blog/image-to-prompt-turn-any-picture-into-a-prompt.webp"
               alt="image to prompt tool example"
               fill
               sizes="(max-width: 896px) 100vw, 896px"
@@ -356,7 +356,7 @@ export default function PromptEngineeringGuidePostContent() {
         <figure className="my-6 rounded-2xl overflow-hidden border border-black/10 dark:border-white/10 shadow-xl bg-black/5 dark:bg-white/5">
           <div className="relative aspect-[16/9] w-full">
             <Image
-              src="https://i.ibb.co/Kp0hBJ06/reverse-prompt-engineering-workflow.webp"
+              src="https://cdn.procraft.site/blog/reverse-prompt-engineering-explained.webp"
               alt="reverse prompt engineering workflow"
               fill
               sizes="(max-width: 896px) 100vw, 896px"
@@ -461,7 +461,7 @@ export default function PromptEngineeringGuidePostContent() {
         <figure className="my-6 rounded-2xl overflow-hidden border border-black/10 dark:border-white/10 shadow-xl bg-black/5 dark:bg-white/5">
           <div className="relative aspect-[16/9] w-full">
             <Image
-              src="https://i.ibb.co/TM1c3H88/procraft-prompt-library-preview.webp"
+              src="https://cdn.procraft.site/blog/build-a-prompt-library-that-saves-you-hours.webp"
               alt="ProCraft prompt library preview"
               fill
               sizes="(max-width: 896px) 100vw, 896px"

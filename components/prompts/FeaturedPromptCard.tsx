@@ -67,8 +67,10 @@ export function FeaturedPromptCard({ prompt, index = 0 }: FeaturedPromptCardProp
         {imageUrl ? (
           <Image
             src={imageUrl}
-            alt={prompt.page_name}
+            alt={`${cleanTitle(prompt.page_name) || "Featured AI Prompt"} — ${prompt.category?.name || "AI"} Art`}
             fill
+            sizes="(max-width: 768px) 100vw, 33vw"
+            loading="lazy"
             className="object-cover group-hover:scale-105 transition-transform duration-500"
             unoptimized
           />

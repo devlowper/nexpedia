@@ -43,7 +43,7 @@ export function DesignPromptCard({ prompt, index = 0, masonry = false }: DesignP
         masonry ? (
           <img
             src={imageUrl}
-            alt={prompt.page_name || "AI Prompt"}
+            alt={`${cleanTitle(prompt.page_name) || "AI Design Prompt"} — ${prompt.category?.name || "AI"} Prompt Output`}
             loading="lazy"
             decoding="async"
             className="w-full h-auto block object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
@@ -52,8 +52,10 @@ export function DesignPromptCard({ prompt, index = 0, masonry = false }: DesignP
         ) : (
           <Image
             src={imageUrl}
-            alt={prompt.page_name || "AI Prompt"}
+            alt={`${cleanTitle(prompt.page_name) || "AI Design Prompt"} — ${prompt.category?.name || "AI"} Prompt Output`}
             fill
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            loading="lazy"
             className="object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
             unoptimized
             onError={() => setImgError(true)}

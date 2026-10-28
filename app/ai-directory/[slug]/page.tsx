@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
+import Script from 'next/script';
 import { AITool } from '../page';
 import { Loader2, ArrowLeft, CheckCircle2, Star, Sparkles, ExternalLink, ShieldCheck } from 'lucide-react';
 import { Toast } from '@/components/ui/Toast';
@@ -126,6 +127,88 @@ export default function AIDetailsPage() {
 
   return (
     <div className="max-w-5xl mx-auto px-4 py-12">
+      {/* ── Structured Data (JSON-LD) ── */}
+      <Script
+        id="directory-tool-structured-data"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@graph": [
+              {
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                  {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "name": "Home",
+                    "item": "https://procraft.site"
+                  },
+                  {
+                    "@type": "ListItem",
+                    "position": 2,
+                    "name": "AI Directory",
+                    "item": "https://procraft.site/ai-directory"
+                  },
+                  {
+                    "@type": "ListItem",
+                    "position": 3,
+                    "name": tool.name,
+                    "item": `https://procraft.site/ai-directory/${tool.slug || params.slug}`
+                  }
+                ]
+              },
+              {
+                "@type": "SoftwareApplication",
+                "@id": `https://procraft.site/ai-directory/${tool.slug || params.slug}#software`,
+                "name": tool.name,
+                "applicationCategory": "DesignApplication",
+                "operatingSystem": "All",
+                "description": tool.description || tool.tagline,
+                "url": tool.websiteUrl || `https://procraft.site/ai-directory/${tool.slug || params.slug}`,
+                ...(tool.logo ? {
+                  "image": {
+                    "@type": "ImageObject",
+                    "@id": `${tool.logo}#logo`,
+                    "url": tool.logo,
+                    "contentUrl": tool.logo,
+                    "name": `${tool.name} Logo`,
+                    "width": 512,
+                    "height": 512,
+                    "creator": {
+                      "@type": "Organization",
+                      "name": tool.name
+                    }
+                  }
+                } : {}),
+                ...(tool.pricing ? {
+                  "offers": {
+                    "@type": "Offer",
+                    "price": tool.pricing.toLowerCase() === 'free' ? '0' : undefined,
+                    "priceCurrency": "USD",
+                    "category": tool.pricing
+                  }
+                } : {}),
+                ...(tool.rating && tool.rating > 0 ? {
+                  "aggregateRating": {
+                    "@type": "AggregateRating",
+                    "ratingValue": tool.rating,
+                    "reviewCount": tool.reviewCount || 1,
+                    "bestRating": 5,
+                    "worstRating": 1
+                  }
+                } : {}),
+                "publisher": {
+                  "@type": "Organization",
+                  "name": "proCraft",
+                  "url": "https://procraft.site"
+                }
+              }
+            ]
+          })
+        }}
+      />
+
       <button
         onClick={() => router.back()}
         className="mb-8 text-muted hover:text-primary flex items-center gap-2 transition-colors"
@@ -140,7 +223,15 @@ export default function AIDetailsPage() {
         <div className="flex flex-col md:flex-row gap-8 items-start relative z-10">
           <div className="w-24 h-24 md:w-32 md:h-32 rounded-2xl bg-elevated border border-border shadow-2xl flex items-center justify-center shrink-0 overflow-hidden p-2">
             {tool.logo ? (
-              <img src={tool.logo} alt={tool.name} className="w-full h-full object-contain" />
+              <img
+                src={tool.logo}
+                alt={`${tool.name} Logo`}
+                width={128}
+                height={128}
+                loading="eager"
+                decoding="async"
+                className="w-full h-full object-contain"
+              />
             ) : (
               <Sparkles className="text-accent" size={40} />
             )}

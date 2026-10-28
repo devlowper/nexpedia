@@ -259,6 +259,88 @@ export default function PromptDetailPage() {
       transition={{ duration: 0.4 }}
       className="max-w-5xl mx-auto px-4 py-10"
     >
+      {/* ── Structured Data (JSON-LD) ── */}
+      <Script
+        id="prompt-structured-data"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@graph": [
+              {
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                  {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "name": "Home",
+                    "item": "https://procraft.site"
+                  },
+                  {
+                    "@type": "ListItem",
+                    "position": 2,
+                    "name": "Prompt Library",
+                    "item": "https://procraft.site/prompt-library"
+                  },
+                  ...(prompt.category?.name ? [{
+                    "@type": "ListItem",
+                    "position": 3,
+                    "name": prompt.category.name,
+                    "item": `https://procraft.site/prompt-library?category=${encodeURIComponent(prompt.category.name)}`
+                  }] : []),
+                  {
+                    "@type": "ListItem",
+                    "position": prompt.category?.name ? 4 : 3,
+                    "name": cleanTitle(prompt.page_name),
+                    "item": `https://procraft.site/prompt-library/${slug}`
+                  }
+                ]
+              },
+              {
+                "@type": "CreativeWork",
+                "@id": `https://procraft.site/prompt-library/${slug}#creativework`,
+                "name": cleanTitle(prompt.page_name),
+                "headline": cleanTitle(prompt.page_name),
+                "description": prompt.description || prompt.what_this_prompt_does,
+                "url": `https://procraft.site/prompt-library/${slug}`,
+                "datePublished": prompt.date_published || "2026-01-01T00:00:00Z",
+                "author": {
+                  "@type": "Organization",
+                  "name": "proCraft",
+                  "url": "https://procraft.site"
+                },
+                "publisher": {
+                  "@type": "Organization",
+                  "name": "proCraft",
+                  "url": "https://procraft.site",
+                  "logo": {
+                    "@type": "ImageObject",
+                    "url": "https://procraft.site/icon-512.png"
+                  }
+                },
+                ...(imageUrl ? {
+                  "image": {
+                    "@type": "ImageObject",
+                    "@id": `${imageUrl}#image`,
+                    "url": imageUrl,
+                    "contentUrl": imageUrl,
+                    "name": cleanTitle(prompt.page_name),
+                    "caption": `${cleanTitle(prompt.page_name)} - AI Art Prompt Example`,
+                    "description": prompt.description,
+                    "width": 1024,
+                    "height": 1024,
+                    "representativeOfPage": true,
+                    "creator": {
+                      "@type": "Organization",
+                      "name": "proCraft"
+                    }
+                  }
+                } : {})
+              }
+            ]
+          })
+        }}
+      />
       {/* ── Breadcrumb ── */}
       <nav className="flex items-center gap-2 text-xs text-muted mb-6">
         <button onClick={() => router.back()} className="flex items-center gap-1 hover:text-primary transition-colors">
@@ -279,13 +361,22 @@ export default function PromptDetailPage() {
       {/* ── Hero ── */}
       <div className="details-card overflow-hidden mb-6">
         {imageUrl && (
-          <div className="relative w-full aspect-video bg-black/5 dark:bg-white/5 flex items-center justify-center border-b border-border">
+          <figure className="relative w-full aspect-video bg-black/5 dark:bg-white/5 flex flex-col items-center justify-center border-b border-border m-0">
             <img
               src={imageUrl}
-              alt={prompt.page_name}
+              alt={`${cleanTitle(prompt.page_name)}${prompt.category?.name ? ` - ${prompt.category.name} AI Image` : ' - AI Art Output'}`}
+              width={1024}
+              height={1024}
+              loading="eager"
+              fetchPriority="high"
+              decoding="async"
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1024px"
               className="w-full h-full object-contain"
             />
-          </div>
+            <figcaption className="w-full py-2 px-4 text-center text-xs text-muted bg-black/10 dark:bg-white/5 border-t border-border">
+              {cleanTitle(prompt.page_name)} — Example output created with {tools[0]?.name || 'AI Prompt'}
+            </figcaption>
+          </figure>
         )}
 
         <div className="p-6 md:p-8">
