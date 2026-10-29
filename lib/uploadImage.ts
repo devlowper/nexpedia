@@ -1,6 +1,6 @@
 /**
  * uploadImage.ts
- * Helper utility to upload images to ImgBB securely via backend /api/upload
+ * Helper utility to upload images to Cloudflare R2 CDN securely via backend /api/upload
  */
 import { getApiBaseUrl } from "@/lib/apiClient";
 
@@ -9,12 +9,13 @@ export interface UploadResult {
   thumbUrl?: string;
   displayUrl?: string;
   deleteUrl?: string;
+  storage?: string;
 }
 
 /**
- * Uploads a File, Blob, or base64 string securely via backend /api/upload
+ * Uploads a File, Blob, or base64 string to Cloudflare R2 CDN via backend /api/upload
  */
-export async function uploadImageToImgBB(
+export async function uploadImageToCDN(
   fileOrBase64: File | Blob | string,
   fileName?: string
 ): Promise<UploadResult> {
@@ -46,15 +47,19 @@ export async function uploadImageToImgBB(
 
     return {
       url: data.data.url,
-      thumbUrl: data.data.thumb_url,
-      displayUrl: data.data.display_url,
+      thumbUrl: data.data.thumb_url || data.data.url,
+      displayUrl: data.data.display_url || data.data.url,
       deleteUrl: data.data.delete_url,
+      storage: data.data.storage,
     };
   } catch (err: any) {
     console.error("Backend image upload failed:", err);
     throw new Error(err.message || "Image upload failed. Please try again.");
   }
 }
+
+// Backward-compatible alias
+export const uploadImageToImgBB = uploadImageToCDN;
 
 /**
  * Converts a File or Blob to a base64 string

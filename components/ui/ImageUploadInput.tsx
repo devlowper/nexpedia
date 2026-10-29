@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useState, useRef } from "react";
-import { Upload, Link2, X, Loader2, Image as ImageIcon, CheckCircle, ExternalLink } from "lucide-react";
-import { uploadImageToImgBB } from "@/lib/uploadImage";
+import { Upload, Link2, X, Loader2, Image as ImageIcon, CheckCircle, ExternalLink, Cloud } from "lucide-react";
+import { uploadImageToCDN } from "@/lib/uploadImage";
 
 interface ImageUploadInputProps {
   label?: string;
@@ -16,10 +16,10 @@ export function ImageUploadInput({
   label = "Image",
   value,
   onChange,
-  placeholder = "https://example.com/image.jpg",
+  placeholder = "https://cdn.procraft.site/image.webp",
   helperText,
 }: ImageUploadInputProps) {
-  const [mode, setMode] = useState<"upload" | "url">(value && !value.includes("ibb.co") ? "url" : "upload");
+  const [mode, setMode] = useState<"upload" | "url">("upload");
   const [uploading, setUploading] = useState(false);
   const [dragActive, setDragActive] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -29,13 +29,13 @@ export function ImageUploadInput({
     if (!file) return;
 
     // Validate type
-    const validTypes = ["image/jpeg", "image/png", "image/webp", "image/gif"];
+    const validTypes = ["image/jpeg", "image/png", "image/webp", "image/gif", "image/avif"];
     if (!validTypes.includes(file.type)) {
-      setError("Please select a valid image (JPG, PNG, WEBP, or GIF).");
+      setError("Please select a valid image (JPG, PNG, WEBP, AVIF, or GIF).");
       return;
     }
 
-    // Validate size (ImgBB supports up to 32MB)
+    // Validate size (Supports up to 30MB)
     if (file.size > 30 * 1024 * 1024) {
       setError("Image size exceeds 30MB limit.");
       return;
@@ -45,7 +45,7 @@ export function ImageUploadInput({
     setUploading(true);
 
     try {
-      const res = await uploadImageToImgBB(file);
+      const res = await uploadImageToCDN(file);
       onChange(res.url);
     } catch (err: any) {
       setError(err.message || "Failed to upload image. Please try again or paste a URL.");
@@ -122,8 +122,8 @@ export function ImageUploadInput({
               {uploading ? (
                 <>
                   <Loader2 size={28} className="animate-spin text-accent" />
-                  <p className="text-sm font-semibold text-primary">Uploading to ImgBB...</p>
-                  <p className="text-xs text-muted">Optimizing and storing your image</p>
+                  <p className="text-sm font-semibold text-primary">Uploading to Cloudflare R2...</p>
+                  <p className="text-xs text-muted">Optimizing and storing to cdn.procraft.site</p>
                 </>
               ) : (
                 <>
@@ -133,7 +133,7 @@ export function ImageUploadInput({
                   <p className="text-sm font-medium text-primary">
                     <span className="text-accent font-semibold underline underline-offset-2">Click to upload</span> or drag and drop
                   </p>
-                  <p className="text-xs text-muted">PNG, JPG, WEBP, or GIF up to 30MB (Hosted via ImgBB)</p>
+                  <p className="text-xs text-muted">PNG, JPG, WEBP, or AVIF (Hosted on Cloudflare R2 CDN)</p>
                 </>
               )}
             </div>
@@ -152,8 +152,12 @@ export function ImageUploadInput({
                 <div className="flex items-center gap-1.5 text-xs font-semibold text-emerald-500 mb-0.5">
                   <CheckCircle size={13} />
                   <span>Image uploaded</span>
-                  {value.includes("ibb.co") && (
-                    <span className="text-[10px] bg-accent/15 text-accent px-1.5 py-0.2 rounded font-mono">ImgBB</span>
+                  {value.includes("cdn.procraft.site") ? (
+                    <span className="text-[10px] bg-accent/15 text-accent px-1.5 py-0.2 rounded font-mono">Cloudflare R2</span>
+                  ) : value.includes("ibb.co") ? (
+                    <span className="text-[10px] bg-amber-500/15 text-amber-500 px-1.5 py-0.2 rounded font-mono">ImgBB</span>
+                  ) : (
+                    <span className="text-[10px] bg-blue-500/15 text-blue-500 px-1.5 py-0.2 rounded font-mono">CDN</span>
                   )}
                 </div>
                 <p className="text-xs text-muted truncate font-mono">{value}</p>

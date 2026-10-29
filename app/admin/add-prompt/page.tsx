@@ -526,13 +526,13 @@ function PromptFormModal({
             </div>
           </div>
 
-          {/* Preview image URL with ImgBB upload */}
+          {/* Preview image URL with Cloudflare R2 upload */}
           <ImageUploadInput
             label="Cover / Preview Image"
             value={form.imageUrl}
             onChange={url => set("imageUrl", url)}
             placeholder="https://example.com/image.jpg"
-            helperText="Upload image directly to ImgBB or enter an image URL."
+            helperText="Upload image directly to Cloudflare R2 CDN or enter an image URL."
           />
 
           {/* Example output */}

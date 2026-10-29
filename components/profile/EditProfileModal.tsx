@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { X, Upload, Camera, Loader2, Check, XCircle } from 'lucide-react';
 import { api } from '@/lib/apiClient';
 import { useAuth } from '@/hooks/useAuth';
-import { uploadImageToImgBB } from '@/lib/uploadImage';
+import { uploadImageToCDN } from '@/lib/uploadImage';
 
 interface EditProfileModalProps {
   isOpen: boolean;
@@ -97,10 +97,10 @@ export function EditProfileModal({ isOpen, onClose, user }: EditProfileModalProp
     setIsUploadingAvatar(true);
 
     try {
-      const res = await uploadImageToImgBB(file);
+      const res = await uploadImageToCDN(file);
       setAvatarPreview(res.url);
     } catch (err: any) {
-      alert(err.message || 'Failed to upload photo to ImgBB');
+      alert(err.message || 'Failed to upload photo to Cloudflare R2');
       setAvatarPreview(user?.avatar || '');
     } finally {
       setIsUploadingAvatar(false);
@@ -193,7 +193,7 @@ export function EditProfileModal({ isOpen, onClose, user }: EditProfileModalProp
                   className="flex items-center gap-2 px-4 py-2 bg-accent text-black dark:text-black cta-btn rounded-lg text-sm font-semibold hover:bg-accent-hover transition-colors disabled:opacity-50"
                 >
                   {isUploadingAvatar ? <Loader2 size={16} className="animate-spin" /> : <Upload size={16} />}
-                  {isUploadingAvatar ? 'Uploading to ImgBB...' : 'Upload Photo'}
+                  {isUploadingAvatar ? 'Uploading to Cloudflare R2...' : 'Upload Photo'}
                 </button>
                 {avatarPreview && avatarPreview !== user?.avatar && (
                   <button
@@ -204,7 +204,7 @@ export function EditProfileModal({ isOpen, onClose, user }: EditProfileModalProp
                     Remove
                   </button>
                 )}
-                <p className="text-xs text-muted">JPG, PNG or WebP up to 10MB (Powered by ImgBB).</p>
+                <p className="text-xs text-muted">JPG, PNG or WebP up to 10MB (Powered by Cloudflare R2 CDN).</p>
               </div>
 
               {/* Hidden file input */}
