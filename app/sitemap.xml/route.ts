@@ -28,6 +28,7 @@ export async function GET() {
     { url: '/image-to-prompt', priority: '0.85', changefreq: 'weekly' },
     { url: '/agent-builder', priority: '0.80', changefreq: 'weekly' },
     { url: '/blog', priority: '0.80', changefreq: 'weekly' },
+    { url: '/pricing', priority: '0.85', changefreq: 'weekly' },
     { url: '/login', priority: '0.60', changefreq: 'monthly' },
     { url: '/about', priority: '0.50', changefreq: 'monthly' },
     { url: '/contact', priority: '0.50', changefreq: 'monthly' },

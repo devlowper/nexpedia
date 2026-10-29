@@ -87,17 +87,25 @@ export function Footer() {
             <div>
               <h4 className="font-semibold text-black dark:text-white mb-6 text-sm">Pages</h4>
               <ul className="space-y-4">
-                {['About', 'Blog'].map((item) => {
-                  let href = "#";
-                  if (item === 'Blog') href = '/blog';
-                  if (item === 'About') href = '/about';
-                  
-                  return (
-                    <li key={item}>
-                      <Link href={href} className="text-gray-500 dark:text-gray-400 text-sm hover:text-black dark:hover:text-white transition-colors">{item}</Link>
-                    </li>
-                  );
-                })}
+                {[
+                  { name: 'About', path: '/about' },
+                  { name: 'Blog', path: '/blog' },
+                  { name: 'Pricing', path: '/pricing', badge: 'Free' },
+                ].map((item) => (
+                  <li key={item.name}>
+                    <Link
+                      href={item.path}
+                      className="inline-flex items-center gap-2 text-gray-500 dark:text-gray-400 text-sm hover:text-black dark:hover:text-white transition-colors"
+                    >
+                      <span>{item.name}</span>
+                      {item.badge && (
+                        <span className="text-[10px] font-bold uppercase tracking-wider bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 px-2 py-0.5 rounded-full border border-emerald-500/25">
+                          {item.badge}
+                        </span>
+                      )}
+                    </Link>
+                  </li>
+                ))}
               </ul>
             </div>
 
