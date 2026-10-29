@@ -99,7 +99,7 @@ export function Footer() {
                     >
                       <span>{item.name}</span>
                       {item.badge && (
-                        <span className="text-[10px] font-bold uppercase tracking-wider bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 px-2 py-0.5 rounded-full border border-emerald-500/25">
+                        <span className="text-[10px] font-bold uppercase tracking-wider bg-black/5 dark:bg-white/10 text-black dark:text-white px-2 py-0.5 rounded-full border border-black/10 dark:border-white/15">
                           {item.badge}
                         </span>
                       )}

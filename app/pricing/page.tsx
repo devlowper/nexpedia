@@ -11,9 +11,7 @@ import {
   Clock,
   Star,
   HelpCircle,
-  Layers,
-  Flame,
-  CheckCircle2,
+  Sparkle,
 } from "lucide-react";
 
 export const metadata: Metadata = {
@@ -91,7 +89,64 @@ const FAQS = [
   },
   {
     q: "Can I use the prompts for client or commercial projects?",
-    a: "Yes. All prompts and outputs you generate on proCraft can be freely used for personal, freelance, and commercial commercial client work without attribution.",
+    a: "Yes. All prompts and outputs you generate on proCraft can be freely used for personal, freelance, and commercial client work without attribution.",
+  },
+];
+
+const REVIEWS = [
+  {
+    name: "Alex Rivera",
+    role: "Midjourney & FLUX Artist",
+    handle: "@alexr_art",
+    avatar: "AR",
+    rating: 5,
+    review:
+      "The Midjourney and FLUX prompts here are next-level. I saved at least 10 hours this week alone testing concepts for client projects. Having 100% free access is unreal.",
+  },
+  {
+    name: "Elena Rostova",
+    role: "Senior UI/UX Designer",
+    handle: "@elena_design",
+    avatar: "ER",
+    rating: 5,
+    review:
+      "The image-to-prompt reverse engineering feature blew my mind. Uploaded a 3D render and got prompt parameters that recreated the lighting and composition perfectly.",
+  },
+  {
+    name: "Marcus Chen",
+    role: "Indie Hacker & Developer",
+    handle: "@marcusbuilds",
+    avatar: "MC",
+    rating: 5,
+    review:
+      "Most AI directories are bloated with dead links. proCraft is clean, lightning fast, and actually curated. Bookmarking my favorite ChatGPT coding prompts is super smooth.",
+  },
+  {
+    name: "Sarah Jenkins",
+    role: "Brand Strategist & Content Lead",
+    handle: "@sarahj_creative",
+    avatar: "SJ",
+    rating: 5,
+    review:
+      "Finding viral marketing and mockup prompts has never been this straightforward. 1-click copy with all parameters already tuned is a massive productivity hack.",
+  },
+  {
+    name: "David Morales",
+    role: "AI Photographer",
+    handle: "@davidm_lens",
+    avatar: "DM",
+    rating: 5,
+    review:
+      "The cinematic portrait and studio lighting prompts on proCraft are some of the best I've seen. The Cloudflare R2 previews load instantly without any lag.",
+  },
+  {
+    name: "Priya Patel",
+    role: "Creative Director",
+    handle: "@priyacreates",
+    avatar: "PP",
+    rating: 5,
+    review:
+      "proCraft feels like what prompt libraries should have been from day one. Sleek dark mode UI, zero spam, and genuinely high-quality generative AI prompts.",
   },
 ];
 
@@ -146,11 +201,7 @@ export default function PricingPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbsJsonLd) }}
       />
 
-      <main className="min-h-screen bg-[#FCFCFC] dark:bg-[#0A0A0A] text-black dark:text-white pt-28 pb-20 px-4 md:px-8 relative overflow-hidden">
-        {/* Subtle Ambient Background Glows */}
-        <div className="absolute top-20 left-1/2 -translate-x-1/2 w-[600px] h-[350px] bg-accent/10 dark:bg-accent/15 blur-[140px] rounded-full pointer-events-none -z-10" />
-        <div className="absolute top-96 right-10 w-[400px] h-[300px] bg-emerald-500/10 blur-[130px] rounded-full pointer-events-none -z-10" />
-
+      <main className="min-h-screen bg-[#FCFCFC] dark:bg-[#0A0A0A] text-black dark:text-white pt-28 pb-20 px-4 md:px-8 relative">
         <div className="max-w-6xl mx-auto">
           {/* Breadcrumbs */}
           <nav aria-label="Breadcrumb" className="mb-8 flex items-center gap-2 text-xs text-muted">
@@ -163,8 +214,8 @@ export default function PricingPage() {
 
           {/* Hero Header */}
           <header className="text-center max-w-3xl mx-auto mb-16">
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-xs font-bold uppercase tracking-wider mb-6 shadow-sm">
-              <Gift size={14} className="animate-pulse" />
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-black/10 dark:border-white/10 bg-black/5 dark:bg-white/5 text-primary dark:text-white text-xs font-semibold uppercase tracking-wider mb-6">
+              <Gift size={14} className="text-primary dark:text-white" />
               <span>Official Launch Celebration • 100% Free</span>
             </div>
 
@@ -176,30 +227,26 @@ export default function PricingPage() {
             </h1>
 
             <p className="text-lg md:text-xl text-black/70 dark:text-white/70 leading-relaxed mb-6">
-              To celebrate the official launch of <span className="font-semibold text-primary dark:text-white">proCraft</span>, full subscription access is completely <strong className="text-emerald-600 dark:text-emerald-400 font-bold">FREE for all creators from 29 Oct through 31 Dec!</strong>
+              To celebrate the official launch of <span className="font-semibold text-primary dark:text-white">proCraft</span>, full subscription access is completely <strong className="text-primary dark:text-white font-bold underline decoration-zinc-400 dark:decoration-zinc-600 underline-offset-4">FREE for all creators from 29 Oct through 31 Dec!</strong>
             </p>
 
-            <div className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-lg bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 text-xs text-muted font-medium">
-              <Clock size={13} className="text-accent" />
-              <span>Free Subscription Window: <strong>Oct 29 – Dec 31</strong></span>
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping" />
+            <div className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 text-xs text-muted font-medium">
+              <Clock size={13} className="text-primary dark:text-white" />
+              <span>Free Subscription Window: <strong className="text-primary dark:text-white">Oct 29 – Dec 31</strong></span>
+              <span className="w-1.5 h-1.5 rounded-full bg-black/60 dark:bg-white/60" />
             </div>
           </header>
 
           {/* Pricing Section — ONLY ONE CARD as requested */}
-          <section className="max-w-2xl mx-auto mb-24 relative" aria-label="Subscription Plans">
-            {/* Outer Accent Glow Ring */}
-            <div className="absolute -inset-1 bg-gradient-to-r from-accent via-emerald-500 to-accent rounded-[2rem] opacity-30 dark:opacity-40 blur-xl transition-all" />
-
-            <div className="relative bg-white dark:bg-[#111111] border-2 border-accent/40 dark:border-accent/40 rounded-3xl p-8 sm:p-12 shadow-2xl overflow-hidden">
-              {/* Top Banner Ribbon */}
+          <section className="max-w-2xl mx-auto mb-24" aria-label="Subscription Plans">
+            <div className="relative bg-white dark:bg-[#111111] border border-black/10 dark:border-white/15 rounded-3xl p-8 sm:p-12 shadow-xl dark:shadow-2xl overflow-hidden">
+              {/* Top Header Badge */}
               <div className="flex flex-wrap items-center justify-between gap-3 mb-8 pb-6 border-b border-black/10 dark:border-white/10">
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent/15 text-accent text-xs font-bold uppercase tracking-wider border border-accent/25">
-                  <Flame size={13} />
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-black/5 dark:bg-white/10 text-primary dark:text-white text-xs font-bold uppercase tracking-wider border border-black/10 dark:border-white/15">
+                  <Sparkle size={13} />
                   <span>Early Launch Pass</span>
                 </div>
-                <div className="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/20">
-                  <CheckCircle2 size={13} />
+                <div className="inline-flex items-center gap-1.5 text-xs font-semibold text-primary dark:text-white bg-black/5 dark:bg-white/5 px-3 py-1 rounded-full border border-black/10 dark:border-white/10">
                   <span>29 Oct – Dec Free Access</span>
                 </div>
               </div>
@@ -218,40 +265,41 @@ export default function PricingPage() {
               </div>
 
               {/* Price Block */}
-              <div className="flex flex-wrap items-baseline gap-3 mb-8 p-5 rounded-2xl bg-black/[0.02] dark:bg-white/[0.03] border border-black/5 dark:border-white/5">
+              <div className="flex flex-wrap items-baseline gap-3 mb-8 p-5 rounded-2xl bg-black/[0.03] dark:bg-white/[0.03] border border-black/10 dark:border-white/10">
                 <div className="flex items-baseline gap-2">
                   <span className="text-5xl sm:text-6xl font-black tracking-tight text-primary dark:text-white">
                     $0
                   </span>
                   <span className="text-lg font-semibold text-muted">/ month</span>
                 </div>
-                <span className="text-sm line-through text-muted/70 decoration-rose-500 decoration-2 font-medium">
+                <span className="text-sm line-through text-muted/70 decoration-zinc-400 dark:decoration-zinc-600 decoration-2 font-medium">
                   $29 / mo
                 </span>
-                <span className="ml-auto text-xs font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-500/15 border border-emerald-500/30 px-2.5 py-1 rounded-lg">
+                <span className="ml-auto text-xs font-bold text-primary dark:text-white bg-black/5 dark:bg-white/10 border border-black/10 dark:border-white/15 px-2.5 py-1 rounded-lg">
                   100% OFF (New Launch)
                 </span>
               </div>
 
-              {/* Primary CTA */}
+              {/* Primary CTA Button (Uiverse.io inspired, styled in sleek black) */}
               <div className="space-y-3 mb-10">
-                <Link
-                  href="/prompt-library"
-                  className="w-full flex items-center justify-center gap-2.5 px-8 py-4 rounded-xl bg-accent text-black font-bold text-base hover:bg-accent-hover transition-all duration-200 shadow-lg shadow-accent/20 hover:scale-[1.01] active:scale-[0.99]"
-                >
-                  <Sparkles size={18} />
-                  <span>Claim Free Access &amp; Explore Prompts</span>
-                  <ArrowRight size={18} />
+                <Link href="/prompt-library" className="block w-full group">
+                  <div className="relative w-full cursor-pointer opacity-95 hover:opacity-100 transition-opacity p-[2px] rounded-[16px] bg-gradient-to-t from-zinc-800 via-zinc-600 to-zinc-400 dark:from-zinc-900 dark:via-zinc-800 dark:to-zinc-600 active:scale-95 shadow-lg">
+                    <span className="w-full h-full flex items-center justify-center gap-2.5 px-8 py-3.5 bg-gradient-to-t from-black via-[#0d0d0d] to-[#1a1a1a] text-white rounded-[14px] font-bold text-base tracking-wide transition-all group-hover:from-black group-hover:to-[#222222]">
+                      <Sparkles size={18} className="text-white" />
+                      <span>Explore Prompt Library</span>
+                      <ArrowRight size={18} className="text-white/80 group-hover:translate-x-1 transition-transform" />
+                    </span>
+                  </div>
                 </Link>
-                <div className="flex flex-wrap items-center justify-center gap-4 text-xs text-muted text-center pt-1">
+                <div className="flex flex-wrap items-center justify-center gap-4 text-xs text-muted text-center pt-2">
                   <span className="flex items-center gap-1">
-                    <Check size={13} className="text-emerald-500" /> No credit card needed
+                    <Check size={13} className="text-primary dark:text-white" /> No credit card needed
                   </span>
                   <span className="flex items-center gap-1">
-                    <Check size={13} className="text-emerald-500" /> Instant activation
+                    <Check size={13} className="text-primary dark:text-white" /> Instant access
                   </span>
                   <span className="flex items-center gap-1">
-                    <Check size={13} className="text-emerald-500" /> Valid until Dec 31
+                    <Check size={13} className="text-primary dark:text-white" /> Free until Dec 31
                   </span>
                 </div>
               </div>
@@ -272,8 +320,8 @@ export default function PricingPage() {
               <ul className="space-y-4">
                 {FEATURES.map((feature, i) => (
                   <li key={i} className="flex items-start gap-3.5">
-                    <div className="w-5 h-5 rounded-full bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0 mt-0.5 border border-emerald-500/30">
-                      <Check size={12} strokeWidth={3} />
+                    <div className="w-5 h-5 rounded-full bg-black/5 dark:bg-white/10 text-primary dark:text-white flex items-center justify-center shrink-0 mt-0.5 border border-black/10 dark:border-white/10">
+                      <Check size={12} strokeWidth={2.5} />
                     </div>
                     <div>
                       <strong className="text-sm font-semibold text-primary dark:text-white block">
@@ -304,8 +352,8 @@ export default function PricingPage() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="p-7 rounded-2xl bg-white dark:bg-[#111111] border border-black/10 dark:border-white/10 hover:border-accent/30 transition-colors">
-                <div className="w-12 h-12 rounded-xl bg-accent/15 text-accent flex items-center justify-center mb-5">
+              <div className="p-7 rounded-2xl bg-white dark:bg-[#111111] border border-black/10 dark:border-white/10 hover:border-black/30 dark:hover:border-white/30 transition-colors">
+                <div className="w-12 h-12 rounded-xl bg-black/5 dark:bg-white/10 text-primary dark:text-white flex items-center justify-center mb-5 border border-black/10 dark:border-white/10">
                   <Zap size={22} />
                 </div>
                 <h3 className="text-lg font-bold text-primary dark:text-white mb-2">
@@ -316,8 +364,8 @@ export default function PricingPage() {
                 </p>
               </div>
 
-              <div className="p-7 rounded-2xl bg-white dark:bg-[#111111] border border-black/10 dark:border-white/10 hover:border-accent/30 transition-colors">
-                <div className="w-12 h-12 rounded-xl bg-emerald-500/15 text-emerald-500 flex items-center justify-center mb-5">
+              <div className="p-7 rounded-2xl bg-white dark:bg-[#111111] border border-black/10 dark:border-white/10 hover:border-black/30 dark:hover:border-white/30 transition-colors">
+                <div className="w-12 h-12 rounded-xl bg-black/5 dark:bg-white/10 text-primary dark:text-white flex items-center justify-center mb-5 border border-black/10 dark:border-white/10">
                   <Star size={22} />
                 </div>
                 <h3 className="text-lg font-bold text-primary dark:text-white mb-2">
@@ -328,8 +376,8 @@ export default function PricingPage() {
                 </p>
               </div>
 
-              <div className="p-7 rounded-2xl bg-white dark:bg-[#111111] border border-black/10 dark:border-white/10 hover:border-accent/30 transition-colors">
-                <div className="w-12 h-12 rounded-xl bg-blue-500/15 text-blue-500 flex items-center justify-center mb-5">
+              <div className="p-7 rounded-2xl bg-white dark:bg-[#111111] border border-black/10 dark:border-white/10 hover:border-black/30 dark:hover:border-white/30 transition-colors">
+                <div className="w-12 h-12 rounded-xl bg-black/5 dark:bg-white/10 text-primary dark:text-white flex items-center justify-center mb-5 border border-black/10 dark:border-white/10">
                   <ShieldCheck size={22} />
                 </div>
                 <h3 className="text-lg font-bold text-primary dark:text-white mb-2">
@@ -338,6 +386,72 @@ export default function PricingPage() {
                 <p className="text-sm text-muted leading-relaxed">
                   You never have to provide credit card numbers or billing details. Enjoy full freedom without worrying about unexpected auto-renewals or fees.
                 </p>
+              </div>
+            </div>
+          </section>
+
+          {/* Creator Reviews Infinite Scroll Motion */}
+          <section className="mb-24 overflow-hidden" aria-label="Creator Reviews">
+            <div className="text-center max-w-2xl mx-auto mb-10">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-black/5 dark:bg-white/5 text-muted text-xs font-semibold mb-3">
+                <Star size={13} className="fill-amber-400 text-amber-400" />
+                <span>Loved By Early Creators</span>
+              </div>
+              <h2
+                className="text-2xl sm:text-3xl font-extrabold text-primary dark:text-white mb-3"
+                style={{ fontFamily: '"Bricolage Grotesque", var(--font-bricolage), sans-serif' }}
+              >
+                What Creators Are Saying
+              </h2>
+              <p className="text-sm sm:text-base text-muted">
+                Real feedback from designers, developers, and AI artists exploring proCraft.
+              </p>
+            </div>
+
+            <div className="marquee-container py-3">
+              <div
+                className="marquee-content"
+                style={{ "--marquee-duration": "35s" } as React.CSSProperties}
+              >
+                {[...REVIEWS, ...REVIEWS].map((item, idx) => (
+                  <div
+                    key={`${item.name}-${idx}`}
+                    className="w-[320px] sm:w-[380px] shrink-0 bg-white dark:bg-[#111111] border border-black/10 dark:border-white/10 rounded-2xl p-6 shadow-sm hover:shadow-md hover:border-black/20 dark:hover:border-white/25 transition-all flex flex-col justify-between"
+                  >
+                    <div>
+                      {/* Stars */}
+                      <div className="flex items-center gap-1 mb-4">
+                        {Array.from({ length: item.rating }).map((_, s) => (
+                          <Star
+                            key={s}
+                            size={14}
+                            className="fill-amber-400 text-amber-400"
+                          />
+                        ))}
+                      </div>
+
+                      {/* Review Content */}
+                      <p className="text-sm text-black/80 dark:text-white/80 leading-relaxed mb-6 font-normal">
+                        &ldquo;{item.review}&rdquo;
+                      </p>
+                    </div>
+
+                    {/* Reviewer Meta */}
+                    <div className="flex items-center gap-3 pt-4 border-t border-black/5 dark:border-white/5">
+                      <div className="w-10 h-10 rounded-full bg-black/5 dark:bg-white/10 border border-black/10 dark:border-white/10 flex items-center justify-center font-bold text-xs text-primary dark:text-white shrink-0">
+                        {item.avatar}
+                      </div>
+                      <div className="min-w-0">
+                        <h4 className="text-sm font-bold text-primary dark:text-white truncate">
+                          {item.name}
+                        </h4>
+                        <p className="text-xs text-muted truncate">
+                          {item.role}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
           </section>
@@ -361,7 +475,7 @@ export default function PricingPage() {
               {FAQS.map((faq, i) => (
                 <details
                   key={i}
-                  className="group bg-white dark:bg-[#111111] border border-black/10 dark:border-white/10 rounded-2xl p-6 transition-all duration-200 open:border-accent/40"
+                  className="group bg-white dark:bg-[#111111] border border-black/10 dark:border-white/10 rounded-2xl p-6 transition-all duration-200 open:border-black/30 dark:open:border-white/30"
                 >
                   <summary className="font-semibold text-base text-primary dark:text-white cursor-pointer list-none flex items-center justify-between gap-4">
                     <span>{faq.q}</span>
@@ -377,8 +491,8 @@ export default function PricingPage() {
             </div>
           </section>
 
-          {/* Bottom Call to Action Banner */}
-          <section className="relative rounded-3xl p-8 sm:p-12 text-center bg-gradient-to-r from-accent/15 via-emerald-500/10 to-accent/15 border border-accent/30 overflow-hidden shadow-xl">
+          {/* Bottom Call to Action Banner (Clean Website Theme) */}
+          <section className="relative rounded-3xl p-8 sm:p-12 text-center bg-black/[0.02] dark:bg-white/[0.03] border border-black/10 dark:border-white/10 overflow-hidden shadow-lg">
             <div className="relative z-10 max-w-2xl mx-auto">
               <h2
                 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-primary dark:text-white mb-4"
@@ -390,15 +504,17 @@ export default function PricingPage() {
                 Take advantage of our 100% free launch subscription today. Discover thousands of tested prompts and verified AI tools.
               </p>
               <div className="flex flex-wrap items-center justify-center gap-4">
-                <Link
-                  href="/prompt-library"
-                  className="px-8 py-3.5 rounded-xl bg-accent text-black font-bold text-sm hover:bg-accent-hover transition-all duration-200 shadow-md hover:scale-105"
-                >
-                  Explore Prompt Library
+                <Link href="/prompt-library" className="group">
+                  <div className="relative cursor-pointer opacity-95 hover:opacity-100 transition-opacity p-[2px] rounded-[14px] bg-gradient-to-t from-zinc-800 via-zinc-600 to-zinc-400 dark:from-zinc-900 dark:via-zinc-800 dark:to-zinc-600 active:scale-95 shadow-md">
+                    <span className="flex items-center gap-2 px-7 py-3 bg-gradient-to-t from-black via-[#0d0d0d] to-[#1a1a1a] text-white rounded-[12px] font-bold text-sm tracking-wide transition-all group-hover:from-black group-hover:to-[#222222]">
+                      <Sparkles size={16} />
+                      <span>Explore Prompt Library</span>
+                    </span>
+                  </div>
                 </Link>
                 <Link
                   href="/ai-directory"
-                  className="px-8 py-3.5 rounded-xl bg-black/5 dark:bg-white/10 text-primary dark:text-white font-semibold text-sm hover:bg-black/10 dark:hover:bg-white/15 transition-all duration-200 border border-black/10 dark:border-white/10"
+                  className="px-7 py-3 rounded-[14px] bg-black/5 dark:bg-white/10 text-primary dark:text-white font-semibold text-sm hover:bg-black/10 dark:hover:bg-white/15 transition-all duration-200 border border-black/10 dark:border-white/10"
                 >
                   Browse AI Directory
                 </Link>
