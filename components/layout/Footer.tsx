@@ -91,6 +91,7 @@ export function Footer() {
                   { name: 'About', path: '/about' },
                   { name: 'Blog', path: '/blog' },
                   { name: 'Pricing', path: '/pricing', badge: 'Free' },
+                  { name: 'Advertise', path: '/ads' },
                 ].map((item) => (
                   <li key={item.name}>
                     <Link
