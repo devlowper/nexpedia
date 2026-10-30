@@ -1,518 +1,607 @@
 "use client";
 
-import React, { useEffect } from "react";
-import Link from "next/link";
-import {
-  Sparkles,
-  Zap,
-  ShieldCheck,
-  ArrowRight,
-  Star,
-  ExternalLink,
-  Users,
-  MousePointerClick,
-  Check,
-  HelpCircle,
-  Megaphone,
-  Layers,
-  Award,
-  Mail,
-  Sparkle,
-} from "lucide-react";
+import React, { useState, useEffect } from "react";
+import Script from "next/script";
 
-const MONETAG_DIRECT_LINK = "https://uplcm.com/4/12127029";
+// Configurable Monetag Direct Link
+const MONETAG = "https://uplcm.com/4/12127029";
 
-const PARTNER_DEALS = [
-  {
-    id: "cloud-gpu",
-    badge: "Limited Offer",
-    title: "AI Cloud Compute & High-Speed GPU Access",
-    desc: "Deploy FLUX, Stable Diffusion XL, and custom LoRA models with fast on-demand cloud GPUs and zero hardware setup.",
-    category: "Cloud & Compute",
-    rating: 4.9,
-    tag: "Verified Deal",
-    cta: "Claim GPU Trial",
-  },
-  {
-    id: "prompt-toolkit",
-    badge: "Trending",
-    title: "Generative AI Workflow & Creative Asset Suite",
-    desc: "Accelerate your creative pipeline with batch image processing, upscaling workflows, and instant prompt augmentation.",
-    category: "Workflow & Tools",
-    rating: 4.8,
-    tag: "Popular Choice",
-    cta: "Explore Tool Suite",
-  },
-  {
-    id: "code-assistant",
-    badge: "Developer Pick",
-    title: "Full-Stack AI Code Automation & Copilot",
-    desc: "Speed up software engineering with intelligent context-aware code generation, automated debugging, and test suites.",
-    category: "Developer Tools",
-    rating: 4.9,
-    tag: "Top Rated",
-    cta: "Start Free Coding",
-  },
-  {
-    id: "video-generation",
-    badge: "Featured Deal",
-    title: "Cinematic Text-to-Video & Camera Motion Studio",
-    desc: "Create broadcast-grade visual effects, dynamic character motion, and AI-generated commercials in minutes.",
-    category: "Video & Animation",
-    rating: 4.7,
-    tag: "Staff Pick",
-    cta: "Unlock Video Perks",
-  },
-  {
-    id: "3d-art-suite",
-    badge: "Exclusive",
-    title: "Next-Gen 3D Mesh & Texture Generator",
-    desc: "Transform single reference images and text prompts into game-ready 3D assets with PBR material maps.",
-    category: "3D & Gaming",
-    rating: 4.8,
-    tag: "Creator Deal",
-    cta: "Generate 3D Now",
-  },
-  {
-    id: "voice-synthesis",
-    badge: "New Release",
-    title: "Ultra-Realistic AI Voice Cloning & Audio Dubbing",
-    desc: "Generate studio-grade voiceovers in 30+ languages with emotional inflection, pacing control, and multi-speaker dialog.",
-    category: "Audio & Voice",
-    rating: 4.9,
-    tag: "Verified",
-    cta: "Try Voice Studio",
-  },
+const CARDS = [
+  { title: "Card 1", src: "https://procraft.site/prompt-library", href: MONETAG },
+  { title: "Card 2", src: "about:blank", href: MONETAG },
+  { title: "Card 3", src: "about:blank", href: MONETAG },
+  { title: "Card 4", src: "about:blank", href: MONETAG },
+  { title: "Card 5", src: "about:blank", href: MONETAG },
+  { title: "Card 6", src: "about:blank", href: MONETAG },
+  { title: "Card 7", src: "about:blank", href: MONETAG },
+  { title: "Card 8", src: "about:blank", href: MONETAG },
 ];
 
-const AD_TIERS = [
-  {
-    name: "Starter Spotlight",
-    price: "$149",
-    period: "/ month",
-    desc: "Ideal for early-stage AI startups and independent tool creators looking for targeted traction.",
-    features: [
-      "1x Dedicated Banner in Category & Explore pages",
-      "Featured badge on your tool in the AI Directory",
-      "Direct do-follow backlink to your website",
-      "Estimated 15,000+ monthly targeted creator impressions",
-      "Standard click & impression analytics",
-    ],
-    popular: false,
-    cta: "Book Starter Ad",
-  },
-  {
-    name: "Growth Partner",
-    price: "$299",
-    period: "/ month",
-    desc: "Best for growing AI software, prompt tools, and platforms wanting prominent visibility.",
-    features: [
-      "Homepage Hero Sponsored Partner Card",
-      "Top #1 sticky placement in your tool's directory category",
-      "3x Curated prompts showcasing your tool in the Prompt Library",
-      "Estimated 45,000+ monthly creator impressions",
-      "Weekly performance report & CTR insights",
-      "Priority sponsor support",
-    ],
-    popular: true,
-    cta: "Book Growth Ad",
-  },
-  {
-    name: "Enterprise Takeover",
-    price: "$599",
-    period: "/ month",
-    desc: "Full-scale brand awareness campaign across all proCraft digital channels and active creator network.",
-    features: [
-      "Sitewide banner placement across all prompt & tool detail pages",
-      "Dedicated feature article on the proCraft Blog",
-      "Permanent high-authority SEO backlink & review",
-      "Exclusive newsletter feature to our subscriber base",
-      "Estimated 100,000+ monthly high-intent impressions",
-      "Dedicated campaign manager & custom ad copy assistance",
-    ],
-    popular: false,
-    cta: "Contact Enterprise",
-  },
+const VIDEOS = [
+  { title: "Viral Video 1", note: "Trending now", href: MONETAG },
+  { title: "Viral Video 2", note: "Trending now", href: MONETAG },
+  { title: "Viral Video 3", note: "Trending now", href: MONETAG },
+  { title: "Viral Video 4", note: "Trending now", href: MONETAG },
 ];
 
-const FAQS = [
-  {
-    q: "How does advertising on proCraft help my product?",
-    a: "proCraft is visited daily by active AI artists, prompt engineers, UI/UX designers, and developers actively looking for prompts, workflows, and tools to improve their work. Your ad is shown to high-intent decision-makers and builders.",
-  },
-  {
-    q: "How can I book a direct sponsorship spot?",
-    a: "Choose any of the sponsorship tiers above or click 'Book Ad' to reach our partnerships team directly via our Contact page or email. We will set up your creative assets within 24 hours.",
-  },
-  {
-    q: "What ad formats and placements are supported?",
-    a: "We support responsive native banners, directory spotlight badges, interactive showcase cards, dedicated blog features, and sponsored prompt packs tailored to your AI model or software.",
-  },
-  {
-    q: "How do you verify partner deals and sponsored links?",
-    a: "All third-party tools and partner offers showcased on this page undergo security and quality checks to ensure our community receives safe, high-quality AI software and relevant creative deals.",
-  },
+const APPS = [
+  { title: "App 1", note: "Earning app", href: MONETAG },
+  { title: "App 2", note: "Earning app", href: MONETAG },
+  { title: "App 3", note: "Earning app", href: MONETAG },
+  { title: "App 4", note: "Earning app", href: MONETAG },
 ];
 
-export default function AdsPage() {
-  // Safe dynamic Monetag scripts injection on this dedicated ads page only
-  useEffect(() => {
-    const zones = [
-      { zone: "12134819", src: "https://n6wxm.com/vignette.min.js" },
-      { zone: "12127704", src: "https://nap5k.com/tag.min.js" },
-      { zone: "12127660", src: "https://nap5k.com/tag.min.js" },
-      { zone: "12127030", src: "https://al5sm.com/tag.min.js" },
-    ];
+const EXPOSE = [
+  { title: "Expose Link 1", href: MONETAG },
+  { title: "Expose Link 2", href: MONETAG },
+  { title: "Expose Link 3", href: MONETAG },
+  { title: "Expose Link 4", href: MONETAG },
+];
 
-    const elements: HTMLScriptElement[] = [];
-
-    zones.forEach(({ zone, src }) => {
-      try {
-        const s = document.createElement("script");
-        s.dataset.zone = zone;
-        s.src = src;
-        s.async = true;
-        document.body.appendChild(s);
-        elements.push(s);
-      } catch (err) {
-        console.warn("Ad script injection error:", err);
-      }
-    });
-
-    return () => {
-      elements.forEach((el) => {
-        if (el && el.parentNode) {
-          el.parentNode.removeChild(el);
-        }
-      });
-    };
-  }, []);
-
-  const handleDirectLinkClick = () => {
-    if (typeof window !== "undefined") {
-      window.open(MONETAG_DIRECT_LINK, "_blank", "noopener,noreferrer");
-    }
-  };
-
+export default function AdsLandingPage() {
   return (
-    <main className="min-h-screen bg-[#FCFCFC] dark:bg-[#0A0A0A] text-black dark:text-white pt-28 pb-20 px-4 md:px-8 relative">
-      <div className="max-w-6xl mx-auto">
-        {/* Breadcrumb Navigation */}
-        <nav aria-label="Breadcrumb" className="mb-8 flex items-center gap-2 text-xs text-muted">
-          <Link href="/" className="hover:text-primary transition-colors">
-            Home
-          </Link>
-          <span>/</span>
-          <span className="text-primary font-medium">Advertise &amp; Partner Hub</span>
-        </nav>
+    <>
+      {/* ── Official Monetag Ad Scripts ── */}
+      <Script
+        id="monetag-zone-12134819"
+        strategy="afterInteractive"
+        dangerouslySetInnerHTML={{
+          __html: `(function(s){s.dataset.zone='12134819',s.src='https://n6wxm.com/vignette.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))`
+        }}
+      />
+      <Script
+        id="monetag-zone-12127704"
+        strategy="afterInteractive"
+        dangerouslySetInnerHTML={{
+          __html: `(function(s){s.dataset.zone='12127704',s.src='https://nap5k.com/tag.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))`
+        }}
+      />
+      <Script
+        id="monetag-zone-12127660"
+        strategy="afterInteractive"
+        dangerouslySetInnerHTML={{
+          __html: `(function(s){s.dataset.zone='12127660',s.src='https://nap5k.com/tag.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))`
+        }}
+      />
+      <Script
+        id="monetag-zone-12127030"
+        strategy="afterInteractive"
+        dangerouslySetInnerHTML={{
+          __html: `(function(s){s.dataset.zone='12127030',s.src='https://al5sm.com/tag.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))`
+        }}
+      />
 
-        {/* Hero Section */}
-        <header className="text-center max-w-3xl mx-auto mb-16">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-black/10 dark:border-white/10 bg-black/5 dark:bg-white/5 text-primary dark:text-white text-xs font-semibold uppercase tracking-wider mb-6">
-            <Megaphone size={14} className="text-primary dark:text-white" />
-            <span>Sponsor &amp; Ads Hub • Verified Deals</span>
-          </div>
+      <style jsx global>{`
+        /* =========================================================
+           proCraft Theme & 3D Black Button Styles
+           ========================================================= */
+        .ads-wrap {
+          max-width: 1180px;
+          margin: 0 auto;
+          padding: 32px 16px 80px;
+        }
 
-          <h1
-            className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-primary dark:text-white mb-6 leading-[1.15]"
-            style={{ fontFamily: '"Bricolage Grotesque", var(--font-bricolage), sans-serif' }}
-          >
-            Reach 50,000+ AI Creators &amp; Innovators.
-          </h1>
+        .ads-hero {
+          display: grid;
+          grid-template-columns: 1.2fr .8fr;
+          gap: 40px;
+          align-items: center;
+          padding: 48px 0 24px;
+        }
+        @media(max-width: 880px) {
+          .ads-hero {
+            grid-template-columns: 1fr;
+            padding-top: 24px;
+          }
+        }
 
-          <p className="text-lg md:text-xl text-black/70 dark:text-white/70 leading-relaxed mb-8">
-            Promote your AI tool, model, or creative software directly to designers, engineers, and prompt enthusiasts worldwide. Explore verified sponsor showcases and exclusive partner deals below.
-          </p>
+        .ads-h1 {
+          font-family: var(--font-bricolage), "Sora", sans-serif;
+          font-size: clamp(2rem, 5.2vw, 3.5rem);
+          line-height: 1.1;
+          font-weight: 800;
+          letter-spacing: -.03em;
+        }
 
-          {/* Key Audience Metrics */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-2xl mx-auto text-left">
-            <div className="p-4 rounded-2xl bg-black/[0.03] dark:bg-white/[0.03] border border-black/10 dark:border-white/10">
-              <div className="flex items-center gap-1.5 text-muted text-xs mb-1">
-                <Users size={13} />
-                <span>Monthly Reach</span>
-              </div>
-              <p className="text-xl sm:text-2xl font-black text-primary dark:text-white">50K+</p>
-            </div>
-            <div className="p-4 rounded-2xl bg-black/[0.03] dark:bg-white/[0.03] border border-black/10 dark:border-white/10">
-              <div className="flex items-center gap-1.5 text-muted text-xs mb-1">
-                <Layers size={13} />
-                <span>Curated Prompts</span>
-              </div>
-              <p className="text-xl sm:text-2xl font-black text-primary dark:text-white">800+</p>
-            </div>
-            <div className="p-4 rounded-2xl bg-black/[0.03] dark:bg-white/[0.03] border border-black/10 dark:border-white/10">
-              <div className="flex items-center gap-1.5 text-muted text-xs mb-1">
-                <MousePointerClick size={13} />
-                <span>Avg. CTR</span>
-              </div>
-              <p className="text-xl sm:text-2xl font-black text-primary dark:text-white">4.8%</p>
-            </div>
-            <div className="p-4 rounded-2xl bg-black/[0.03] dark:bg-white/[0.03] border border-black/10 dark:border-white/10">
-              <div className="flex items-center gap-1.5 text-muted text-xs mb-1">
-                <Award size={13} />
-                <span>Targeted Intent</span>
-              </div>
-              <p className="text-xl sm:text-2xl font-black text-primary dark:text-white">100%</p>
-            </div>
-          </div>
-        </header>
+        .ads-hero p {
+          margin-top: 16px;
+          font-size: 1.1rem;
+          line-height: 1.6;
+          opacity: 0.8;
+        }
 
-        {/* Featured Sponsor Showcase Banner */}
-        <section className="mb-20" aria-label="Featured Sponsor Showcase">
-          <div
-            onClick={handleDirectLinkClick}
-            className="group cursor-pointer rounded-3xl border border-black/10 dark:border-white/15 bg-white dark:bg-[#111111] p-8 sm:p-10 shadow-lg hover:shadow-2xl transition-all duration-300 relative overflow-hidden"
-          >
-            <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8 relative z-10">
-              <div className="space-y-4 max-w-2xl">
-                <div className="flex flex-wrap items-center gap-2.5">
-                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-black text-white dark:bg-white dark:text-black text-[11px] font-bold uppercase tracking-wider">
-                    <Sparkle size={12} />
-                    <span>Featured Sponsor</span>
-                  </span>
-                  <span className="inline-flex items-center gap-1 text-xs text-muted font-medium">
-                    <Star size={13} className="fill-amber-400 text-amber-400" />
-                    <span>4.9 / 5.0 (2,400+ reviews)</span>
-                  </span>
-                  <span className="inline-flex items-center gap-1 text-xs text-primary dark:text-white font-medium bg-black/5 dark:bg-white/10 px-2.5 py-0.5 rounded-full border border-black/5 dark:border-white/10">
-                    <ShieldCheck size={13} />
-                    <span>Verified Partner</span>
-                  </span>
-                </div>
+        .ads-cta {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 14px;
+          margin-top: 28px;
+          align-items: center;
+        }
 
-                <h2
-                  className="text-2xl sm:text-3xl font-extrabold text-primary dark:text-white leading-tight group-hover:underline underline-offset-4 decoration-zinc-400"
-                  style={{ fontFamily: '"Bricolage Grotesque", var(--font-bricolage), sans-serif' }}
+        .ads-ghost {
+          font-family: var(--font-bricolage), "Sora", sans-serif;
+          font-weight: 700;
+          font-size: .95rem;
+          text-decoration: none;
+          padding: 14px 24px;
+          border: 1.5px solid currentColor;
+          opacity: 0.8;
+          border-radius: 16px;
+          transition: all .15s ease;
+        }
+        .ads-ghost:hover {
+          opacity: 1;
+          transform: translateY(-2px);
+        }
+
+        .ads-trust {
+          list-style: none;
+          padding: 0;
+          display: flex;
+          flex-wrap: wrap;
+          gap: 8px 22px;
+          margin-top: 24px;
+          font-size: .92rem;
+          opacity: 0.75;
+        }
+        .ads-trust li {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+        }
+        .ads-trust li:before {
+          content: "";
+          display: inline-block;
+          width: 7px;
+          height: 7px;
+          border-radius: 50%;
+          background: currentColor;
+        }
+
+        .ads-hero-art {
+          position: relative;
+          aspect-ratio: 1/1;
+          max-width: 380px;
+          width: 100%;
+          justify-self: center;
+          border-radius: 28px;
+          padding: 32px;
+          display: flex;
+          align-items: flex-end;
+        }
+        .ads-bars {
+          display: flex;
+          align-items: flex-end;
+          gap: 12px;
+          width: 100%;
+          height: 100%;
+        }
+        .ads-bars i {
+          flex: 1;
+          border-radius: 10px 10px 4px 4px;
+          transform-origin: bottom;
+          animation: adsGrow .9s cubic-bezier(.2,.8,.2,1) both;
+        }
+        @keyframes adsGrow {
+          from { transform: scaleY(0); }
+        }
+
+        .ads-chip {
+          position: absolute;
+          font: 700 .8rem var(--font-bricolage), "Sora", sans-serif;
+          padding: 8px 16px;
+          border-radius: 999px;
+          box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+        .ads-c1 { top: 20px; left: -14px; }
+        .ads-c2 { top: 48%; right: -14px; }
+        @media(max-width: 480px) {
+          .ads-c1 { left: 8px; }
+          .ads-c2 { right: 8px; }
+        }
+
+        .ads-section {
+          margin-top: 60px;
+        }
+        .ads-h2 {
+          font-family: var(--font-bricolage), "Sora", sans-serif;
+          font-size: 1.5rem;
+          font-weight: 700;
+          margin-bottom: 6px;
+          letter-spacing: -.02em;
+        }
+        .ads-sub {
+          margin-bottom: 22px;
+          font-size: .95rem;
+          opacity: 0.75;
+        }
+
+        /* 4 Col Desktop, 2 Col Tablet, 1 Col Mobile */
+        .ads-grid {
+          display: grid;
+          gap: 18px;
+          grid-template-columns: repeat(4, 1fr);
+        }
+        @media(max-width: 980px) {
+          .ads-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media(max-width: 560px) {
+          .ads-grid { grid-template-columns: 1fr; }
+        }
+
+        .ads-card {
+          border-radius: 20px;
+          overflow: hidden;
+          display: flex;
+          flex-direction: column;
+          transition: transform .2s ease, border-color .2s ease;
+        }
+        .ads-card:hover {
+          transform: translateY(-4px);
+        }
+
+        .ads-frame {
+          aspect-ratio: 4/3;
+          position: relative;
+          background: rgba(120, 120, 120, 0.08);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+        .ads-frame iframe {
+          position: absolute;
+          inset: 0;
+          width: 100%;
+          height: 100%;
+          border: 0;
+        }
+
+        .ads-body {
+          padding: 16px;
+          display: flex;
+          flex-direction: column;
+          gap: 12px;
+          flex: 1;
+        }
+        .ads-body h3 {
+          font-family: var(--font-bricolage), "Sora", sans-serif;
+          font-size: 1rem;
+          font-weight: 700;
+        }
+
+        /* 3D Black Button (Uiverse.io inspired) */
+        a.ads-btn, .ads-expose a.ads-btn, a.ads-btn-big {
+          position: relative;
+          background: linear-gradient(to top, #0f1012, #212429);
+          color: #ffffff !important;
+          border: 0;
+          border-radius: 16px;
+          padding: 13px 26px;
+          font-family: var(--font-bricolage), "Sora", sans-serif;
+          font-weight: 700;
+          font-size: .9rem;
+          text-decoration: none;
+          opacity: .96;
+          box-shadow: 0 0 0 1.5px rgba(255, 255, 255, .15), inset 0 2px 0 rgba(255, 255, 255, .25), 0 6px 0 #000000, 0 12px 20px -4px rgba(0, 0, 0, .5);
+          transform: translateY(0);
+          transition: transform .12s ease, box-shadow .12s ease, opacity .15s ease;
+          display: inline-flex;
+          justify-content: center;
+          align-items: center;
+          cursor: pointer;
+          text-align: center;
+        }
+        a.ads-btn:hover, .ads-expose a.ads-btn:hover, a.ads-btn-big:hover {
+          background: linear-gradient(to top, #16181c, #2c3038);
+          color: #ffffff !important;
+          opacity: 1;
+          transform: translateY(-2px);
+          box-shadow: 0 0 0 1.5px rgba(255, 255, 255, .25), inset 0 2px 0 rgba(255, 255, 255, .35), 0 8px 0 #000000, 0 16px 24px -4px rgba(0, 0, 0, .6);
+        }
+        a.ads-btn:active, .ads-expose a.ads-btn:active, a.ads-btn-big:active {
+          transform: translateY(5px);
+          box-shadow: 0 0 0 1.5px rgba(255, 255, 255, .15), inset 0 1px 0 rgba(255, 255, 255, .15), 0 1px 0 #000000, 0 4px 8px -2px rgba(0, 0, 0, .4);
+        }
+        .ads-card a.ads-btn {
+          margin-top: auto;
+          width: 100%;
+        }
+
+        /* Viral Videos */
+        .ads-rows {
+          display: grid;
+          gap: 12px;
+        }
+        .ads-row {
+          display: flex;
+          align-items: center;
+          gap: 16px;
+          border-radius: 16px;
+          padding: 16px 20px;
+          text-decoration: none;
+          color: inherit;
+          transition: transform .15s ease, border-color .15s ease;
+        }
+        .ads-row:hover {
+          transform: translateX(4px);
+        }
+        .ads-play {
+          flex: none;
+          width: 42px;
+          height: 42px;
+          border-radius: 50%;
+          display: grid;
+          place-items: center;
+          transition: transform .2s ease;
+        }
+        .ads-row:hover .ads-play {
+          transform: scale(1.08);
+        }
+
+        /* Apps */
+        .ads-apps {
+          display: grid;
+          gap: 14px;
+          grid-template-columns: repeat(4, 1fr);
+        }
+        @media(max-width: 980px) {
+          .ads-apps { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media(max-width: 480px) {
+          .ads-apps { grid-template-columns: 1fr; }
+        }
+        .ads-app {
+          border-radius: 18px;
+          padding: 18px;
+          text-decoration: none;
+          color: inherit;
+          display: flex;
+          flex-direction: column;
+          gap: 6px;
+          transition: transform .15s ease, border-color .15s ease;
+        }
+        .ads-app:hover {
+          transform: translateY(-3px);
+        }
+        .ads-ico {
+          width: 46px;
+          height: 46px;
+          border-radius: 14px;
+          display: grid;
+          place-items: center;
+          font-family: var(--font-bricolage), "Sora", sans-serif;
+          font-weight: 800;
+          font-size: 1.2rem;
+        }
+
+        /* Expose Buttons */
+        .ads-expose {
+          display: grid;
+          gap: 16px;
+          grid-template-columns: repeat(4, 1fr);
+        }
+        @media(max-width: 980px) {
+          .ads-expose { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media(max-width: 480px) {
+          .ads-expose { grid-template-columns: 1fr; }
+        }
+        .ads-expose a.ads-btn {
+          margin: 0;
+          padding: 18px 24px;
+          font-size: 1rem;
+          width: 100%;
+        }
+
+        /* Disclaimer */
+        .ads-disc {
+          margin-top: 64px;
+          border-radius: 18px;
+          padding: 26px 28px;
+          font-size: .95rem;
+        }
+        .ads-disc-head {
+          display: flex;
+          align-items: center;
+          gap: 14px;
+          margin-bottom: 14px;
+        }
+        .ads-disc-ico {
+          flex: none;
+          width: 38px;
+          height: 38px;
+          border-radius: 50%;
+          display: grid;
+          place-items: center;
+          font-family: var(--font-bricolage), "Sora", sans-serif;
+          font-weight: 800;
+          font-size: 1.25rem;
+        }
+        .ads-disc .key {
+          font-weight: 700;
+          padding: 12px 16px;
+          border-radius: 12px;
+          margin-bottom: 12px;
+        }
+
+        @media(prefers-reduced-motion: reduce) {
+          *, *::before, *::after {
+            animation-duration: 0.01ms !important;
+            transition-duration: 0.01ms !important;
+          }
+        }
+      `}</style>
+
+      <main className="min-h-screen bg-[#FCFCFC] dark:bg-[#0A0A0A] text-[#111318] dark:text-white pt-24 pb-20">
+        <div className="ads-wrap">
+          {/* Hero Section */}
+          <header className="ads-hero">
+            <div>
+              <h1 className="ads-h1">TURN ADVERTISING INTO PROFITABLE BUSINESS GROWTH</h1>
+              <p>Discover today&apos;s trending offers, viral videos and money-making apps in one place. Some links are sponsored ads.</p>
+              <div className="ads-cta">
+                <a
+                  className="ads-btn-big ads-btn"
+                  href={MONETAG}
+                  target="_blank"
+                  rel="noopener sponsored"
                 >
-                  Accelerate Your Generative AI Production Pipeline
-                </h2>
-
-                <p className="text-sm sm:text-base text-muted leading-relaxed">
-                  Unlock high-performance cloud GPUs, instant reverse prompt engineering, and automated batch rendering for Midjourney, FLUX, and custom SDXL models.
-                </p>
+                  Start Growing Now
+                </a>
+                <a className="ads-ghost" href="#featured">
+                  Browse Offers
+                </a>
               </div>
+              <ul className="ads-trust">
+                <li>Fresh picks daily</li>
+                <li>Free to browse</li>
+                <li>Sponsored links marked</li>
+              </ul>
+            </div>
 
-              {/* Action Button */}
-              <div className="shrink-0 w-full lg:w-auto">
-                <div className="relative cursor-pointer opacity-95 hover:opacity-100 transition-opacity p-[2px] rounded-[16px] bg-gradient-to-t from-zinc-800 via-zinc-600 to-zinc-400 dark:from-zinc-900 dark:via-zinc-800 dark:to-zinc-600 active:scale-95 shadow-md">
-                  <span className="flex items-center justify-center gap-2.5 px-8 py-3.5 bg-gradient-to-t from-black via-[#0d0d0d] to-[#1a1a1a] text-white rounded-[14px] font-bold text-sm tracking-wide transition-all group-hover:from-black group-hover:to-[#222222]">
-                    <span>Explore Verified Deal</span>
-                    <ExternalLink size={16} />
-                  </span>
-                </div>
+            {/* Growth Art Visual */}
+            <div className="ads-hero-art bg-white dark:bg-[#111111] border border-black/10 dark:border-white/10 shadow-lg">
+              <div className="ads-bars">
+                <i className="bg-black/20 dark:bg-white/20" style={{ height: "32%" }}></i>
+                <i className="bg-black/30 dark:bg-white/30" style={{ height: "48%", animationDelay: "0.08s" }}></i>
+                <i className="bg-black/40 dark:bg-white/40" style={{ height: "44%", animationDelay: "0.16s" }}></i>
+                <i className="bg-black/60 dark:bg-white/60" style={{ height: "68%", animationDelay: "0.24s" }}></i>
+                <i className="bg-black/80 dark:bg-white/80" style={{ height: "86%", animationDelay: "0.32s" }}></i>
+                <i className="bg-black dark:bg-white" style={{ height: "100%", animationDelay: "0.40s" }}></i>
+              </div>
+              <div className="ads-chip ads-c1 bg-black text-white dark:bg-white dark:text-black">
+                +248% reach
+              </div>
+              <div className="ads-chip ads-c2 bg-white text-black dark:bg-[#111111] dark:text-white border border-black/10 dark:border-white/15">
+                Trending now
               </div>
             </div>
-          </div>
-        </section>
+          </header>
 
-        {/* 6 Curated AI Partner & Sponsored Deals */}
-        <section className="mb-24" aria-label="Curated AI Partner Deals">
-          <div className="text-center max-w-2xl mx-auto mb-12">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-black/5 dark:bg-white/5 text-muted text-xs font-semibold mb-3">
-              <Zap size={13} className="text-primary dark:text-white" />
-              <span>Verified Creator Perks</span>
-            </div>
-            <h2
-              className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-primary dark:text-white mb-3"
-              style={{ fontFamily: '"Bricolage Grotesque", var(--font-bricolage), sans-serif' }}
-            >
-              Exclusive AI Partner Deals
-            </h2>
-            <p className="text-sm sm:text-base text-muted">
-              Handpicked tools and resources offering special discounts and extended free trials for proCraft users.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {PARTNER_DEALS.map((deal) => (
-              <div
-                key={deal.id}
-                onClick={handleDirectLinkClick}
-                className="group cursor-pointer rounded-2xl bg-white dark:bg-[#111111] border border-black/10 dark:border-white/10 p-6 sm:p-7 shadow-sm hover:shadow-xl hover:border-black/30 dark:hover:border-white/25 transition-all flex flex-col justify-between"
-              >
-                <div>
-                  <div className="flex items-center justify-between gap-2 mb-4">
-                    <span className="text-[10px] font-extrabold uppercase tracking-wider bg-black/5 dark:bg-white/10 text-primary dark:text-white px-2.5 py-0.5 rounded-full border border-black/10 dark:border-white/15">
-                      {deal.badge}
-                    </span>
-                    <span className="text-xs text-muted flex items-center gap-1 font-medium">
-                      <Star size={12} className="fill-amber-400 text-amber-400" />
-                      <span>{deal.rating}</span>
-                    </span>
-                  </div>
-
-                  <h3 className="text-lg font-bold text-primary dark:text-white mb-2 leading-snug group-hover:underline underline-offset-4 decoration-zinc-400">
-                    {deal.title}
-                  </h3>
-
-                  <p className="text-xs sm:text-sm text-muted leading-relaxed mb-6">
-                    {deal.desc}
-                  </p>
-                </div>
-
-                <div className="pt-4 border-t border-black/5 dark:border-white/5 flex items-center justify-between gap-2">
-                  <span className="text-xs text-muted font-medium">
-                    {deal.category}
-                  </span>
-                  <span className="inline-flex items-center gap-1 text-xs font-bold text-primary dark:text-white group-hover:translate-x-0.5 transition-transform">
-                    <span>{deal.cta}</span>
-                    <ArrowRight size={13} />
-                  </span>
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* Sponsorship Pricing Packages */}
-        <section className="mb-24" aria-label="Sponsorship Packages">
-          <div className="text-center max-w-2xl mx-auto mb-14">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-black/5 dark:bg-white/5 text-muted text-xs font-semibold mb-3">
-              <Megaphone size={13} />
-              <span>Sponsor Packages</span>
-            </div>
-            <h2
-              className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-primary dark:text-white mb-3"
-              style={{ fontFamily: '"Bricolage Grotesque", var(--font-bricolage), sans-serif' }}
-            >
-              Direct Sponsorship Placements
-            </h2>
-            <p className="text-sm sm:text-base text-muted">
-              Get maximum brand exposure to active prompt engineers and digital creators. Transparent pricing, no setup fees.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
-            {AD_TIERS.map((tier) => (
-              <div
-                key={tier.name}
-                className={`rounded-3xl p-7 sm:p-8 transition-all flex flex-col justify-between ${
-                  tier.popular
-                    ? "bg-white dark:bg-[#111111] border-2 border-black/40 dark:border-white/40 shadow-xl relative"
-                    : "bg-white dark:bg-[#111111] border border-black/10 dark:border-white/10 shadow-sm hover:shadow-md"
-                }`}
-              >
-                <div>
-                  {tier.popular && (
-                    <div className="inline-block mb-4 px-3 py-1 rounded-full bg-black text-white dark:bg-white dark:text-black text-[10px] font-bold uppercase tracking-wider">
-                      Most Popular Choice
-                    </div>
-                  )}
-
-                  <h3
-                    className="text-xl font-bold text-primary dark:text-white mb-2"
-                    style={{ fontFamily: '"Bricolage Grotesque", var(--font-bricolage), sans-serif' }}
-                  >
-                    {tier.name}
-                  </h3>
-
-                  <p className="text-xs sm:text-sm text-muted leading-relaxed mb-6">
-                    {tier.desc}
-                  </p>
-
-                  <div className="flex items-baseline gap-1.5 mb-8 pb-6 border-b border-black/10 dark:border-white/10">
-                    <span className="text-4xl sm:text-5xl font-black text-primary dark:text-white">
-                      {tier.price}
-                    </span>
-                    <span className="text-sm font-semibold text-muted">
-                      {tier.period}
-                    </span>
-                  </div>
-
-                  <ul className="space-y-3.5 mb-8">
-                    {tier.features.map((feat, i) => (
-                      <li key={i} className="flex items-start gap-2.5 text-xs sm:text-sm">
-                        <Check size={15} className="text-primary dark:text-white shrink-0 mt-0.5" />
-                        <span className="text-black/80 dark:text-white/80">{feat}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                <Link
-                  href="/contact?subject=Advertising"
-                  className="w-full block"
+          {/* Section: Featured */}
+          <section id="featured" className="ads-section">
+            <h2 className="ads-h2">Featured</h2>
+            <p className="ads-sub">Click the button under a card to open the link in a new tab.</p>
+            <div className="ads-grid">
+              {CARDS.map((c, idx) => (
+                <article
+                  key={idx}
+                  className="ads-card bg-white dark:bg-[#111111] border border-black/10 dark:border-white/10 shadow-md hover:border-black/30 dark:hover:border-white/25"
                 >
-                  <div className="relative cursor-pointer opacity-95 hover:opacity-100 transition-opacity p-[2px] rounded-[14px] bg-gradient-to-t from-zinc-800 via-zinc-600 to-zinc-400 dark:from-zinc-900 dark:via-zinc-800 dark:to-zinc-600 active:scale-95 shadow-md">
-                    <span className="flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-t from-black via-[#0d0d0d] to-[#1a1a1a] text-white rounded-[12px] font-bold text-xs uppercase tracking-wider transition-all group-hover:from-black group-hover:to-[#222222]">
-                      <span>{tier.cta}</span>
-                      <ArrowRight size={14} />
-                    </span>
+                  <div className="ads-frame">
+                    <iframe
+                      src={c.src}
+                      title={c.title}
+                      loading="lazy"
+                      sandbox="allow-scripts allow-same-origin"
+                      referrerPolicy="no-referrer"
+                    />
                   </div>
-                </Link>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* Frequently Asked Questions */}
-        <section className="max-w-3xl mx-auto mb-24" aria-label="Advertising FAQ">
-          <div className="text-center mb-10">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-black/5 dark:bg-white/5 text-muted text-xs font-semibold mb-3">
-              <HelpCircle size={13} />
-              <span>Got Questions?</span>
+                  <div className="ads-body">
+                    <h3>{c.title}</h3>
+                    <a
+                      className="ads-btn"
+                      href={c.href}
+                      target="_blank"
+                      rel="noopener sponsored"
+                    >
+                      Open Link
+                    </a>
+                  </div>
+                </article>
+              ))}
             </div>
-            <h2
-              className="text-2xl sm:text-3xl font-extrabold text-primary dark:text-white"
-              style={{ fontFamily: '"Bricolage Grotesque", var(--font-bricolage), sans-serif' }}
-            >
-              Advertising &amp; Sponsorship FAQ
-            </h2>
-          </div>
+          </section>
 
-          <div className="space-y-4">
-            {FAQS.map((faq, i) => (
-              <details
-                key={i}
-                className="group bg-white dark:bg-[#111111] border border-black/10 dark:border-white/10 rounded-2xl p-6 transition-all duration-200 open:border-black/30 dark:open:border-white/30"
-              >
-                <summary className="font-semibold text-base text-primary dark:text-white cursor-pointer list-none flex items-center justify-between gap-4">
-                  <span>{faq.q}</span>
-                  <span className="w-6 h-6 rounded-full bg-black/5 dark:bg-white/5 flex items-center justify-center text-muted group-open:rotate-180 transition-transform shrink-0 text-xs">
-                    ▼
+          {/* Section: Viral Video Link */}
+          <section className="ads-section">
+            <h2 className="ads-h2">Viral Video Link</h2>
+            <p className="ads-sub">The videos everyone is talking about right now.</p>
+            <div className="ads-rows">
+              {VIDEOS.map((v, idx) => (
+                <a
+                  key={idx}
+                  className="ads-row bg-white dark:bg-[#111111] border border-black/10 dark:border-white/10 shadow-sm hover:border-black/30 dark:hover:border-white/25"
+                  href={v.href}
+                  target="_blank"
+                  rel="noopener sponsored"
+                >
+                  <span className="ads-play bg-black text-white dark:bg-white dark:text-black">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                      <polygon points="6 4 20 12 6 20 6 4" />
+                    </svg>
                   </span>
-                </summary>
-                <p className="mt-4 text-sm text-muted leading-relaxed border-t border-black/5 dark:border-white/5 pt-4">
-                  {faq.a}
-                </p>
-              </details>
-            ))}
-          </div>
-        </section>
+                  <div>
+                    <b className="text-base">{v.title}</b>
+                    <span className="block text-xs opacity-70 mt-0.5">{v.note}</span>
+                  </div>
+                </a>
+              ))}
+            </div>
+          </section>
 
-        {/* Contact Partnerships Call-to-Action */}
-        <section className="relative rounded-3xl p-8 sm:p-12 text-center bg-black/[0.02] dark:bg-white/[0.03] border border-black/10 dark:border-white/10 overflow-hidden shadow-lg">
-          <div className="relative z-10 max-w-2xl mx-auto">
-            <h2
-              className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-primary dark:text-white mb-4"
-              style={{ fontFamily: '"Bricolage Grotesque", var(--font-bricolage), sans-serif' }}
-            >
-              Need a Custom Campaign or Direct Booking?
-            </h2>
-            <p className="text-sm sm:text-base text-muted mb-8 leading-relaxed">
-              We create custom sponsorship packages, newsletter features, and bespoke AI workflow integrations tailored to your budget and growth targets.
+          {/* Section: Moneymaking Viral Apps */}
+          <section className="ads-section">
+            <h2 className="ads-h2">Moneymaking Viral Apps</h2>
+            <p className="ads-sub">Trending app picks. Please verify before using any app.</p>
+            <div className="ads-apps">
+              {APPS.map((a, idx) => (
+                <a
+                  key={idx}
+                  className="ads-app bg-white dark:bg-[#111111] border border-black/10 dark:border-white/10 shadow-sm hover:border-black/30 dark:hover:border-white/25"
+                  href={a.href}
+                  target="_blank"
+                  rel="noopener sponsored"
+                >
+                  <div className="ads-ico bg-black text-white dark:bg-white dark:text-black">
+                    {a.title.charAt(0)}
+                  </div>
+                  <b className="text-sm font-bold mt-1">{a.title}</b>
+                  <span className="text-xs opacity-70">{a.note}</span>
+                </a>
+              ))}
+            </div>
+          </section>
+
+          {/* Section: Expose Viral Link */}
+          <section className="ads-section">
+            <h2 className="ads-h2">Expose Viral Link</h2>
+            <p className="ads-sub">The buttons below are sponsored links.</p>
+            <div className="ads-expose">
+              {EXPOSE.map((e, idx) => (
+                <a
+                  key={idx}
+                  className="ads-btn"
+                  href={e.href}
+                  target="_blank"
+                  rel="noopener sponsored"
+                >
+                  {e.title}
+                </a>
+              ))}
+            </div>
+          </section>
+
+          {/* Section: Ad Disclaimer */}
+          <aside className="ads-disc bg-white dark:bg-[#111111] border-2 border-dashed border-black/20 dark:border-white/20 border-l-[8px] border-l-black dark:border-l-white shadow-lg">
+            <div className="ads-disc-head">
+              <span className="ads-disc-ico bg-black text-white dark:bg-white dark:text-black">
+                !
+              </span>
+              <h2 className="ads-h2 m-0">Ad Disclaimer</h2>
+            </div>
+            <p className="key bg-black/5 dark:bg-white/10 text-black dark:text-white">
+              We do NOT guarantee that clicking any button or link will take you to the original page.
             </p>
-            <div className="flex flex-wrap items-center justify-center gap-4">
-              <Link href="/contact?subject=Advertising" className="group">
-                <div className="relative cursor-pointer opacity-95 hover:opacity-100 transition-opacity p-[2px] rounded-[14px] bg-gradient-to-t from-zinc-800 via-zinc-600 to-zinc-400 dark:from-zinc-900 dark:via-zinc-800 dark:to-zinc-600 active:scale-95 shadow-md">
-                  <span className="flex items-center gap-2 px-7 py-3 bg-gradient-to-t from-black via-[#0d0d0d] to-[#1a1a1a] text-white rounded-[12px] font-bold text-sm tracking-wide transition-all group-hover:from-black group-hover:to-[#222222]">
-                    <Mail size={16} />
-                    <span>Contact Partnerships</span>
-                  </span>
-                </div>
-              </Link>
-              <button
-                type="button"
-                onClick={handleDirectLinkClick}
-                className="px-7 py-3 rounded-[14px] bg-black/5 dark:bg-white/10 text-primary dark:text-white font-semibold text-sm hover:bg-black/10 dark:hover:bg-white/15 transition-all duration-200 border border-black/10 dark:border-white/10 flex items-center gap-2"
-              >
-                <span>View Partner Offers</span>
-                <ExternalLink size={14} />
-              </button>
-            </div>
-          </div>
-        </section>
-      </div>
-    </main>
+            <p className="opacity-80 text-sm leading-relaxed mb-2">
+              This page contains sponsored advertisements and affiliate links. Ad content is controlled by third parties.
+            </p>
+            <p className="opacity-80 text-sm leading-relaxed">
+              If this causes any inconvenience or annoyance, we sincerely apologize. Please verify any link before entering money, passwords or personal information.
+            </p>
+          </aside>
+        </div>
+      </main>
+    </>
   );
 }
