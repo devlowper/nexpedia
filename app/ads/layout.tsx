@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Advertise & Sponsored Deals | proCraft Partner Hub",
+  title: "Advertise & Partner Hub | Sponsor Deals & AI Showcase",
   description:
-    "Promote your AI tools, prompt engineering models, and creative software to 50,000+ active creators on proCraft. Explore advertising packages, banner placements, and verified partner deals.",
+    "Promote your AI tools, models, and creative software to 50,000+ active creators on proCraft. Explore advertising packages, native placements, and verified partner deals.",
   alternates: {
     canonical: "/ads",
   },

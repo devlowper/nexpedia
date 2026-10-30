@@ -10,16 +10,14 @@ import {
   Star,
   ExternalLink,
   Users,
-  Eye,
-  TrendingUp,
   MousePointerClick,
   Check,
   HelpCircle,
   Megaphone,
   Layers,
   Award,
-  Globe,
   Mail,
+  Sparkle,
 } from "lucide-react";
 
 const MONETAG_DIRECT_LINK = "https://uplcm.com/4/12127029";
@@ -251,66 +249,55 @@ export default function AdsPage() {
             </div>
             <div className="p-4 rounded-2xl bg-black/[0.03] dark:bg-white/[0.03] border border-black/10 dark:border-white/10">
               <div className="flex items-center gap-1.5 text-muted text-xs mb-1">
-                <TrendingUp size={13} />
-                <span>Audience</span>
+                <Award size={13} />
+                <span>Targeted Intent</span>
               </div>
-              <p className="text-xl sm:text-2xl font-black text-primary dark:text-white">100% AI</p>
+              <p className="text-xl sm:text-2xl font-black text-primary dark:text-white">100%</p>
             </div>
           </div>
         </header>
 
-        {/* Featured Sponsor Highlight Card (Interactive Monetag Direct Link integration) */}
+        {/* Featured Sponsor Showcase Banner */}
         <section className="mb-20" aria-label="Featured Sponsor Showcase">
           <div
             onClick={handleDirectLinkClick}
-            className="cursor-pointer group relative bg-white dark:bg-[#111111] border border-black/10 dark:border-white/15 rounded-3xl p-8 sm:p-12 shadow-xl hover:border-black/30 dark:hover:border-white/30 transition-all duration-300"
+            className="group cursor-pointer rounded-3xl border border-black/10 dark:border-white/15 bg-white dark:bg-[#111111] p-8 sm:p-10 shadow-lg hover:shadow-2xl transition-all duration-300 relative overflow-hidden"
           >
-            <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-8">
+            <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8 relative z-10">
               <div className="space-y-4 max-w-2xl">
-                <div className="flex items-center gap-2 flex-wrap">
-                  <span className="text-[10px] font-bold uppercase tracking-wider bg-black/5 dark:bg-white/10 text-primary dark:text-white px-3 py-1 rounded-full border border-black/10 dark:border-white/15 flex items-center gap-1">
-                    <Award size={12} />
-                    <span>Featured Sponsor Spotlight</span>
+                <div className="flex flex-wrap items-center gap-2.5">
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-black text-white dark:bg-white dark:text-black text-[11px] font-bold uppercase tracking-wider">
+                    <Sparkle size={12} />
+                    <span>Featured Sponsor</span>
                   </span>
-                  <span className="text-xs text-muted font-medium flex items-center gap-1">
-                    <Star size={12} className="fill-amber-400 text-amber-400" /> 4.95 Rating
+                  <span className="inline-flex items-center gap-1 text-xs text-muted font-medium">
+                    <Star size={13} className="fill-amber-400 text-amber-400" />
+                    <span>4.9 / 5.0 (2,400+ reviews)</span>
                   </span>
-                  <span className="text-xs text-primary dark:text-white font-semibold flex items-center gap-1">
-                    <ShieldCheck size={13} /> Verified AI Partner
+                  <span className="inline-flex items-center gap-1 text-xs text-primary dark:text-white font-medium bg-black/5 dark:bg-white/10 px-2.5 py-0.5 rounded-full border border-black/5 dark:border-white/10">
+                    <ShieldCheck size={13} />
+                    <span>Verified Partner</span>
                   </span>
                 </div>
 
                 <h2
-                  className="text-2xl sm:text-3xl font-extrabold text-primary dark:text-white group-hover:underline underline-offset-4 decoration-zinc-400 transition-all"
+                  className="text-2xl sm:text-3xl font-extrabold text-primary dark:text-white leading-tight group-hover:underline underline-offset-4 decoration-zinc-400"
                   style={{ fontFamily: '"Bricolage Grotesque", var(--font-bricolage), sans-serif' }}
                 >
-                  ProAI Studio — Next-Gen Generative Models &amp; Automation
+                  Accelerate Your Generative AI Production Pipeline
                 </h2>
 
                 <p className="text-sm sm:text-base text-muted leading-relaxed">
-                  Accelerate your production workflows with unified model orchestration, high-speed multi-prompt execution, automated asset scaling, and developer APIs.
+                  Unlock high-performance cloud GPUs, instant reverse prompt engineering, and automated batch rendering for Midjourney, FLUX, and custom SDXL models.
                 </p>
-
-                <div className="flex flex-wrap items-center gap-4 text-xs text-muted pt-1">
-                  <span className="flex items-center gap-1">
-                    <Check size={13} /> Instant Activation
-                  </span>
-                  <span className="flex items-center gap-1">
-                    <Check size={13} /> Exclusive Community Deal
-                  </span>
-                  <span className="flex items-center gap-1">
-                    <Check size={13} /> Direct Partner Access
-                  </span>
-                </div>
               </div>
 
-              {/* Uiverse-Inspired Sleek Black CTA Button */}
-              <div className="shrink-0 w-full md:w-auto">
-                <div className="relative w-full md:w-auto cursor-pointer opacity-95 group-hover:opacity-100 transition-opacity p-[2px] rounded-[16px] bg-gradient-to-t from-zinc-800 via-zinc-600 to-zinc-400 dark:from-zinc-900 dark:via-zinc-800 dark:to-zinc-600 active:scale-95 shadow-lg">
-                  <span className="w-full h-full flex items-center justify-center gap-2.5 px-8 py-3.5 bg-gradient-to-t from-black via-[#0d0d0d] to-[#1a1a1a] text-white rounded-[14px] font-bold text-sm tracking-wide transition-all group-hover:from-black group-hover:to-[#222222]">
-                    <Sparkles size={16} className="text-white" />
-                    <span>Claim Sponsor Offer</span>
-                    <ExternalLink size={15} className="text-white/80 group-hover:translate-x-0.5 transition-transform" />
+              {/* Action Button */}
+              <div className="shrink-0 w-full lg:w-auto">
+                <div className="relative cursor-pointer opacity-95 hover:opacity-100 transition-opacity p-[2px] rounded-[16px] bg-gradient-to-t from-zinc-800 via-zinc-600 to-zinc-400 dark:from-zinc-900 dark:via-zinc-800 dark:to-zinc-600 active:scale-95 shadow-md">
+                  <span className="flex items-center justify-center gap-2.5 px-8 py-3.5 bg-gradient-to-t from-black via-[#0d0d0d] to-[#1a1a1a] text-white rounded-[14px] font-bold text-sm tracking-wide transition-all group-hover:from-black group-hover:to-[#222222]">
+                    <span>Explore Verified Deal</span>
+                    <ExternalLink size={16} />
                   </span>
                 </div>
               </div>
@@ -318,21 +305,21 @@ export default function AdsPage() {
           </div>
         </section>
 
-        {/* Curated Partner Deals Grid (6 Cards, styled in website theme) */}
-        <section className="mb-24" aria-label="Curated Partner Deals">
+        {/* 6 Curated AI Partner & Sponsored Deals */}
+        <section className="mb-24" aria-label="Curated AI Partner Deals">
           <div className="text-center max-w-2xl mx-auto mb-12">
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-black/5 dark:bg-white/5 text-muted text-xs font-semibold mb-3">
-              <Zap size={13} />
+              <Zap size={13} className="text-primary dark:text-white" />
               <span>Verified Creator Perks</span>
             </div>
             <h2
-              className="text-2xl sm:text-3xl font-extrabold text-primary dark:text-white mb-3"
+              className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-primary dark:text-white mb-3"
               style={{ fontFamily: '"Bricolage Grotesque", var(--font-bricolage), sans-serif' }}
             >
-              Exclusive AI Partner Deals &amp; Offers
+              Exclusive AI Partner Deals
             </h2>
             <p className="text-sm sm:text-base text-muted">
-              Discover tested AI tools, cloud compute credits, and creative suites offering special deals for proCraft visitors.
+              Handpicked tools and resources offering special discounts and extended free trials for proCraft users.
             </p>
           </div>
 
@@ -341,24 +328,20 @@ export default function AdsPage() {
               <div
                 key={deal.id}
                 onClick={handleDirectLinkClick}
-                className="cursor-pointer group bg-white dark:bg-[#111111] border border-black/10 dark:border-white/10 rounded-2xl p-6 shadow-sm hover:shadow-xl hover:border-black/30 dark:hover:border-white/30 transition-all duration-200 flex flex-col justify-between"
+                className="group cursor-pointer rounded-2xl bg-white dark:bg-[#111111] border border-black/10 dark:border-white/10 p-6 sm:p-7 shadow-sm hover:shadow-xl hover:border-black/30 dark:hover:border-white/25 transition-all flex flex-col justify-between"
               >
                 <div>
                   <div className="flex items-center justify-between gap-2 mb-4">
-                    <span className="text-[10px] font-bold uppercase tracking-wider bg-black/5 dark:bg-white/10 text-primary dark:text-white px-2.5 py-0.5 rounded-full border border-black/10 dark:border-white/15">
+                    <span className="text-[10px] font-extrabold uppercase tracking-wider bg-black/5 dark:bg-white/10 text-primary dark:text-white px-2.5 py-0.5 rounded-full border border-black/10 dark:border-white/15">
                       {deal.badge}
                     </span>
-                    <div className="flex items-center gap-1 text-xs text-muted">
+                    <span className="text-xs text-muted flex items-center gap-1 font-medium">
                       <Star size={12} className="fill-amber-400 text-amber-400" />
                       <span>{deal.rating}</span>
-                    </div>
+                    </span>
                   </div>
 
-                  <span className="text-xs text-muted font-medium block mb-1">
-                    {deal.category}
-                  </span>
-
-                  <h3 className="text-base sm:text-lg font-bold text-primary dark:text-white group-hover:text-accent transition-colors mb-2.5 leading-snug">
+                  <h3 className="text-lg font-bold text-primary dark:text-white mb-2 leading-snug group-hover:underline underline-offset-4 decoration-zinc-400">
                     {deal.title}
                   </h3>
 
@@ -367,9 +350,9 @@ export default function AdsPage() {
                   </p>
                 </div>
 
-                <div className="pt-4 border-t border-black/5 dark:border-white/5 flex items-center justify-between gap-3">
-                  <span className="text-xs text-muted font-medium flex items-center gap-1">
-                    <ShieldCheck size={12} /> {deal.tag}
+                <div className="pt-4 border-t border-black/5 dark:border-white/5 flex items-center justify-between gap-2">
+                  <span className="text-xs text-muted font-medium">
+                    {deal.category}
                   </span>
                   <span className="inline-flex items-center gap-1 text-xs font-bold text-primary dark:text-white group-hover:translate-x-0.5 transition-transform">
                     <span>{deal.cta}</span>
@@ -381,52 +364,54 @@ export default function AdsPage() {
           </div>
         </section>
 
-        {/* Advertise with proCraft — Sponsorship Packages */}
+        {/* Sponsorship Pricing Packages */}
         <section className="mb-24" aria-label="Sponsorship Packages">
           <div className="text-center max-w-2xl mx-auto mb-14">
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-black/5 dark:bg-white/5 text-muted text-xs font-semibold mb-3">
-              <Globe size={13} />
-              <span>Direct Sponsorships</span>
+              <Megaphone size={13} />
+              <span>Sponsor Packages</span>
             </div>
             <h2
-              className="text-2xl sm:text-3xl font-extrabold text-primary dark:text-white mb-3"
+              className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-primary dark:text-white mb-3"
               style={{ fontFamily: '"Bricolage Grotesque", var(--font-bricolage), sans-serif' }}
             >
-              Advertise on proCraft
+              Direct Sponsorship Placements
             </h2>
             <p className="text-sm sm:text-base text-muted">
-              Select a sponsorship package to place your brand in front of thousands of daily generative AI builders and creators.
+              Get maximum brand exposure to active prompt engineers and digital creators. Transparent pricing, no setup fees.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
             {AD_TIERS.map((tier) => (
               <div
                 key={tier.name}
-                className={`relative bg-white dark:bg-[#111111] rounded-3xl p-8 flex flex-col justify-between transition-all duration-200 border ${
+                className={`rounded-3xl p-7 sm:p-8 transition-all flex flex-col justify-between ${
                   tier.popular
-                    ? "border-black/30 dark:border-white/30 shadow-2xl scale-[1.02]"
-                    : "border-black/10 dark:border-white/10 shadow-md hover:border-black/25 dark:hover:border-white/25"
+                    ? "bg-white dark:bg-[#111111] border-2 border-black/40 dark:border-white/40 shadow-xl relative"
+                    : "bg-white dark:bg-[#111111] border border-black/10 dark:border-white/10 shadow-sm hover:shadow-md"
                 }`}
               >
-                {tier.popular && (
-                  <div className="absolute -top-3.5 left-1/2 -translate-x-1/2">
-                    <span className="bg-black text-white dark:bg-white dark:text-black text-[10px] font-extrabold uppercase tracking-widest px-3.5 py-1 rounded-full shadow-md">
-                      Most Popular
-                    </span>
-                  </div>
-                )}
-
                 <div>
-                  <h3 className="text-xl font-bold text-primary dark:text-white mb-2">
+                  {tier.popular && (
+                    <div className="inline-block mb-4 px-3 py-1 rounded-full bg-black text-white dark:bg-white dark:text-black text-[10px] font-bold uppercase tracking-wider">
+                      Most Popular Choice
+                    </div>
+                  )}
+
+                  <h3
+                    className="text-xl font-bold text-primary dark:text-white mb-2"
+                    style={{ fontFamily: '"Bricolage Grotesque", var(--font-bricolage), sans-serif' }}
+                  >
                     {tier.name}
                   </h3>
-                  <p className="text-xs text-muted mb-6 leading-relaxed">
+
+                  <p className="text-xs sm:text-sm text-muted leading-relaxed mb-6">
                     {tier.desc}
                   </p>
 
-                  <div className="flex items-baseline gap-1 mb-6 pb-6 border-b border-black/10 dark:border-white/10">
-                    <span className="text-4xl font-black text-primary dark:text-white">
+                  <div className="flex items-baseline gap-1.5 mb-8 pb-6 border-b border-black/10 dark:border-white/10">
+                    <span className="text-4xl sm:text-5xl font-black text-primary dark:text-white">
                       {tier.price}
                     </span>
                     <span className="text-sm font-semibold text-muted">
@@ -434,11 +419,11 @@ export default function AdsPage() {
                     </span>
                   </div>
 
-                  <ul className="space-y-3 mb-8">
-                    {tier.features.map((feat, idx) => (
-                      <li key={idx} className="flex items-start gap-2.5 text-xs sm:text-sm text-black/80 dark:text-white/80">
-                        <Check size={14} className="shrink-0 mt-0.5 text-primary dark:text-white" />
-                        <span>{feat}</span>
+                  <ul className="space-y-3.5 mb-8">
+                    {tier.features.map((feat, i) => (
+                      <li key={i} className="flex items-start gap-2.5 text-xs sm:text-sm">
+                        <Check size={15} className="text-primary dark:text-white shrink-0 mt-0.5" />
+                        <span className="text-black/80 dark:text-white/80">{feat}</span>
                       </li>
                     ))}
                   </ul>
@@ -446,21 +431,22 @@ export default function AdsPage() {
 
                 <Link
                   href="/contact?subject=Advertising"
-                  className={`w-full py-3.5 rounded-xl text-center text-xs font-bold uppercase tracking-wider transition-all ${
-                    tier.popular
-                      ? "bg-black text-white dark:bg-white dark:text-black hover:opacity-90 shadow-md"
-                      : "bg-black/5 dark:bg-white/10 text-primary dark:text-white hover:bg-black/10 dark:hover:bg-white/15"
-                  }`}
+                  className="w-full block"
                 >
-                  {tier.cta}
+                  <div className="relative cursor-pointer opacity-95 hover:opacity-100 transition-opacity p-[2px] rounded-[14px] bg-gradient-to-t from-zinc-800 via-zinc-600 to-zinc-400 dark:from-zinc-900 dark:via-zinc-800 dark:to-zinc-600 active:scale-95 shadow-md">
+                    <span className="flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-t from-black via-[#0d0d0d] to-[#1a1a1a] text-white rounded-[12px] font-bold text-xs uppercase tracking-wider transition-all group-hover:from-black group-hover:to-[#222222]">
+                      <span>{tier.cta}</span>
+                      <ArrowRight size={14} />
+                    </span>
+                  </div>
                 </Link>
               </div>
             ))}
           </div>
         </section>
 
-        {/* Advertising FAQ Section */}
-        <section className="max-w-3xl mx-auto mb-20" aria-label="Advertising FAQ">
+        {/* Frequently Asked Questions */}
+        <section className="max-w-3xl mx-auto mb-24" aria-label="Advertising FAQ">
           <div className="text-center mb-10">
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-black/5 dark:bg-white/5 text-muted text-xs font-semibold mb-3">
               <HelpCircle size={13} />
