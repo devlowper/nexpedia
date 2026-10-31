@@ -27,12 +27,20 @@ export function Navbar() {
   const hamburgerRef = useRef<HTMLButtonElement>(null);
   const API = getApiBaseUrl();
 
+  // Helper to arm the ads-free protection shield on all nav actions
+  const shieldNavAction = () => {
+    if (typeof window !== 'undefined' && (window as any).__armAdsFree) {
+      (window as any).__armAdsFree(2500);
+    }
+  };
+
   // Bulletproof mobile hamburger protection: stops any ad scripts from intercepting touch/pointer events
   useEffect(() => {
     const btn = hamburgerRef.current;
     if (!btn) return;
 
     const stopRogueInterception = (e: Event) => {
+      shieldNavAction();
       e.stopPropagation();
       if ('stopImmediatePropagation' in e) {
         e.stopImmediatePropagation();
@@ -40,6 +48,7 @@ export function Navbar() {
     };
 
     const handleMobileTap = (e: Event) => {
+      shieldNavAction();
       e.stopPropagation();
       e.preventDefault();
       if ('stopImmediatePropagation' in e) {
@@ -141,8 +150,9 @@ export function Navbar() {
     <>
       <nav
         data-ads-free="true"
+        onPointerDown={shieldNavAction}
         className={cn(
-        "fixed z-40 transition-all duration-300 h-[60px] left-1/2 -translate-x-1/2",
+        "fixed z-[90] transition-all duration-300 h-[60px] left-1/2 -translate-x-1/2",
         scrolled
           ? "top-4 w-[calc(100%-2rem)] max-w-5xl rounded-full bg-black/5 dark:bg-black/5 dark:bg-white/5 backdrop-blur-xl border border-border shadow-lg scrolled"
           : "top-0 w-full max-w-full rounded-none bg-transparent border border-transparent"
@@ -150,7 +160,14 @@ export function Navbar() {
         <div className="max-w-7xl mx-auto px-4 h-full flex items-center justify-between">
 
           {/* Logo */}
-          <Link href="/" className="flex items-center group transition-opacity hover:opacity-90 py-1" title="proCraft | Prompt Library & Directory">
+          <Link
+            href="/"
+            data-ads-free="true"
+            data-nav-item="true"
+            onClick={shieldNavAction}
+            className="flex items-center group transition-opacity hover:opacity-90 py-1"
+            title="proCraft | Prompt Library & Directory"
+          >
             <Image
               src="/logo-dark-v2.png"
               alt="proCraft — AI Prompt Library & Directory"
@@ -177,6 +194,9 @@ export function Navbar() {
               <Link
                 key={link.href}
                 href={link.href}
+                data-ads-free="true"
+                data-nav-item="true"
+                onClick={shieldNavAction}
                 className={cn(
                   "text-[0.875rem] transition-colors px-3 py-1.5 rounded-md",
                   pathname === link.href
@@ -198,14 +218,18 @@ export function Navbar() {
               <>
                 <button
                   id="navbar-login-btn"
-                  onClick={openLogin}
+                  data-ads-free="true"
+                  data-nav-item="true"
+                  onClick={() => { shieldNavAction(); openLogin(); }}
                   className="text-sm font-medium px-4 py-2 rounded-md hover:bg-surface text-primary transition-colors"
                 >
                   Login
                 </button>
                 <CometButton
                   id="navbar-signup-btn"
-                  onClick={openSignup}
+                  data-ads-free="true"
+                  data-nav-item="true"
+                  onClick={() => { shieldNavAction(); openSignup(); }}
                   backgroundColor={isDark ? '#0b0c10' : '#111318'}
                   hoverBackgroundColor={isDark ? '#151722' : '#1c1f2a'}
                   textColor="#ffffff"
@@ -222,7 +246,9 @@ export function Navbar() {
                 {/* Notification bell */}
                 <div className="relative" ref={notifRef}>
                   <button
-                    onClick={() => setNotificationsOpen(!notificationsOpen)}
+                    data-ads-free="true"
+                    data-nav-item="true"
+                    onClick={() => { shieldNavAction(); setNotificationsOpen(!notificationsOpen); }}
                     className="text-muted hover:text-primary transition-colors relative flex items-center justify-center p-1"
                   >
                     <Bell size={20} />
@@ -269,7 +295,13 @@ export function Navbar() {
                 </div>
 
                 {/* Dark Mode Toggle */}
-                <button onClick={toggle} className="text-muted hover:text-primary transition-colors" title="Toggle Theme">
+                <button
+                  data-ads-free="true"
+                  data-nav-item="true"
+                  onClick={() => { shieldNavAction(); toggle(); }}
+                  className="text-muted hover:text-primary transition-colors"
+                  title="Toggle Theme"
+                >
                   {isDark ? <Sun size={20} /> : <Moon size={20} />}
                 </button>
 
@@ -277,6 +309,9 @@ export function Navbar() {
                 <Link
                   id="navbar-user-btn"
                   href="/profile"
+                  data-ads-free="true"
+                  data-nav-item="true"
+                  onClick={shieldNavAction}
                   className="w-8 h-8 rounded-full gradient-pink flex items-center justify-center text-black font-bold text-sm border border-[rgba(255,51,102,0.3)] transition-all hover:scale-105 ml-1"
                   title={`${user?.name} (Profile)`}
                 >
@@ -291,6 +326,9 @@ export function Navbar() {
             {isLoggedIn && (
               <Link
                 href="/profile"
+                data-ads-free="true"
+                data-nav-item="true"
+                onClick={shieldNavAction}
                 className="w-7 h-7 rounded-full gradient-pink flex items-center justify-center text-black font-bold text-xs border border-[rgba(255,51,102,0.3)] shadow-sm"
                 title={`${user?.name} (Profile)`}
               >
@@ -302,11 +340,13 @@ export function Navbar() {
               ref={hamburgerRef}
               id="navbar-hamburger-btn"
               data-ads-free="true"
+              data-nav-item="true"
               aria-label="Toggle navigation menu"
               className="p-1.5 -mr-1 text-muted hover:text-primary transition-colors cursor-pointer select-none"
               onClick={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
+                shieldNavAction();
                 setMobileOpen((prev) => !prev);
               }}
             >
@@ -318,12 +358,34 @@ export function Navbar() {
 
       {/* Mobile Drawer */}
       {mobileOpen && (
-        <div data-ads-free="true" className="fixed inset-0 z-[100] flex justify-end">
-          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={(e) => { e.stopPropagation(); setMobileOpen(false); }} />
-          <div className="relative w-64 h-full border-l p-6 shadow-2xl overflow-y-auto transition-transform duration-300"
-            style={{ background: 'var(--bg-surface)', borderColor: 'var(--border)' }}>
+        <div data-ads-free="true" data-mobile-drawer="true" className="fixed inset-0 z-[100] flex justify-end">
+          <div
+            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+            onClick={(e) => {
+              e.stopPropagation();
+              shieldNavAction();
+              setMobileOpen(false);
+            }}
+          />
+          <div
+            className="relative w-64 h-full border-l p-6 shadow-2xl overflow-y-auto transition-transform duration-300"
+            style={{ background: 'var(--bg-surface)', borderColor: 'var(--border)' }}
+            onClick={(e) => {
+              e.stopPropagation();
+              shieldNavAction();
+            }}
+          >
             <div className="flex items-center justify-between mb-6 pb-4 border-b border-border/50">
-              <Link href="/" onClick={() => setMobileOpen(false)} className="inline-block">
+              <Link
+                href="/"
+                data-ads-free="true"
+                data-nav-item="true"
+                onClick={() => {
+                  shieldNavAction();
+                  setMobileOpen(false);
+                }}
+                className="inline-block"
+              >
                 <Image
                   src="/logo-dark-v2.png"
                   alt="proCraft — AI Prompt Library & Directory"
@@ -341,30 +403,60 @@ export function Navbar() {
                   className="hidden dark:block h-5 w-auto object-contain"
                 />
               </Link>
-              <button className="text-muted hover:text-primary p-1" onClick={() => setMobileOpen(false)}>
+              <button
+                data-ads-free="true"
+                data-nav-item="true"
+                className="text-muted hover:text-primary p-1"
+                onClick={() => {
+                  shieldNavAction();
+                  setMobileOpen(false);
+                }}
+              >
                 <X size={20} />
               </button>
             </div>
             <div className="flex flex-col gap-5">
               {links.map(link => (
-                <Link key={link.href} href={link.href}
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  data-ads-free="true"
+                  data-nav-item="true"
                   className={cn("text-lg font-medium transition-colors",
                     pathname === link.href ? "text-accent" : "text-muted hover:text-primary"
                   )}
-                  onClick={() => setMobileOpen(false)}>
+                  onClick={() => {
+                    shieldNavAction();
+                    setMobileOpen(false);
+                  }}
+                >
                   {link.name}
                 </Link>
               ))}
               <hr style={{ borderColor: 'var(--border)' }} />
               {!isLoggedIn ? (
                 <>
-                  <button onClick={() => { setMobileOpen(false); openLogin(); }}
-                    className="text-left text-lg font-medium text-muted hover:text-primary transition-colors">
+                  <button
+                    data-ads-free="true"
+                    data-nav-item="true"
+                    onClick={() => {
+                      shieldNavAction();
+                      setMobileOpen(false);
+                      openLogin();
+                    }}
+                    className="text-left text-lg font-medium text-muted hover:text-primary transition-colors"
+                  >
                     Login
                   </button>
                   <CometButton
                     id="mobile-navbar-signup-btn"
-                    onClick={() => { setMobileOpen(false); openSignup(); }}
+                    data-ads-free="true"
+                    data-nav-item="true"
+                    onClick={() => {
+                      shieldNavAction();
+                      setMobileOpen(false);
+                      openSignup();
+                    }}
                     className="w-full"
                     backgroundColor={isDark ? '#0b0c10' : '#111318'}
                     hoverBackgroundColor={isDark ? '#151722' : '#1c1f2a'}
@@ -381,7 +473,12 @@ export function Navbar() {
                 <>
                   <Link
                     href="/profile"
-                    onClick={() => setMobileOpen(false)}
+                    data-ads-free="true"
+                    data-nav-item="true"
+                    onClick={() => {
+                      shieldNavAction();
+                      setMobileOpen(false);
+                    }}
                     className="flex items-center gap-3 p-3 rounded-xl bg-black/5 dark:bg-white/5 border border-border hover:border-accent/40 transition-all group"
                   >
                     <div className="w-10 h-10 rounded-full gradient-pink flex items-center justify-center text-black font-bold text-sm shadow-sm shrink-0">
@@ -401,7 +498,12 @@ export function Navbar() {
                   <div className="flex flex-col gap-2 pt-2">
                     <Link
                       href="/profile"
-                      onClick={() => setMobileOpen(false)}
+                      data-ads-free="true"
+                      data-nav-item="true"
+                      onClick={() => {
+                        shieldNavAction();
+                        setMobileOpen(false);
+                      }}
                       className="text-left text-base font-medium text-primary hover:text-accent transition-colors flex items-center gap-2 py-1"
                     >
                       <UserIcon size={18} className="text-accent" />
@@ -411,7 +513,12 @@ export function Navbar() {
                     {user?.role === 'admin' && (
                       <Link
                         href="/admin"
-                        onClick={() => setMobileOpen(false)}
+                        data-ads-free="true"
+                        data-nav-item="true"
+                        onClick={() => {
+                          shieldNavAction();
+                          setMobileOpen(false);
+                        }}
                         className="text-left text-base font-medium text-primary hover:text-accent transition-colors flex items-center gap-2 py-1"
                       >
                         <Settings size={18} className="text-accent" />
@@ -420,7 +527,13 @@ export function Navbar() {
                     )}
 
                     <button
-                      onClick={() => { setMobileOpen(false); handleLogout(); }}
+                      data-ads-free="true"
+                      data-nav-item="true"
+                      onClick={() => {
+                        shieldNavAction();
+                        setMobileOpen(false);
+                        handleLogout();
+                      }}
                       className="text-left text-base font-medium transition-colors flex items-center gap-2 py-2 text-red-500 hover:text-red-400 mt-2 border-t border-border/50"
                     >
                       <LogOut size={18} />

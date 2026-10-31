@@ -5,7 +5,8 @@ import {
   Plus, Search, Edit2, Trash2, X, Save, AlertCircle,
   CheckCircle, Loader2, Sparkles, Clock, Tag, Eye,
   ChevronLeft, ChevronRight, Filter, ToggleLeft, ToggleRight,
-  Lightbulb, BookOpen, ChevronDown, ChevronUp, Wand2, Crown, DollarSign, Layers
+  Lightbulb, BookOpen, ChevronDown, ChevronUp, Wand2, Crown, DollarSign, Layers,
+  Check
 } from "lucide-react";
 import { ImageUploadInput } from "@/components/ui/ImageUploadInput";
 import { getApiBaseUrl } from "@/lib/apiClient";
@@ -33,14 +34,19 @@ export const AI_MODELS_DATA = [
   { name: "ChatGPT", logo: "/logos/chatgpt.svg", color: "#10a37f" },
   { name: "Claude", logo: "/logos/claude.svg", color: "#d97706" },
   { name: "Gemini", logo: "/logos/gemini.svg", color: "#1a73e8" },
-  { name: "Grok", logo: "/logos/grok.svg", color: "#ffffff" },
-  { name: "DeepSeek", logo: "/logos/deepseek.svg", color: "#3b82f6" },
   { name: "Midjourney", logo: "/logos/midjourney.svg", color: "#8b5cf6" },
-  { name: "Runway", logo: "/logos/muse.svg", color: "#ec4899" },
-  { name: "Nano Banana", emoji: "🍌", color: "#f9c22e" },
-  { name: "Qwen", logo: "/logos/qwen.svg", color: "#6366f1" },
   { name: "FLUX", emoji: "⚡", color: "#eab308" },
+  { name: "Stable Diffusion", emoji: "🎨", color: "#a855f7" },
+  { name: "DALL-E 3", logo: "/logos/chatgpt.svg", color: "#10a37f" },
+  { name: "DeepSeek", logo: "/logos/deepseek.svg", color: "#3b82f6" },
+  { name: "Grok", logo: "/logos/grok.svg", color: "#ffffff" },
+  { name: "Runway", logo: "/logos/muse.svg", color: "#ec4899" },
+  { name: "Leonardo AI", emoji: "🖌️", color: "#f43f5e" },
+  { name: "Ideogram", emoji: "💡", color: "#f97316" },
+  { name: "Recraft", emoji: "✨", color: "#8b5cf6" },
+  { name: "Qwen", logo: "/logos/qwen.svg", color: "#6366f1" },
   { name: "Sora", logo: "/logos/chatgpt.svg", color: "#06b6d4" },
+  { name: "Nano Banana", emoji: "🍌", color: "#f9c22e" },
   { name: "Other", emoji: "🤖", color: "#94a3b8" },
 ];
 
@@ -48,8 +54,9 @@ const AI_MODELS = AI_MODELS_DATA.map(m => m.name);
 
 export const getModelData = (name?: string) => {
   if (!name) return null;
-  return AI_MODELS_DATA.find(m => m.name.toLowerCase() === name.toLowerCase()) || {
-    name,
+  const trimmed = name.trim();
+  return AI_MODELS_DATA.find(m => m.name.toLowerCase() === trimmed.toLowerCase()) || {
+    name: trimmed,
     emoji: "🤖",
     color: "#6366f1",
   };
@@ -92,6 +99,7 @@ interface FormState {
   tags: string;
   imageUrl: string;
   aiModel: string;
+  aiModels: string[];
   exampleOutput: string;
   status: "draft" | "published";
   isLatest: boolean;
@@ -112,6 +120,7 @@ const EMPTY_FORM: FormState = {
   tags: "",
   imageUrl: "",
   aiModel: "",
+  aiModels: [],
   exampleOutput: "",
   status: "published",
   isLatest: true,
@@ -202,7 +211,12 @@ function PromptFormModal({
   const isEdit = !!editingPrompt;
 
   const toForm = (p: PromptRow | null): FormState => {
-    if (!p) return { ...EMPTY_FORM, publishedAt: new Date().toISOString().slice(0, 16) };
+    if (!p) return { ...EMPTY_FORM, aiModels: [], publishedAt: new Date().toISOString().slice(0, 16) };
+    const rawAiModel = p.aiModel || "";
+    const parsedModels = rawAiModel
+      ? rawAiModel.split(/[,/]/).map(m => m.trim()).filter(Boolean)
+      : [];
+
     return {
       page_name:    p.page_name || p.title || "",
       prompt_body:  p.prompt_body || p.promptText || "",
@@ -210,7 +224,8 @@ function PromptFormModal({
       category:     getCategoryName(p.category),
       tags:         (p.tags || []).join(", "),
       imageUrl:     p.imageUrl || p.example_output_image_url || "",
-      aiModel:      p.aiModel || "",
+      aiModel:      rawAiModel,
+      aiModels:     parsedModels,
       exampleOutput: p.exampleOutput || "",
       status:       (p.status === "draft" ? "draft" : "published") as "draft" | "published",
       isLatest:     p.isLatest ?? false,
@@ -231,6 +246,47 @@ function PromptFormModal({
   const [showDetailsSection, setShowDetailsSection] = useState(
     !!(editingPrompt?.what_this_prompt_does || editingPrompt?.tips || editingPrompt?.how_to_use_the_prompt)
   );
+  const [customModelInput, setCustomModelInput] = useState("");
+
+  const toggleModel = (modelName: string) => {
+    setForm(prev => {
+      const current = prev.aiModels || [];
+      const exists = current.some(m => m.toLowerCase() === modelName.toLowerCase());
+      const updated = exists
+        ? current.filter(m => m.toLowerCase() !== modelName.toLowerCase())
+        : [...current, modelName];
+      return {
+        ...prev,
+        aiModels: updated,
+        aiModel: updated.join(", "),
+      };
+    });
+  };
+
+  const handleAddCustomModel = (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
+    const trimmed = customModelInput.trim();
+    if (!trimmed) return;
+    setForm(prev => {
+      const current = prev.aiModels || [];
+      if (current.some(m => m.toLowerCase() === trimmed.toLowerCase())) return prev;
+      const updated = [...current, trimmed];
+      return {
+        ...prev,
+        aiModels: updated,
+        aiModel: updated.join(", "),
+      };
+    });
+    setCustomModelInput("");
+  };
+
+  const handleClearModels = () => {
+    setForm(prev => ({
+      ...prev,
+      aiModels: [],
+      aiModel: "",
+    }));
+  };
 
   const set = (key: keyof FormState, val: string | boolean) =>
     setForm(prev => ({ ...prev, [key]: val }));
@@ -289,6 +345,9 @@ function PromptFormModal({
     setSaving(true);
     const token = sessionStorage.getItem("admin_token");
     const tagsArr = form.tags ? form.tags.split(",").map(t => t.trim()).filter(Boolean) : [];
+    const finalAiModel = form.aiModels && form.aiModels.length > 0
+      ? form.aiModels.join(", ")
+      : (form.aiModel.trim() || null);
 
     const body = {
       page_name:    form.page_name.trim(),
@@ -297,7 +356,7 @@ function PromptFormModal({
       category:     form.category,
       tags:         tagsArr,
       imageUrl:     form.imageUrl.trim() || null,
-      aiModel:      form.aiModel.trim() || null,
+      aiModel:      finalAiModel,
       exampleOutput: form.exampleOutput.trim() || null,
       status:       form.status,
       isLatest:     form.status === "draft" ? false : form.isLatest,
@@ -424,104 +483,161 @@ function PromptFormModal({
                 className="w-full bg-black/5 dark:bg-white/5 border border-border rounded-lg px-4 py-2.5 text-primary text-sm focus:border-accent outline-none transition-colors"
               />
             </div>
-            <div className="space-y-2">
-              <label className="text-sm font-semibold text-primary flex items-center justify-between">
-                <span>AI Model / Tool</span>
-                {form.aiModel && (
-                  <span className="text-[11px] font-medium text-accent">Selected</span>
-                )}
-              </label>
-
-              <div className="relative flex items-center">
-                <select
-                  value={form.aiModel}
-                  onChange={e => set("aiModel", e.target.value)}
-                  className={`w-full bg-black/5 dark:bg-white/5 border border-border rounded-lg ${
-                    form.aiModel ? "pl-11" : "pl-4"
-                  } pr-4 py-2.5 text-primary text-sm focus:border-accent outline-none transition-all appearance-none cursor-pointer`}
-                >
-                  <option value="">Select AI tool…</option>
-                  {AI_MODELS.map(m => (
-                    <option key={m} value={m}>
-                      {m}
-                    </option>
-                  ))}
-                </select>
-
-                {/* Inline model logo preview inside the dropdown */}
-                {form.aiModel && (
-                  <div className="absolute left-3 pointer-events-none flex items-center justify-center">
-                    {getModelData(form.aiModel)?.logo ? (
-                      <img
-                        src={getModelData(form.aiModel)?.logo}
-                        alt={form.aiModel}
-                        className="w-5 h-5 object-contain"
-                      />
-                    ) : (
-                      <span className="text-base leading-none">
-                        {getModelData(form.aiModel)?.emoji || "🤖"}
-                      </span>
-                    )}
-                  </div>
-                )}
+            <div className="space-y-2.5">
+              <div className="flex items-center justify-between">
+                <label className="text-sm font-semibold text-primary flex items-center gap-1.5">
+                  <Sparkles size={13} className="text-accent" />
+                  <span>AI Models / Tools</span>
+                </label>
+                <div className="flex items-center gap-2">
+                  <span className="text-[11px] font-semibold text-accent bg-accent/10 border border-accent/25 px-2 py-0.5 rounded-full">
+                    {form.aiModels.length > 0 ? `${form.aiModels.length} Selected` : "Multiple Select"}
+                  </span>
+                  {form.aiModels.length > 0 && (
+                    <button
+                      type="button"
+                      onClick={handleClearModels}
+                      className="text-[11px] text-muted hover:text-red-400 underline transition-colors"
+                    >
+                      Clear
+                    </button>
+                  )}
+                </div>
               </div>
 
-              {/* Selected Model Logo Banner */}
-              {form.aiModel && (
-                <div className="flex items-center gap-3 p-2.5 rounded-xl border border-border bg-black/5 dark:bg-white/5 transition-all">
-                  <div
-                    className="w-8 h-8 rounded-lg p-1.5 flex items-center justify-center border shadow-xs shrink-0"
-                    style={{
-                      borderColor: `${getModelData(form.aiModel)?.color}40`,
-                      backgroundColor: `${getModelData(form.aiModel)?.color}15`,
-                    }}
-                  >
-                    {getModelData(form.aiModel)?.logo ? (
-                      <img
-                        src={getModelData(form.aiModel)?.logo}
-                        alt={form.aiModel}
-                        className="w-full h-full object-contain"
-                      />
-                    ) : (
-                      <span className="text-sm">
-                        {getModelData(form.aiModel)?.emoji || "🤖"}
-                      </span>
-                    )}
+              {/* Selected Model Chips / Banner */}
+              {form.aiModels.length > 0 && (
+                <div className="p-2.5 rounded-xl border border-accent/25 bg-accent/[0.04] dark:bg-accent/[0.06] space-y-1.5 transition-all">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[11px] font-bold text-primary uppercase tracking-wider">
+                      Selected ({form.aiModels.length})
+                    </span>
+                    <span className="text-[10px] text-muted">
+                      Shows on cards &amp; details
+                    </span>
                   </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-xs font-bold text-primary flex items-center gap-2">
-                      <span>{form.aiModel}</span>
-                      <span
-                        className="w-2 h-2 rounded-full inline-block"
-                        style={{ backgroundColor: getModelData(form.aiModel)?.color }}
-                      />
-                    </p>
-                    <p className="text-[10px] text-muted">Model logo will appear on the prompt card</p>
+                  <div className="flex flex-wrap items-center gap-1.5 max-h-28 overflow-y-auto custom-scrollbar">
+                    {form.aiModels.map(name => {
+                      const model = getModelData(name);
+                      return (
+                        <span
+                          key={name}
+                          className="inline-flex items-center gap-1.5 pl-2 pr-1 py-1 rounded-lg text-xs font-semibold border shadow-2xs transition-all bg-white dark:bg-[#16171a]"
+                          style={{
+                            borderColor: `${model?.color || "#ff3366"}40`,
+                          }}
+                        >
+                          <span
+                            className="w-1.5 h-1.5 rounded-full shrink-0"
+                            style={{ backgroundColor: model?.color || "#ff3366" }}
+                          />
+                          {model?.logo ? (
+                            <img
+                              src={model.logo}
+                              alt={name}
+                              className="w-3.5 h-3.5 object-contain shrink-0"
+                            />
+                          ) : (
+                            <span className="text-xs leading-none shrink-0">{model?.emoji || "🤖"}</span>
+                          )}
+                          <span className="text-primary truncate max-w-[120px]">{name}</span>
+                          <button
+                            type="button"
+                            onClick={() => toggleModel(name)}
+                            className="w-4 h-4 rounded-full flex items-center justify-center hover:bg-black/10 dark:hover:bg-white/10 text-muted hover:text-red-500 transition-colors ml-0.5"
+                            title={`Remove ${name}`}
+                          >
+                            <X size={11} />
+                          </button>
+                        </span>
+                      );
+                    })}
                   </div>
                 </div>
               )}
 
-              {/* Quick Model Selector Pills */}
-              <div className="flex flex-wrap gap-1.5 pt-1">
-                {AI_MODELS_DATA.map(m => (
-                  <button
-                    key={m.name}
-                    type="button"
-                    onClick={() => set("aiModel", m.name)}
-                    className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs transition-all ${
-                      form.aiModel === m.name
-                        ? "bg-accent/15 border-accent text-accent font-semibold shadow-xs border"
-                        : "bg-black/5 dark:bg-white/5 border border-border text-muted hover:text-primary hover:border-border/80"
-                    }`}
+              {/* Quick Model Selector Pills (Multi-Select Click to Toggle) */}
+              <div className="space-y-1.5">
+                <span className="text-[11px] text-muted block">
+                  Click to select/toggle multiple models:
+                </span>
+                <div className="flex flex-wrap gap-1.5 max-h-36 overflow-y-auto custom-scrollbar pr-0.5">
+                  {AI_MODELS_DATA.map(m => {
+                    const isSelected = form.aiModels.some(
+                      item => item.toLowerCase() === m.name.toLowerCase()
+                    );
+                    return (
+                      <button
+                        key={m.name}
+                        type="button"
+                        onClick={() => toggleModel(m.name)}
+                        className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs transition-all select-none cursor-pointer ${
+                          isSelected
+                            ? "bg-accent/15 border-accent text-accent font-bold shadow-xs border ring-1 ring-accent/30"
+                            : "bg-black/5 dark:bg-white/5 border border-border text-muted hover:text-primary hover:border-border/80"
+                        }`}
+                      >
+                        {m.logo ? (
+                          <img src={m.logo} alt={m.name} className="w-3.5 h-3.5 object-contain" />
+                        ) : (
+                          <span className="text-xs">{m.emoji}</span>
+                        )}
+                        <span>{m.name}</span>
+                        {isSelected && <Check size={12} className="text-accent stroke-[3]" />}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Dropdown helper & Custom Model addition */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
+                {/* Dropdown to add from list */}
+                <div className="relative">
+                  <select
+                    value=""
+                    onChange={e => {
+                      if (e.target.value) {
+                        toggleModel(e.target.value);
+                      }
+                    }}
+                    className="w-full bg-black/5 dark:bg-white/5 border border-border rounded-lg px-2.5 py-1.5 text-primary text-xs focus:border-accent outline-none transition-all cursor-pointer"
                   >
-                    {m.logo ? (
-                      <img src={m.logo} alt={m.name} className="w-3.5 h-3.5 object-contain" />
-                    ) : (
-                      <span className="text-xs">{m.emoji}</span>
-                    )}
-                    <span>{m.name}</span>
+                    <option value="">+ Add model…</option>
+                    {AI_MODELS.filter(
+                      m => !form.aiModels.some(sel => sel.toLowerCase() === m.toLowerCase())
+                    ).map(m => (
+                      <option key={m} value={m}>
+                        + {m}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* Custom Model Input */}
+                <div className="flex items-center gap-1">
+                  <input
+                    type="text"
+                    value={customModelInput}
+                    onChange={e => setCustomModelInput(e.target.value)}
+                    onKeyDown={e => {
+                      if (e.key === "Enter") {
+                        e.preventDefault();
+                        handleAddCustomModel();
+                      }
+                    }}
+                    placeholder="Custom model…"
+                    className="w-full bg-black/5 dark:bg-white/5 border border-border rounded-lg px-2.5 py-1.5 text-primary text-xs focus:border-accent outline-none transition-all"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => handleAddCustomModel()}
+                    disabled={!customModelInput.trim()}
+                    className="px-2.5 py-1.5 rounded-lg bg-black/10 dark:bg-white/10 hover:bg-accent hover:text-white text-primary text-xs font-semibold transition-colors disabled:opacity-40 whitespace-nowrap border border-border"
+                  >
+                    + Add
                   </button>
-                ))}
+                </div>
               </div>
             </div>
           </div>
@@ -1065,28 +1181,43 @@ export default function AdminPromptsPage() {
                 </thead>
                 <tbody className="divide-y" style={{ borderColor: "var(--border)" }}>
                   {prompts.map(p => {
-                    const modelData = p.aiModel ? getModelData(p.aiModel) : null;
+                    const modelNames = p.aiModel
+                      ? p.aiModel.split(/[,/]/).map(m => m.trim()).filter(Boolean)
+                      : [];
                     return (
                       <tr key={p._id} className="hover:bg-black/3 dark:hover:bg-white/3 transition-colors">
                         <td className="px-5 py-4">
                           <div className="flex items-center gap-3">
-                            {modelData && (
-                              <div
-                                className="w-7 h-7 rounded-lg flex items-center justify-center p-1 border shadow-xs shrink-0"
-                                style={{
-                                  borderColor: `${modelData.color}40`,
-                                  backgroundColor: `${modelData.color}15`,
-                                }}
-                                title={`AI Model: ${p.aiModel}`}
-                              >
-                                {modelData.logo ? (
-                                  <img
-                                    src={modelData.logo}
-                                    alt={p.aiModel || ""}
-                                    className="w-full h-full object-contain"
-                                  />
-                                ) : (
-                                  <span className="text-xs">{modelData.emoji || "🤖"}</span>
+                            {modelNames.length > 0 && (
+                              <div className="flex items-center -space-x-1.5 shrink-0" title={`AI Models: ${p.aiModel}`}>
+                                {modelNames.slice(0, 3).map((mName, idx) => {
+                                  const mData = getModelData(mName);
+                                  return (
+                                    <div
+                                      key={idx}
+                                      className="w-7 h-7 rounded-lg flex items-center justify-center p-1 border shadow-xs bg-white dark:bg-[#16171a] overflow-hidden"
+                                      style={{
+                                        borderColor: `${mData?.color || '#ff3366'}40`,
+                                        backgroundColor: `${mData?.color || '#ff3366'}15`,
+                                      }}
+                                      title={mName}
+                                    >
+                                      {mData?.logo ? (
+                                        <img
+                                          src={mData.logo}
+                                          alt={mName}
+                                          className="w-full h-full object-contain"
+                                        />
+                                      ) : (
+                                        <span className="text-xs leading-none">{mData?.emoji || "🤖"}</span>
+                                      )}
+                                    </div>
+                                  );
+                                })}
+                                {modelNames.length > 3 && (
+                                  <div className="w-7 h-7 rounded-lg flex items-center justify-center text-[10px] font-bold border border-border bg-black/10 dark:bg-white/10 text-muted">
+                                    +{modelNames.length - 3}
+                                  </div>
                                 )}
                               </div>
                             )}

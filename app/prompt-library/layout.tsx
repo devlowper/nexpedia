@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'AI Prompt Library — Trending Prompts',
+  title: 'AI Prompt Library | Trending Prompts',
   description:
     'Discover 800+ curated AI art prompts for Midjourney, ChatGPT, FLUX and Stable Diffusion. Copy prompts with one click on ProCraft.',
   keywords: [
@@ -13,12 +13,19 @@ export const metadata: Metadata = {
     'ai prompt library',
     'midjourney prompts',
     'chatgpt prompts',
+    'free prompt library',
+    'online prompt library',
+    'ai prompt database',
+    'ready made ai prompts',
+    'ai art prompt library',
+    'photography prompt library',
+    'image generation prompt library',
   ],
   alternates: {
     canonical: '/prompt-library',
   },
   openGraph: {
-    title: 'AI Prompt Library — Trending Prompts | ProCraft',
+    title: 'AI Prompt Library | Trending Prompts | ProCraft',
     description:
       'Explore thousands of curated, trending AI prompts ready to copy with 1-click.',
     url: '/prompt-library',

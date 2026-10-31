@@ -24,7 +24,7 @@ export async function generateMetadata({ params }: LayoutProps): Promise<Metadat
     const cleanName = (tool.name || 'AI Tool').trim();
 
     // 50-60 chars title
-    const title = `${cleanName} — AI Tool Review & Pricing | proCraft`;
+    const title = `${cleanName} | AI Tool Review & Pricing | ProCraft`;
 
     // 150-160 chars description
     let rawDesc = tool.tagline || tool.description || `Discover ${cleanName}: pricing, features, alternatives and pros/cons in the proCraft AI Directory.`;
@@ -49,13 +49,13 @@ export async function generateMetadata({ params }: LayoutProps): Promise<Metadat
         type: 'website',
         images: logoUrl
           ? [
-              {
-                url: logoUrl,
-                width: 512,
-                height: 512,
-                alt: `${cleanName} Logo`,
-              },
-            ]
+            {
+              url: logoUrl,
+              width: 512,
+              height: 512,
+              alt: `${cleanName} Logo`,
+            },
+          ]
           : undefined,
       },
       twitter: {
@@ -67,7 +67,7 @@ export async function generateMetadata({ params }: LayoutProps): Promise<Metadat
     };
   } catch {
     return {
-      title: 'AI Tool Review & Details — proCraft',
+      title: 'AI Tool Review & Details | ProCraft',
       description: 'Discover curated AI tools, pricing, and models in the proCraft AI Directory.',
     };
   }

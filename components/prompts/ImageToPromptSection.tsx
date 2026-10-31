@@ -353,20 +353,24 @@ export function ImageToPromptSection() {
               type="button"
               onClick={handleGenerate}
               disabled={loading}
-              className="w-full py-4 px-8 rounded-2xl bg-[#EA4C89] hover:bg-[#d43a76] disabled:opacity-50 disabled:cursor-not-allowed !text-white font-bold text-sm sm:text-base transition-all flex items-center justify-center gap-2.5 shadow-[0_6px_25px_rgba(234,76,137,0.35)] active:scale-[0.99] cursor-pointer"
-              style={{ color: '#ffffff' }}
+              className="w-full relative group cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed select-none p-[2px] rounded-2xl bg-gradient-to-t from-[#1b1a1b] to-[#454244] hover:from-[#232122] hover:to-[#555254] shadow-[0_4px_16px_rgba(0,0,0,0.35)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.5)] active:scale-[0.99] transition-all"
             >
-              {loading ? (
-                <>
-                  <Loader2 size={18} className="animate-spin text-white shrink-0" style={{ color: '#ffffff' }} />
-                  <span className="text-white font-bold" style={{ color: '#ffffff' }}>Analyzing Visuals & Generating Prompt...</span>
-                </>
-              ) : (
-                <>
-                  <Sparkles size={18} className="text-white shrink-0" style={{ color: '#ffffff' }} />
-                  <span className="text-white font-bold" style={{ color: '#ffffff' }}>Generate Prompt</span>
-                </>
-              )}
+              <span
+                className="w-full py-3.5 sm:py-4 px-6 sm:px-8 rounded-[14px] bg-[#2D2B2C] group-hover:bg-[#383536] !text-white font-bricolage font-bold text-sm sm:text-base tracking-normal transition-colors flex items-center justify-center gap-2.5"
+                style={{ backgroundColor: '#2D2B2C', color: '#ffffff' }}
+              >
+                {loading ? (
+                  <>
+                    <Loader2 size={18} className="animate-spin !text-white shrink-0" style={{ color: '#ffffff' }} />
+                    <span className="!text-white font-bold" style={{ color: '#ffffff' }}>Analyzing Visuals & Generating Prompt...</span>
+                  </>
+                ) : (
+                  <>
+                    <Sparkles size={18} className="!text-white shrink-0 group-hover:scale-110 transition-transform" style={{ color: '#ffffff' }} />
+                    <span className="!text-white font-bold" style={{ color: '#ffffff' }}>Generate Prompt</span>
+                  </>
+                )}
+              </span>
             </button>
 
             <Link

@@ -68,24 +68,37 @@ function SectionCard({
 }
 
 
+const PROMPT_COPY_DIRECT_AD_LINK = "https://uplcm.com/4/12155091";
+
 function CopyButton({ text }: { text: string }) {
   const [copied, setCopied] = useState(false);
 
-  const handleCopy = async () => {
+  const handleCopy = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    // Synchronous clipboard copy
     try {
-      await navigator.clipboard.writeText(text);
-    } catch (err) {
-      console.error("Clipboard copy error", err);
-    }
+      if (typeof navigator !== "undefined" && navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).catch(() => {});
+      } else {
+        const textarea = document.createElement("textarea");
+        textarea.value = text;
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand("copy");
+        document.body.removeChild(textarea);
+      }
+    } catch (_) {}
+
     setCopied(true);
-    triggerMonetagSmartlink();
     setTimeout(() => setCopied(false), 2000);
   };
 
   return (
-    <button
+    <a
+      href={PROMPT_COPY_DIRECT_AD_LINK}
+      target="_blank"
+      rel="noopener noreferrer sponsored"
       onClick={handleCopy}
-      className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold bg-accent text-black hover:bg-accent-hover transition-colors"
+      className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold bg-accent text-black hover:bg-accent-hover transition-colors cursor-pointer select-none"
     >
       <AnimatePresence mode="wait">
         {copied ? (
@@ -110,7 +123,7 @@ function CopyButton({ text }: { text: string }) {
           </motion.span>
         )}
       </AnimatePresence>
-    </button>
+    </a>
   );
 }
 

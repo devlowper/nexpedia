@@ -704,3 +704,101 @@ input:checked+.toggle-slider:before {
 [data-theme="light"] .ptc-canvas {
   color: rgba(0, 0, 0, 0.2);
 }
+
+/* =========================================================
+   100% Ads-Free Smooth Navigation Shield (Desktop & Mobile)
+   ========================================================= */
+nav[data-ads-free="true"] {
+  z-index: 90 !important;
+  pointer-events: auto !important;
+}
+
+[data-ads-free="true"] {
+  pointer-events: auto !important;
+}
+
+/* Ensure mobile navigation drawer is on the absolute top layer above any ad elements */
+[data-mobile-drawer="true"] {
+  z-index: 100000 !important;
+  pointer-events: auto !important;
+}
+
+/* Suppress third-party overlays / anchors that displace or cover the top navigation */
+.google-anno-skip,
+ins.adsbygoogle[data-anchor-status="displayed"],
+div[id*="google_ads_iframe"][style*="top: 0"] {
+  display: none !important;
+}
+
+/* =========================================================
+   Light Mode High-Contrast Text Fixes
+   (FAQ Answers & Subtitles, Sponsor Cards, Ad Disclaimer, SEO Intro Card)
+   ========================================================= */
+[data-theme="light"] .faq-answer,
+[data-theme="light"] .faq-answer p,
+[data-theme="light"] .faq-answer span {
+  color: #4b5563 !important;
+}
+
+[data-theme="light"] .faq-answer strong {
+  color: #1f2937 !important;
+}
+
+[data-theme="light"] .faq-answer a {
+  color: var(--brand-solid) !important;
+}
+
+[data-theme="light"] .faq-subtitle {
+  color: #4b5563 !important;
+}
+
+/* =========================================================
+   FAQ Numbers & Badges High-Contrast Shield
+   (Fixes dark mode black & light mode white inversion)
+   ========================================================= */
+[data-theme="light"] .faq-num-badge {
+  color: #111827 !important;
+  background-color: rgba(0, 0, 0, 0.05) !important;
+  border-color: rgba(0, 0, 0, 0.12) !important;
+}
+
+[data-theme="dark"] .faq-num-badge {
+  color: #ffffff !important;
+  background-color: rgba(255, 255, 255, 0.08) !important;
+  border-color: rgba(255, 255, 255, 0.16) !important;
+}
+
+[data-theme="light"] .faq-num-badge-open,
+[data-theme="dark"] .faq-num-badge-open {
+  background-color: var(--brand-solid) !important;
+  border-color: var(--brand-solid) !important;
+  color: #ffffff !important;
+}
+
+.faq-prefix {
+  color: var(--brand-solid) !important;
+}
+
+[data-theme="light"] .sponsor-card-desc {
+  color: #4b5563 !important;
+}
+
+[data-theme="light"] .ad-disclaimer-body,
+[data-theme="light"] .ad-disclaimer-body *,
+[data-theme="light"] .ad-disclaimer-body p {
+  color: #1f2937 !important;
+}
+
+[data-theme="light"] .ad-disclaimer-footnote {
+  color: #4b5563 !important;
+}
+
+[data-theme="light"] .prompt-seo-intro-desc,
+[data-theme="light"] .prompt-seo-intro-desc * {
+  color: #1f2937 !important;
+}
+
+[data-theme="light"] .prompt-seo-intro-desc strong {
+  color: #111827 !important;
+}
+

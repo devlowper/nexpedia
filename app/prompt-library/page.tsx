@@ -11,6 +11,7 @@ import { LatestPromptsSection } from "@/components/prompts/LatestPromptsSection"
 import { PopularCategories } from "@/components/home/PopularCategories";
 import { SkeletonCard } from "@/components/ui/SkeletonCard";
 import { ImageToPromptSection } from "@/components/prompts/ImageToPromptSection";
+import { PromptLibrarySEOIntro, PromptLibrarySEOExtended } from "@/components/prompts/PromptLibrarySEO";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
 import { SponsoredCard } from "@/components/ads/SponsoredCard";
 import { AdsterraBanner } from "@/components/ads/AdsterraBanner";
@@ -350,10 +351,13 @@ function PromptLibraryContent() {
                 const prompts = grouped[category];
                 if (!prompts || prompts.length === 0) return null;
                 
+                const isBusiness = category === "Business";
+
+                let content: React.ReactNode = null;
                 if (category === "Design") {
-                  return renderDesignSection(category, prompts);
+                  content = renderDesignSection(category, prompts);
                 } else if (category === "Photography") {
-                  return renderPhotographySection(category, prompts);
+                  content = renderPhotographySection(category, prompts);
                 } else {
                   let description = "Explore specialized prompts for this category.";
                   let aspect: string | undefined = undefined;
@@ -381,13 +385,27 @@ function PromptLibraryContent() {
                   if (category === "Education") description = "Enhance learning, teaching, and course creation with powerful prompts.";
                   if (category === "Health") description = "Discover AI workflows for wellness, fitness, and health insights.";
                   
-                  return renderStandardSection(category, prompts, description, aspect);
+                  content = renderStandardSection(category, prompts, description, aspect);
                 }
+
+                if (isBusiness) {
+                  return (
+                    <React.Fragment key={category}>
+                      <PromptLibrarySEOIntro />
+                      {content}
+                    </React.Fragment>
+                  );
+                }
+
+                return content;
               })
             )}
           </div>
         )}
       </div>
+
+      {/* ── Prompt Library SEO Extended Guide, Long-Tail Styles & FAQ ── */}
+      <PromptLibrarySEOExtended />
 
       {/* Bottom Adsterra Banner Units (320x50) */}
       <div className="w-full flex flex-wrap items-center justify-center gap-4 my-10 px-4">

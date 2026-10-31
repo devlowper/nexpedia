@@ -483,7 +483,7 @@ export default function PricingPage() {
                       ▼
                     </span>
                   </summary>
-                  <p className="mt-4 text-sm text-muted leading-relaxed border-t border-black/5 dark:border-white/5 pt-4">
+                  <p className="mt-4 text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed border-t border-black/5 dark:border-white/5 pt-4">
                     {faq.a}
                   </p>
                 </details>

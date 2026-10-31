@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 
 export type AdsterraBannerFormat = '300x250' | '728x90' | '320x50';
 
@@ -35,88 +35,29 @@ interface AdsterraBannerProps {
 }
 
 /**
- * Sandboxed Adsterra Banner component using an isolated iframe.
- * Prevents document.write crashes in Next.js/React and avoids variable collisions.
+ * Sandboxed Adsterra Banner component using an isolated iframe loaded from `/adsterra-frame.html`.
+ * Loading through same-origin `/adsterra-frame.html` allows Adsterra's script to verify
+ * document.location.hostname and run its official invoke.js loader.
+ *
+ * Using sandbox="allow-scripts allow-same-origin allow-popups allow-forms" ensures:
+ * 1. The ad script has full DOM execution inside its isolated frame.
+ * 2. Clicks on the banner open legitimate advertiser links in a new tab (allow-popups).
+ * 3. Crucially, WITHOUT 'allow-top-navigation', Adsterra is PHYSICALLY PREVENTED
+ *    from redirecting the top-level parent window or hijacking navigation!
  */
 export function AdsterraBanner({
   format,
   className = '',
   showLabel = true,
 }: AdsterraBannerProps) {
-  const containerRef = useRef<HTMLDivElement>(null);
   const config = AD_CONFIGS[format];
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    const container = containerRef.current;
-    if (!container) return;
+    setMounted(true);
+  }, []);
 
-    // Clear any previous iframe on re-render / route change
-    container.innerHTML = '';
-
-    const iframe = document.createElement('iframe');
-    iframe.width = `${config.width}`;
-    iframe.height = `${config.height}`;
-    iframe.style.width = `${config.width}px`;
-    iframe.style.height = `${config.height}px`;
-    iframe.style.border = 'none';
-    iframe.style.overflow = 'hidden';
-    iframe.scrolling = 'no';
-    iframe.setAttribute('loading', 'lazy');
-    iframe.setAttribute('title', `Advertisement ${format}`);
-
-    container.appendChild(iframe);
-
-    try {
-      const doc = iframe.contentWindow?.document || iframe.contentDocument;
-      if (doc) {
-        doc.open();
-        doc.write(`
-          <!DOCTYPE html>
-          <html>
-            <head>
-              <meta charset="utf-8">
-              <meta name="viewport" content="width=device-width, initial-scale=1.0">
-              <style>
-                * { box-sizing: border-box; }
-                html, body {
-                  margin: 0;
-                  padding: 0;
-                  background: transparent;
-                  display: flex;
-                  align-items: center;
-                  justify-content: center;
-                  overflow: hidden;
-                  width: 100%;
-                  height: 100%;
-                }
-              </style>
-            </head>
-            <body>
-              <script type="text/javascript">
-                atOptions = {
-                  'key' : '${config.key}',
-                  'format' : 'iframe',
-                  'height' : ${config.height},
-                  'width' : ${config.width},
-                  'params' : {}
-                };
-              </script>
-              <script type="text/javascript" src="https://bauval.org/22/${config.key}"></script>
-            </body>
-          </html>
-        `);
-        doc.close();
-      }
-    } catch (err) {
-      console.warn('Adsterra iframe initialization warning:', err);
-    }
-
-    return () => {
-      if (container) {
-        container.innerHTML = '';
-      }
-    };
-  }, [format, config.key, config.width, config.height]);
+  const frameSrc = `/adsterra-frame.html?key=${config.key}&w=${config.width}&h=${config.height}`;
 
   return (
     <div className={`flex flex-col items-center justify-center my-6 select-none ${className}`}>
@@ -129,15 +70,32 @@ export function AdsterraBanner({
         className="rounded-xl overflow-hidden border border-black/5 dark:border-white/10 bg-black/[0.02] dark:bg-white/[0.02] shadow-sm flex items-center justify-center transition-opacity"
         style={{ width: config.width, height: config.height }}
       >
-        <div ref={containerRef} style={{ width: config.width, height: config.height }} />
+        {mounted ? (
+          <iframe
+            src={frameSrc}
+            width={config.width}
+            height={config.height}
+            style={{ width: `${config.width}px`, height: `${config.height}px`, border: 'none', overflow: 'hidden' }}
+            scrolling="no"
+            loading="lazy"
+            title={`Advertisement ${format}`}
+            sandbox="allow-scripts allow-same-origin allow-popups allow-forms"
+          />
+        ) : (
+          <div
+            style={{ width: `${config.width}px`, height: `${config.height}px` }}
+            className="flex items-center justify-center text-muted/30 text-xs"
+          >
+            Ad Loading...
+          </div>
+        )}
       </div>
     </div>
   );
 }
 
 /**
- * Responsive banner: Renders 728x90 on Desktop/Tablet and 320x50 on Mobile.
- * Completely eliminates mobile horizontal scroll/overflow issues.
+ * Responsive banner: Renders 728x90 on Desktop/Tablet and 300x250 on Mobile inside sandboxed iframes.
  */
 export function AdsterraResponsiveBanner({
   className = '',
@@ -152,18 +110,16 @@ export function AdsterraResponsiveBanner({
       <div className="hidden md:flex justify-center w-full">
         <AdsterraBanner format="728x90" showLabel={showLabel} />
       </div>
-      {/* Mobile: 320x50 */}
+      {/* Mobile: 300x250 */}
       <div className="flex md:hidden justify-center w-full">
-        <AdsterraBanner format="320x50" showLabel={showLabel} />
+        <AdsterraBanner format="300x250" showLabel={showLabel} />
       </div>
     </div>
   );
 }
 
 /**
- * Native Banner widget container.
- * Loads the Adsterra native banner securely inside an isolated sandboxed iframe.
- * Never pollutes top-level document.body with external scripts.
+ * Native Banner widget container inside sandboxed iframe.
  */
 export function AdsterraNativeBanner({
   className = '',
@@ -172,64 +128,10 @@ export function AdsterraNativeBanner({
   className?: string;
   showLabel?: boolean;
 }) {
-  const containerRef = useRef<HTMLDivElement>(null);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    const container = containerRef.current;
-    if (!container) return;
-
-    container.innerHTML = '';
-
-    const iframe = document.createElement('iframe');
-    iframe.style.width = '100%';
-    iframe.style.height = '160px';
-    iframe.style.border = 'none';
-    iframe.style.overflow = 'hidden';
-    iframe.scrolling = 'no';
-    iframe.setAttribute('loading', 'lazy');
-    iframe.setAttribute('title', 'Sponsored Recommendations');
-
-    container.appendChild(iframe);
-
-    try {
-      const doc = iframe.contentWindow?.document || iframe.contentDocument;
-      if (doc) {
-        doc.open();
-        doc.write(`
-          <!DOCTYPE html>
-          <html>
-            <head>
-              <meta charset="utf-8">
-              <meta name="viewport" content="width=device-width, initial-scale=1.0">
-              <style>
-                * { box-sizing: border-box; margin: 0; padding: 0; }
-                html, body {
-                  background: transparent;
-                  width: 100%;
-                  overflow: hidden;
-                  display: flex;
-                  justify-content: center;
-                  align-items: center;
-                }
-              </style>
-            </head>
-            <body>
-              <div id="container-e1f6812d1a6a17f547fa2eea499f1732" style="width:100%; display:flex; justify-content:center;"></div>
-              <script async="async" data-cfasync="false" src="https://bauval.org/21/e1f6812d1a6a17f547fa2eea499f1732"></script>
-            </body>
-          </html>
-        `);
-        doc.close();
-      }
-    } catch (err) {
-      console.warn('Native ad initialization warning:', err);
-    }
-
-    return () => {
-      if (container) {
-        container.innerHTML = '';
-      }
-    };
+    setMounted(true);
   }, []);
 
   return (
@@ -240,7 +142,20 @@ export function AdsterraNativeBanner({
         </span>
       )}
       <div className="w-full max-w-5xl rounded-2xl p-2 bg-black/[0.02] dark:bg-white/[0.02] border border-black/5 dark:border-white/10 min-h-[160px] flex items-center justify-center">
-        <div ref={containerRef} className="w-full flex justify-center" />
+        {mounted ? (
+          <iframe
+            src="/adsterra-native.html"
+            style={{ width: '100%', height: '160px', border: 'none', overflow: 'hidden' }}
+            scrolling="no"
+            loading="lazy"
+            title="Sponsored Recommendations"
+            sandbox="allow-scripts allow-same-origin allow-popups allow-forms"
+          />
+        ) : (
+          <div className="w-full h-[160px] flex items-center justify-center text-muted/30 text-xs">
+            Sponsored Loading...
+          </div>
+        )}
       </div>
     </div>
   );

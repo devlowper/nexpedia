@@ -6,13 +6,9 @@
 <title>Turn Advertising Into Profitable Business Growth – proCraft</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;500;600;700;800;900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-<!-- Monetag Ad Scripts -->
-<script>(function(s){s.dataset.zone='12134819',s.src='https://n6wxm.com/vignette.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
-<script>(function(s){s.dataset.zone='12127704',s.src='https://nap5k.com/tag.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
-<script>(function(s){s.dataset.zone='12127660',s.src='https://nap5k.com/tag.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
-<script>(function(s){s.dataset.zone='12127030',s.src='https://al5sm.com/tag.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
+<!-- Monetag / Adsterra Direct Monetization: Navigation-safe and 100% ad-free navigation -->
 
 <style>
 /* =========================================================
@@ -72,11 +68,15 @@
 body {
   background: var(--bg);
   color: var(--ink);
-  font-family: "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
+  font-family: "Bricolage Grotesque", var(--font-bricolage), sans-serif;
   line-height: 1.6;
   padding: 0 20px 80px;
   -webkit-font-smoothing: antialiased;
   transition: background .2s ease, color .2s ease;
+}
+
+*, h1, h2, h3, h4, p, span, a, button, input, label, .brand, .btn, .deal-title, .sub, .app-badge, .card {
+  font-family: "Bricolage Grotesque", var(--font-bricolage), sans-serif;
 }
 
 .wrap {
@@ -93,7 +93,7 @@ body {
   border-bottom: 1px solid var(--line);
 }
 .brand {
-  font-family: Sora, sans-serif;
+  font-family: "Bricolage Grotesque", sans-serif;
   font-weight: 800;
   font-size: 1.25rem;
   color: var(--ink);
@@ -120,7 +120,7 @@ body {
   border-color: var(--line-strong);
 }
 
-h1, h2, .btn, .tag, .hero-art, .disc h2 {
+h1, h2, h3, .btn, .tag, .hero-art {
   font-family: Sora, sans-serif;
 }
 
@@ -130,18 +130,18 @@ h1, h2, .btn, .tag, .hero-art, .disc h2 {
   grid-template-columns: 1.2fr .8fr;
   gap: 48px;
   align-items: center;
-  padding: 64px 0 36px;
+  padding: 56px 0 36px;
 }
 @media (max-width: 880px) {
   .hero {
     grid-template-columns: 1fr;
-    padding-top: 40px;
+    padding-top: 36px;
   }
 }
 
 h1 {
-  font-size: clamp(2rem, 5.2vw, 3.5rem);
-  line-height: 1.1;
+  font-size: clamp(2rem, 5vw, 3.4rem);
+  line-height: 1.08;
   font-weight: 800;
   letter-spacing: -.03em;
   max-width: 14em;
@@ -280,16 +280,94 @@ section {
   margin-top: 64px;
 }
 h2 {
-  font-size: 1.5rem;
-  font-weight: 700;
+  font-size: 1.55rem;
+  font-weight: 800;
   margin-bottom: 6px;
   color: var(--ink);
   letter-spacing: -.02em;
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 .sub {
   color: var(--muted);
   margin-bottom: 24px;
   font-size: .95rem;
+}
+
+/* Metrics Grid (4 items) */
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-top: 40px;
+}
+@media(max-width: 768px) {
+  .metrics-grid { grid-template-columns: repeat(2, 1fr); }
+}
+.metric-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  padding: 20px;
+  box-shadow: var(--shadow);
+}
+.metric-num {
+  font-family: Sora, sans-serif;
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: var(--ink);
+}
+.metric-lbl {
+  font-weight: 700;
+  font-size: .9rem;
+  margin-top: 4px;
+}
+.metric-sub {
+  font-size: .78rem;
+  color: var(--muted);
+  margin-top: 2px;
+}
+
+/* Showcase Banner */
+.showcase-banner {
+  margin-top: 48px;
+  background: linear-gradient(135deg, #0f1012, #212429);
+  color: #ffffff;
+  border-radius: 24px;
+  padding: 32px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+  border: 1px solid rgba(255,255,255,0.15);
+  box-shadow: var(--shadow);
+}
+@media(max-width: 800px) {
+  .showcase-banner { flex-direction: column; align-items: flex-start; }
+}
+.showcase-badge {
+  display: inline-block;
+  font-size: .7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.15);
+  margin-bottom: 12px;
+}
+.showcase-title {
+  font-size: 1.35rem;
+  font-weight: 800;
+  line-height: 1.3;
+}
+.showcase-desc {
+  font-size: .88rem;
+  opacity: .8;
+  margin-top: 8px;
+  max-width: 600px;
 }
 
 /* Featured 8 Cards Grid (4 Col Desktop, 2 Col Tablet, 1 Col Mobile) */
@@ -322,269 +400,443 @@ h2 {
 
 .frame {
   aspect-ratio: 4/3;
-  background: linear-gradient(135deg, rgba(120,120,120,.12), rgba(120,120,120,.04));
+  background: rgba(120, 120, 120, 0.08);
   position: relative;
+  overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
 }
-.frame iframe {
+.frame img {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
-  border: 0;
+  object-fit: cover;
+  transition: transform .35s ease;
 }
-.frame-placeholder {
+.card:hover .frame img {
+  transform: scale(1.06);
+}
+.frame .card-badge {
   position: absolute;
-  color: var(--muted);
-  font-size: .8rem;
-  font-weight: 600;
-  pointer-events: none;
+  top: 10px;
+  left: 10px;
+  background: rgba(17, 19, 24, 0.88);
+  color: #ffffff;
+  font-family: Sora, sans-serif;
+  font-size: .72rem;
+  font-weight: 700;
+  letter-spacing: .03em;
+  padding: 4px 10px;
+  border-radius: 999px;
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  z-index: 2;
 }
 
 .body {
   padding: 16px 18px 20px;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 8px;
   flex: 1;
 }
 .body h3 {
-  font-size: 1.05rem;
+  font-size: 1.02rem;
   font-weight: 700;
   color: var(--ink);
   letter-spacing: -.01em;
+  line-height: 1.35;
+}
+.body .desc {
+  font-size: .83rem;
+  color: var(--muted);
+  line-height: 1.5;
+  margin-bottom: 6px;
+}
+
+/* 3 Col Grid */
+.grid-3 {
+  display: grid;
+  gap: 20px;
+  grid-template-columns: repeat(3, 1fr);
+}
+@media (max-width: 900px) {
+  .grid-3 { grid-template-columns: 1fr; }
 }
 
 /* =========================================================
-   Sleek 3D Black Button (Based on Uiverse.io by adamgiebl)
-   Recreated in Premium Black with Tangible Tactile Feedback
+   Uiverse 2-Layer Black Button Architecture
    ========================================================= */
-a.btn, .expose a.btn, a.btn.big {
+a.btn, .btn.big, .btn {
   position: relative;
-  background: linear-gradient(to top, #0f1012, #212429);
-  color: #ffffff;
-  border: 0;
-  border-radius: 16px;
-  padding: 14px 28px;
-  font-family: Sora, sans-serif;
-  font-weight: 700;
-  font-size: .92rem;
-  text-decoration: none;
-  opacity: .96;
-  box-shadow: 0 0 0 1.5px rgba(255, 255, 255, .15), inset 0 2px 0 rgba(255, 255, 255, .25), 0 6px 0 #000000, 0 14px 22px -4px rgba(0, 0, 0, .5);
-  transform: translateY(0);
-  transition: transform .12s ease, box-shadow .12s ease, opacity .15s ease;
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  gap: 8px;
   cursor: pointer;
-  text-align: center;
+  opacity: 0.92;
+  transition: opacity 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+  padding: 2px !important;
+  border-radius: 16px;
+  background: linear-gradient(to top, #141517, #3e414c);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  border: 0;
+  user-select: none;
+  color: #ffffff !important;
 }
-a.btn:hover, .expose a.btn:hover, a.btn.big:hover {
-  background: linear-gradient(to top, #16181c, #2c3038);
-  color: #ffffff;
+a.btn:hover, .btn.big:hover, .btn:hover {
   opacity: 1;
-  transform: translateY(-2px);
-  box-shadow: 0 0 0 1.5px rgba(255, 255, 255, .25), inset 0 2px 0 rgba(255, 255, 255, .35), 0 8px 0 #000000, 0 18px 26px -4px rgba(0, 0, 0, .6);
+  background: linear-gradient(to top, #1c1d22, #555967);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.65);
+  color: #ffffff !important;
 }
-a.btn:active, .expose a.btn:active, a.btn.big:active {
-  transform: translateY(5px);
-  box-shadow: 0 0 0 1.5px rgba(255, 255, 255, .15), inset 0 1px 0 rgba(255, 255, 255, .15), 0 1px 0 #000000, 0 4px 8px -2px rgba(0, 0, 0, .4);
+a.btn:active, .btn.big:active, .btn:active {
+  transform: scale(0.95);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
 }
-.btn:focus-visible, .row:focus-visible, .app:focus-visible, .ghost:focus-visible {
-  outline: 3px solid var(--ink);
-  outline-offset: 3px;
+
+.btn-inner {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 11px 22px;
+  background: linear-gradient(to top, #0b0c0e, #1a1b1f);
+  color: #ffffff !important;
+  border-radius: 14px;
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-weight: 700;
+  font-size: 0.88rem;
+  letter-spacing: -0.01em;
+  transition: background 0.15s ease;
 }
+.btn.big .btn-inner {
+  padding: 14px 28px;
+  font-size: 0.95rem;
+}
+a.btn:hover .btn-inner, .btn:hover .btn-inner {
+  background: linear-gradient(to top, #101114, #22242a);
+  color: #ffffff !important;
+}
+
 .card .btn {
   margin-top: auto;
-  margin-bottom: 4px;
   width: 100%;
 }
 
-/* Viral Video Link Rows */
-.rows {
-  display: grid;
-  gap: 14px;
-}
-.row {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  background: var(--surface);
+/* Adsterra Banner Container */
+.ad-slot-wrap {
+  margin: 48px auto;
+  padding: 16px 12px;
+  background: rgba(120, 120, 120, 0.04);
   border: 1px solid var(--line);
-  border-radius: 16px;
-  padding: 16px 20px;
-  text-decoration: none;
-  color: inherit;
-  box-shadow: var(--shadow);
-  transition: transform .15s ease, border-color .15s ease;
-}
-.row:hover {
-  border-color: var(--ink);
-  transform: translateX(4px);
-}
-.play {
-  flex: none;
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  background: var(--ink);
-  display: grid;
-  place-items: center;
-  transition: transform .2s ease;
-}
-.play:after {
-  content: "";
-  border-left: 13px solid var(--bg);
-  border-top: 8px solid transparent;
-  border-bottom: 8px solid transparent;
-  margin-left: 3px;
-}
-.row:hover .play {
-  transform: scale(1.08);
-}
-.row b {
-  display: block;
-  font-size: 1.05rem;
-  font-weight: 700;
-  color: var(--ink);
-}
-.row span {
-  color: var(--muted);
-  font-size: .88rem;
-}
-
-/* Moneymaking Viral Apps */
-.apps {
-  display: grid;
-  gap: 16px;
-  grid-template-columns: repeat(4, 1fr);
-}
-@media (max-width: 980px) {
-  .apps { grid-template-columns: repeat(2, 1fr); }
-}
-@media (max-width: 480px) {
-  .apps { grid-template-columns: 1fr; }
-}
-.app {
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-radius: 18px;
-  padding: 20px;
-  text-decoration: none;
-  color: inherit;
+  border-radius: 20px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.ad-slot-lbl {
+  font-size: .65rem;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 8px;
+  font-weight: 700;
+}
+.ad-slot-frame {
+  max-width: 100%;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+}
+
+/* Video Grid (2 Cols Desktop, 1 Col Mobile) */
+.video-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+}
+@media (max-width: 768px) {
+  .video-grid { grid-template-columns: 1fr; }
+}
+.video-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  overflow: hidden;
   box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  transition: transform .2s ease, border-color .2s ease;
+}
+.video-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--line-strong);
+}
+.video-frame {
+  width: 100%;
+  aspect-ratio: 16/9;
+  background: #000000;
+  overflow: hidden;
+}
+.video-frame iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+.video-body {
+  padding: 16px 20px 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  flex: 1;
+  gap: 12px;
+}
+
+/* Viral Apps Cards (Polished) */
+.app-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  padding: 20px;
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   transition: transform .15s ease, border-color .15s ease;
 }
-.app:hover {
-  border-color: var(--ink);
-  transform: translateY(-3px);
+.app-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--line-strong);
 }
-.ico {
-  width: 48px;
-  height: 48px;
+.app-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
+}
+.app-icon {
+  width: 44px;
+  height: 44px;
   border-radius: 14px;
   background: var(--ink);
   color: var(--bg);
   display: grid;
   place-items: center;
-  font: 800 1.25rem Sora, sans-serif;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  font-size: 1.15rem;
+  font-weight: 800;
 }
-.app b {
-  font-size: 1rem;
+.app-badge {
+  font-size: .7rem;
   font-weight: 700;
-  color: var(--ink);
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(120, 120, 120, 0.08);
+  border: 1px solid var(--line);
 }
-.app span {
+.app-card h3 {
+  font-size: 1.02rem;
+  font-weight: 700;
+  margin-bottom: 2px;
+}
+.app-stats {
+  font-size: .8rem;
   color: var(--muted);
-  font-size: .88rem;
+  margin-bottom: 8px;
+}
+.app-desc {
+  font-size: .82rem;
+  color: var(--muted);
+  line-height: 1.5;
+  margin-bottom: 16px;
 }
 
-/* Expose Viral Link */
-.expose {
-  display: grid;
-  gap: 20px;
-  grid-template-columns: repeat(4, 1fr);
+/* FAQ Accordion */
+.faq-wrap {
+  max-width: 800px;
+  margin: 32px auto 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
-@media (max-width: 980px) {
-  .expose { grid-template-columns: repeat(2, 1fr); }
-}
-@media (max-width: 480px) {
-  .expose { grid-template-columns: 1fr; }
-}
-.expose .btn {
-  margin: 0;
-  padding: 18px 24px;
-  font-size: 1rem;
-  width: 100%;
-}
-
-/* Ad Disclaimer Box */
-.disc {
-  margin-top: 72px;
+.faq-box {
   background: var(--surface);
-  border: 2px dashed var(--line-strong);
-  border-left: 8px solid var(--ink);
+  border: 1px solid var(--line);
   border-radius: 18px;
-  padding: 28px 32px;
-  color: var(--ink);
-  font-size: .95rem;
+  overflow: hidden;
   box-shadow: var(--shadow);
+}
+.faq-q {
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 20px 24px;
+  text-align: left;
+  font-family: Sora, sans-serif;
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--ink);
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.faq-q:hover {
+  background: rgba(120, 120, 120, 0.03);
+}
+.faq-icon {
+  font-size: .85rem;
+  transition: transform .2s ease;
+}
+.faq-a {
+  padding: 0 24px 20px;
+  font-size: .92rem;
+  color: var(--muted);
+  line-height: 1.6;
+  display: none;
+}
+.faq-box.active .faq-a {
+  display: block;
+}
+.faq-box.active .faq-icon {
+  transform: rotate(180deg);
+}
+
+/* Noticeable Disclosure Box */
+.disc-box {
+  margin-top: 64px;
+  background: var(--surface);
+  border: 2px solid var(--line-strong);
+  border-left: 8px solid var(--ink);
+  border-radius: 24px;
+  padding: 32px 36px;
+  box-shadow: var(--shadow);
+}
+.disc-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: .72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: rgba(120, 120, 120, 0.08);
+  border: 1px solid var(--line);
+  color: var(--ink);
+  margin-bottom: 16px;
 }
 .disc-head {
   display: flex;
-  align-items: center;
-  gap: 14px;
-  margin-bottom: 16px;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 18px;
 }
-.disc-ico {
-  flex: none;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
+.disc-shield {
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
   background: var(--ink);
   color: var(--bg);
   display: grid;
   place-items: center;
-  font: 800 1.3rem Sora, sans-serif;
+  font-size: 1.25rem;
+  font-weight: 800;
+  flex-shrink: 0;
 }
-.disc h2 {
-  font-size: 1.4rem;
-  margin: 0;
+.disc-box h3 {
+  font-size: 1.35rem;
+  font-weight: 800;
   color: var(--ink);
+  letter-spacing: -.02em;
+  line-height: 1.2;
 }
-.disc .key {
-  font-weight: 700;
-  font-size: 1.02rem;
-  background: rgba(120, 120, 120, 0.08);
-  padding: 12px 18px;
-  border-radius: 12px;
-  margin-bottom: 12px;
-}
-.disc p:not(.key) {
-  color: var(--muted);
-  line-height: 1.65;
-}
-.disc p + p {
-  margin-top: 10px;
-}
-
-footer.site-copy {
-  margin-top: 48px;
-  text-align: center;
+.disc-sub {
   font-size: .85rem;
   color: var(--muted);
+  margin-top: 4px;
 }
-footer.site-copy a {
+.disc-key-callout {
+  margin: 18px 0;
+  padding: 14px 18px;
+  border-radius: 14px;
+  background: rgba(120, 120, 120, 0.06);
+  border: 1px solid var(--line-strong);
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+.disc-key-badge {
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  background: var(--ink);
+  color: var(--bg);
+  display: grid;
+  place-items: center;
+  font-size: .75rem;
+  font-weight: 800;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.disc-key-text {
+  font-size: .88rem;
+  font-weight: 700;
   color: var(--ink);
-  font-weight: 600;
+  line-height: 1.5;
+}
+.disc-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin: 20px 0;
+}
+@media (max-width: 768px) {
+  .disc-grid { grid-template-columns: 1fr; }
+}
+.disc-card {
+  padding: 16px;
+  border-radius: 14px;
+  background: rgba(120, 120, 120, 0.03);
+  border: 1px solid var(--line);
+}
+.disc-card b {
+  display: block;
+  font-size: .75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  color: var(--ink);
+  margin-bottom: 6px;
+}
+.disc-card p {
+  font-size: .8rem;
+  color: var(--muted);
+  line-height: 1.5;
+  margin: 0;
+}
+.disc-foot {
+  margin-top: 18px;
+  padding-top: 14px;
+  border-top: 1px solid var(--line);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  font-size: .78rem;
+  color: var(--muted);
+}
+.disc-foot a {
+  color: var(--ink);
+  font-weight: 700;
   text-decoration: underline;
   text-underline-offset: 3px;
 }
@@ -602,21 +854,27 @@ footer.site-copy a {
   <!-- Top Navigation -->
   <nav class="top-nav" aria-label="Main Navigation">
     <a href="https://procraft.site" class="brand" title="proCraft AI Prompt Library & Directory">
-      proCraft <span>/ Ads</span>
+      proCraft <span>/ Partner Deals</span>
     </a>
     <button type="button" class="theme-btn" id="themeToggleBtn" aria-label="Toggle light and dark mode">
-      <span id="themeIcon">🌓</span>
       <span id="themeText">Theme</span>
     </button>
   </nav>
 
-  <!-- Hero Section -->
+  <!-- 1. Hero Section -->
   <header class="hero">
     <div class="hero-text">
+      <div style="display:inline-flex; align-items:center; gap:6px; font-size:.78rem; font-weight:700; padding:4px 12px; border-radius:999px; background:rgba(120,120,120,0.08); margin-bottom:14px; border:1px solid var(--line);">
+        Curated Partner Hub & Trending Deals
+      </div>
       <h1>TURN ADVERTISING INTO PROFITABLE BUSINESS GROWTH</h1>
-      <p>Discover today's trending offers, viral videos and money-making apps in one place. Some links are sponsored ads.</p>
+      <p>Discover today's trending creator offers, high-yield reward apps, and viral videos in one place. Some links are sponsored ads.</p>
       <div class="cta">
-        <a class="btn big" id="heroCta" href="#" target="_blank" rel="noopener sponsored">Start Growing Now</a>
+        <a class="btn big" id="heroCta" href="#" target="_blank" rel="noopener sponsored">
+          <span class="btn-inner">
+            <span>Start Growing Now</span> &rarr;
+          </span>
+        </a>
         <a class="ghost" href="#featured">Browse Offers</a>
       </div>
       <ul class="trust">
@@ -625,6 +883,8 @@ footer.site-copy a {
         <li>Sponsored links marked</li>
       </ul>
     </div>
+
+    <!-- Growth Art Visual -->
     <div class="hero-art" aria-hidden="true">
       <div class="bars">
         <i style="--h:32%"></i>
@@ -634,141 +894,618 @@ footer.site-copy a {
         <i style="--h:86%"></i>
         <i style="--h:100%"></i>
       </div>
-      <div class="chip c1">+248% reach</div>
-      <div class="chip c2">Trending now</div>
+      <span class="chip c1">+248% reach</span>
+      <span class="chip c2">Trending now</span>
     </div>
   </header>
 
-  <!-- Featured 8 Cards -->
+
+
+  <!-- 4. Section: Featured 8 Cards -->
   <section id="featured">
-    <h2>Featured</h2>
-    <p class="sub">Click the button under a card to open the link in a new tab.</p>
-    <div class="grid" id="cards"></div>
-  </section>
-
-  <!-- Viral Video Link -->
-  <section>
-    <h2>Viral Video Link</h2>
-    <p class="sub">The videos everyone is talking about right now.</p>
-    <div class="rows" id="videos"></div>
-  </section>
-
-  <!-- Moneymaking Viral Apps -->
-  <section>
-    <h2>Moneymaking Viral Apps</h2>
-    <p class="sub">Trending app picks. Please verify before using any app.</p>
-    <div class="apps" id="apps"></div>
-  </section>
-
-  <!-- Expose Viral Link -->
-  <section>
-    <h2>Expose Viral Link</h2>
-    <p class="sub">The buttons below are sponsored links.</p>
-    <div class="expose" id="expose"></div>
-  </section>
-
-  <!-- Ad Disclaimer -->
-  <aside class="disc" role="note" aria-label="Ad disclaimer">
-    <div class="disc-head">
-      <span class="disc-ico" aria-hidden="true">!</span>
-      <h2>Ad Disclaimer</h2>
+    <h2>Featured Picks & Viral Offers</h2>
+    <p class="sub">Click the button under a card to claim the verified offer in a new tab.</p>
+    <div class="grid" id="featuredCardsGrid">
+      <!-- Generated dynamically from CARDS config in JS -->
     </div>
-    <p class="key">We do NOT guarantee that clicking any button or link will take you to the original page.</p>
-    <p>This page contains sponsored advertisements and affiliate links. Ad content is controlled by third parties.</p>
-    <p>If this causes any inconvenience or annoyance, we sincerely apologize. Please verify any link before entering money, passwords or personal information.</p>
+  </section>
+
+  <!-- 5. ADSTERRA BANNER #1 (Sandboxed Iframe: Desktop 728x90, Mobile 300x250) -->
+  <div class="ad-slot-wrap" style="text-align:center; margin: 35px 0;">
+    <div class="ad-slot-lbl">Advertisement</div>
+    <div class="ad-slot-frame" style="display:inline-block;">
+      <iframe
+        src="/adsterra-frame.html?key=5d110b3033a83acb645822e998ca0bd7&w=728&h=90"
+        width="728"
+        height="90"
+        style="border:none; overflow:hidden;"
+        scrolling="no"
+        loading="lazy"
+        title="Advertisement 728x90"
+        sandbox="allow-scripts allow-same-origin allow-popups allow-forms"
+      ></iframe>
+    </div>
+  </div>
+
+  <!-- 6. Section: Verified AI Partner Deals -->
+  <section>
+    <h2>Verified AI Partner Deals</h2>
+    <p class="sub">Hand-tested developer infrastructure, creative suites, and generative AI perks.</p>
+    <div class="grid-3" id="partnerDealsGrid">
+      <!-- Generated dynamically from PARTNERS config in JS -->
+    </div>
+  </section>
+
+  <!-- 7. Section: Moneymaking & Creator Apps (Fixed) -->
+  <section>
+    <h2>Moneymaking & Creator Apps</h2>
+    <p class="sub">Trending verified rewards applications, micro-task platforms, and digital tools.</p>
+    <div class="grid" id="appsGrid">
+      <!-- Generated dynamically from APPS config in JS -->
+    </div>
+  </section>
+
+  <!-- 8. Section: Viral Video Showcase (Embedded Players) -->
+  <section>
+    <h2>Viral Video Showcase</h2>
+    <p class="sub">Watch trending creator masterclasses and AI breakthroughs directly on-page.</p>
+    <div class="video-grid" id="videoGrid">
+      <!-- Generated dynamically from VIDEOS config in JS -->
+    </div>
+  </section>
+
+  <!-- 9. Section: Instant Bonus & VIP Perks (Fixed) -->
+  <section>
+    <h2>Instant Bonus & VIP Perks</h2>
+    <p class="sub">High-priority access tokens, starter credits, and commercial master downloads.</p>
+    <div class="grid" id="perksGrid">
+      <!-- Generated dynamically from PERKS config in JS -->
+    </div>
+  </section>
+
+  <!-- 10. ADSTERRA BANNER #2 (Sandboxed Iframe) -->
+  <div class="ad-slot-wrap" style="text-align:center; margin: 35px 0;">
+    <div class="ad-slot-lbl">Advertisement</div>
+    <div class="ad-slot-frame" style="display:inline-block;">
+      <iframe
+        src="/adsterra-frame.html?key=5d110b3033a83acb645822e998ca0bd7&w=728&h=90"
+        width="728"
+        height="90"
+        style="border:none; overflow:hidden;"
+        scrolling="no"
+        loading="lazy"
+        title="Advertisement 728x90"
+        sandbox="allow-scripts allow-same-origin allow-popups allow-forms"
+      ></iframe>
+    </div>
+  </div>
+
+  <!-- 11. FAQ Section ("fqr add koro last er dibe") -->
+  <section>
+    <div style="text-align:center; max-width:640px; margin:0 auto 20px;">
+      <div style="display:inline-block; font-size:.72rem; font-weight:800; text-transform:uppercase; letter-spacing:.08em; padding:3px 12px; border-radius:999px; background:rgba(120,120,120,0.08); border:1px solid var(--line); margin-bottom:8px; font-family:'Bricolage Grotesque', sans-serif;">Transparency & Safe Browsing</div>
+      <h2 style="margin:0 0 8px;">Frequently Asked Questions</h2>
+      <p class="sub" style="margin:0;">Full transparency regarding sponsored links, partner offers, and safe link browsing.</p>
+    </div>
+    <div class="faq-wrap" id="faqAccordion">
+      <!-- Injected via JS -->
+    </div>
+  </section>
+
+  <!-- 12. Noticeable Ad Disclaimer -->
+  <aside class="disc-box">
+    <div class="disc-head" style="align-items:center; margin-bottom:16px;">
+      <div class="disc-shield" style="font-size:1.35rem; font-weight:900;">!</div>
+      <div>
+        <h3 style="font-size:1.5rem; font-weight:800; color:var(--ink); margin:0;">Ad Disclaimer</h3>
+      </div>
+    </div>
+
+    <div class="disc-key-callout" style="margin:18px 0;">
+      <div class="disc-key-badge" style="font-weight:900;">!</div>
+      <div class="disc-key-text" style="font-size:.95rem; font-weight:700;">
+        We do NOT guarantee that clicking any button or link will take you to the original page.
+      </div>
+    </div>
+
+    <div style="display:flex; flex-direction:column; gap:12px; font-size:.92rem; color:var(--muted); line-height:1.65; margin:18px 0 24px;">
+      <p style="margin:0;">This page contains sponsored advertisements and affiliate links. Ad content is controlled by third parties.</p>
+      <p style="margin:0;">If this causes any inconvenience or annoyance, we sincerely apologize. Please verify any link before entering money, passwords or personal information.</p>
+    </div>
+
+    <div class="disc-foot">
+      <span>proCraft Transparency Notice</span>
+    </div>
   </aside>
 
-  <footer class="site-copy">
-    <p>&copy; 2026 <a href="https://procraft.site">proCraft</a>. All rights reserved. Sponsored Ads &amp; Offers.</p>
+  <footer class="site-copy" style="margin-top:48px; text-align:center; font-size:.85rem; color:var(--muted);">
+    &copy; 2026 <a href="https://procraft.site" style="color:var(--ink); font-weight:600; text-decoration:none;">proCraft</a>. All rights reserved. &bull;
+    <a href="https://procraft.site/privacy" style="color:var(--muted);">Privacy</a> &bull;
+    <a href="https://procraft.site/terms" style="color:var(--muted);">Terms</a>
   </footer>
 </div>
 
 <script>
-/* ====== Edit links here only ====== */
-const MONETAG = "https://uplcm.com/4/12127029"; // Your Monetag direct link
-
-// 8 cards: src = page shown in the iframe, href = where the button goes
-const cards = [
-  {title:"Card 1", src:"https://procraft.site/prompt-library", href:MONETAG},
-  {title:"Card 2", src:"about:blank", href:MONETAG},
-  {title:"Card 3", src:"about:blank", href:MONETAG},
-  {title:"Card 4", src:"about:blank", href:MONETAG},
-  {title:"Card 5", src:"about:blank", href:MONETAG},
-  {title:"Card 6", src:"about:blank", href:MONETAG},
-  {title:"Card 7", src:"about:blank", href:MONETAG},
-  {title:"Card 8", src:"about:blank", href:MONETAG}
+// =========================================================
+// Official Monetag Direct Links Config
+// =========================================================
+const DIRECT_LINKS = [
+  "https://uplcm.com/4/12127029",
+  "https://uplcm.com/4/12155084",
+  "https://uplcm.com/4/12155091",
+  "https://uplcm.com/4/12156082",
 ];
 
-const videos = [
-  {title:"Viral Video 1", note:"Trending now", href:MONETAG},
-  {title:"Viral Video 2", note:"Trending now", href:MONETAG},
-  {title:"Viral Video 3", note:"Trending now", href:MONETAG},
-  {title:"Viral Video 4", note:"Trending now", href:MONETAG}
-];
+let directLinkIdx = 0;
+function getNextDirectLink() {
+  const link = DIRECT_LINKS[directLinkIdx % DIRECT_LINKS.length];
+  directLinkIdx++;
+  return link;
+}
 
-const apps = [
-  {title:"App 1", note:"Earning app", href:MONETAG},
-  {title:"App 2", note:"Earning app", href:MONETAG},
-  {title:"App 3", note:"Earning app", href:MONETAG},
-  {title:"App 4", note:"Earning app", href:MONETAG}
-];
+function setupTwoClickButton(btn, originalUrl) {
+  if (!btn) return;
+  btn.dataset.step = '0';
+  btn.href = getNextDirectLink();
+  btn.target = '_blank';
+  btn.rel = 'noopener noreferrer sponsored';
 
-const expose = [
-  {title:"Expose Link 1", href:MONETAG},
-  {title:"Expose Link 2", href:MONETAG},
-  {title:"Expose Link 3", href:MONETAG},
-  {title:"Expose Link 4", href:MONETAG}
-];
-/* ====================================== */
-
-document.getElementById("heroCta").href = MONETAG;
-const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
-const L = 'target="_blank" rel="noopener sponsored"';
-
-document.getElementById("cards").innerHTML = cards.map(c => `
-  <article class="card">
-    <div class="frame">
-      <span class="frame-placeholder">Live Preview</span>
-      <iframe src="${esc(c.src)}" title="${esc(c.title)}" loading="lazy" sandbox="allow-scripts allow-same-origin" referrerpolicy="no-referrer"></iframe>
-    </div>
-    <div class="body">
-      <h3>${esc(c.title)}</h3>
-      <a class="btn" href="${esc(c.href)}" ${L}>Open Link</a>
-    </div>
-  </article>`).join("");
-
-document.getElementById("videos").innerHTML = videos.map(v => `
-  <a class="row" href="${esc(v.href)}" ${L}>
-    <span class="play"></span>
-    <div>
-      <b>${esc(v.title)}</b>
-      <span>${esc(v.note)}</span>
-    </div>
-  </a>`).join("");
-
-document.getElementById("apps").innerHTML = apps.map(a => `
-  <a class="app" href="${esc(a.href)}" ${L}>
-    <div class="ico">${esc(a.title.charAt(0))}</div>
-    <b>${esc(a.title)}</b>
-    <span>${esc(a.note)}</span>
-  </a>`).join("");
-
-document.getElementById("expose").innerHTML = expose.map(e => `
-  <a class="btn" href="${esc(e.href)}" ${L}>${esc(e.title)}</a>`).join("");
-
-// Theme toggle
-const themeBtn = document.getElementById("themeToggleBtn");
-if (themeBtn) {
-  const isDarkDefault = window.matchMedia("(prefers-color-scheme: dark)").matches;
-  let currentTheme = localStorage.getItem("procraft_theme") || (isDarkDefault ? "dark" : "light");
-  document.documentElement.setAttribute("data-theme", currentTheme);
-
-  themeBtn.addEventListener("click", () => {
-    currentTheme = currentTheme === "dark" ? "light" : "dark";
-    document.documentElement.setAttribute("data-theme", currentTheme);
-    localStorage.setItem("procraft_theme", currentTheme);
+  btn.addEventListener('click', function(e) {
+    if (this.dataset.step === '0') {
+      // 1st click: browser natively follows href to ad in a new tab!
+      this.dataset.step = '1';
+      this.href = originalUrl;
+    } else {
+      // 2nd click: browser natively follows href to originalUrl!
+      this.dataset.step = '0';
+      this.href = getNextDirectLink();
+    }
   });
 }
+
+const CARDS = [
+  {
+    title: "FLUX.1 & Midjourney v6.1",
+    desc: "Leading generative diffusion models for photorealistic rendering, complex multi-subject prompts, and typography.",
+    image: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&h=450&q=80",
+    badge: "Top Rated",
+    cta: "Explore FLUX",
+    href: "https://blackforestlabs.ai/",
+  },
+  {
+    title: "Google AI Pro & Gemini Ultra",
+    desc: "12 months free for verified students, featuring Gemini advanced reasoning, deep multimodal analysis, and workspace tools.",
+    image: "https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=600&h=450&q=80",
+    badge: "12-Mo Free",
+    cta: "Claim Google Deal",
+    href: "https://gemini.google.com/",
+  },
+  {
+    title: "RunPod Serverless Cloud GPUs",
+    desc: "Deploy FLUX, SDXL, and custom LLM inference pipelines on scalable NVIDIA RTX 4090 and H100 GPU clusters.",
+    image: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=600&h=450&q=80",
+    badge: "Instant Setup",
+    cta: "Get Cloud GPU",
+    href: "https://www.runpod.io/",
+  },
+  {
+    title: "Runway Gen-3 Alpha Studio",
+    desc: "High-fidelity text-to-video, camera direction controls, and motion brush synthesis for professional creators.",
+    image: "https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?auto=format&fit=crop&w=600&h=450&q=80",
+    badge: "Creator Pick",
+    cta: "Create Video",
+    href: "https://runwayml.com/",
+  },
+  {
+    title: "Perplexity Education Pro",
+    desc: "Real-time cited web search, academic paper synthesis, multi-file analysis, and frontier model routing.",
+    image: "https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?auto=format&fit=crop&w=600&h=450&q=80",
+    badge: "50% Student Off",
+    cta: "Unlock Access",
+    href: "https://www.perplexity.ai/pro",
+  },
+  {
+    title: "Muse Autonomous Agent",
+    desc: "Personal AI agent workflow. Redeem code XC7IQO inside Settings within 48 hours for 1 billion bonus tokens.",
+    image: "https://images.unsplash.com/photo-1620712943543-bcc4688e7485?auto=format&fit=crop&w=600&h=450&q=80",
+    badge: "1B Token Bonus",
+    cta: "Claim 1B Tokens",
+    href: "https://muse.ai/join",
+  },
+  {
+    title: "Tripo3D AI Model Generator",
+    desc: "Transform single 2D images or text prompts into game-ready 3D meshes with PBR textures and GLTF/FBX export.",
+    image: "https://images.unsplash.com/photo-1634017839464-5c339ebe3cb4?auto=format&fit=crop&w=600&h=450&q=80",
+    badge: "Fast 3D Export",
+    cta: "Generate 3D Assets",
+    href: "https://www.tripo3d.ai/",
+  },
+  {
+    title: "ElevenLabs Voice Synthesis",
+    desc: "Industry-leading human-like voice cloning, multilingual TTS, and sound effects for video and game development.",
+    image: "https://images.unsplash.com/photo-1590602847861-f357a9332bbc?auto=format&fit=crop&w=600&h=450&q=80",
+    badge: "10K Free Chars",
+    cta: "Synthesize Voice",
+    href: "https://elevenlabs.io/",
+  },
+];
+
+const PARTNERS = [
+  {
+    title: "Google AI Pro & Ultra Plans",
+    category: "FOUNDATION MODELS",
+    badge: "12-Mo Free / 50% Off",
+    rating: "4.9",
+    desc: "12 months free AI Pro for verified students, plus 50% off the 3-month AI Ultra plan for advanced generative workflows.",
+    brandColor: "#1A73E8",
+    cta: "Claim Google AI Deal",
+    href: "https://gemini.google.com/",
+    iconSvg: `<svg viewBox="0 0 24 24" width="22" height="22"><path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.8-2.4 3.65v3.03h3.88c2.27-2.09 3.665-5.17 3.665-9.12z"/><path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.03c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.26v3.13C3.26 21.36 7.33 24 12 24z"/><path fill="#FBBC05" d="M5.28 14.29c-.25-.72-.38-1.49-.38-2.29s.14-1.57.38-2.29V6.58H1.26C.46 8.18 0 9.99 0 12s.46 3.82 1.26 5.42l4.02-3.13z"/><path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.33 0 3.26 2.64 1.26 6.58l4.02 3.13c.95-2.83 3.6-4.96 6.72-4.96z"/></svg>`,
+  },
+  {
+    title: "Perplexity Education Pro",
+    category: "AI SEARCH & RESEARCH",
+    badge: "$10 / Month",
+    rating: "4.9",
+    desc: "Academic search, source citations, and file analysis at 50% off ($10/mo down from $20/mo) for verified students.",
+    brandColor: "#1FB8CD",
+    cta: "Get Student Access",
+    href: "https://www.perplexity.ai/pro",
+    iconSvg: `<img src="/brands/perplexity.png" alt="Perplexity AI" style="width:24px; height:24px; object-fit:contain;" />`,
+  },
+  {
+    title: "Seadance AI Video Generator",
+    category: "AI VIDEO GENERATION",
+    badge: "50% Annual Off",
+    rating: "4.8",
+    desc: "Cinematic video generation with up to 180,000 credits. Yearly billing tiers start from $14.95/month.",
+    brandColor: "#06B6D4",
+    cta: "Unlock Seadance Deal",
+    href: "https://videomakerai.io/seadance",
+    iconSvg: `<img src="/brands/seadance.png" alt="Seadance AI" style="width:24px; height:24px; object-fit:contain;" />`,
+  },
+  {
+    title: "Muse – Personal AI Agent",
+    category: "AUTONOMOUS AI AGENT",
+    badge: "1 Billion Tokens",
+    rating: "4.8",
+    desc: "Redeem referral code XC7IQO inside Settings within 48 hours of joining to unlock 1 billion Muse bonus tokens.",
+    brandColor: "#0066FF",
+    cta: "Claim 1B Tokens",
+    href: "https://muse.ai/join",
+    iconSvg: `<img src="/brands/muse.png" alt="Muse AI" style="width:24px; height:24px; object-fit:contain;" />`,
+  },
+  {
+    title: "Google Gemini 4 Argon",
+    category: "FLAGSHIP REASONING",
+    badge: "1.98B Tokens",
+    rating: "5.0",
+    desc: "Flagship multi-step reasoning model optimized for deep coding, mathematical proofs, complex document synthesis, and up to 1M token output generation.",
+    brandColor: "#1A73E8",
+    cta: "Explore Gemini Argon",
+    href: "https://ai.google.dev/",
+    iconSvg: `<img src="/brands/gemini.png" alt="Google Gemini" style="width:26px; height:26px; object-fit:contain;" />`,
+  },
+  {
+    title: "Higgsfield AI Studio",
+    category: "AI VIDEO GENERATION",
+    badge: "24h Unlimited Free",
+    rating: "4.8",
+    desc: "Cinematic video generation and camera controls. Toggle the unlimited switch to unlock a 24-hour unlimited generation trial with $0 upfront.",
+    brandColor: "#D4FF00",
+    cta: "Start Free Trial",
+    href: "https://higgsfield.ai/",
+    iconSvg: `<img src="/brands/higgsfield.png" alt="Higgsfield AI" style="width:26px; height:26px; border-radius:6px; object-fit:cover;" />`,
+  },
+];
+
+const APPS = [
+  {
+    title: "Freecash Rewards Hub",
+    category: "Rewards & Testing",
+    badge: "Top Rated",
+    brandColor: "#00E785",
+    badgeColor: "color:#00E785; background:rgba(0,231,133,0.1); border-color:rgba(0,231,133,0.3);",
+    iconSvg: `<svg viewBox="0 0 24 24" width="24" height="24" fill="none"><rect width="24" height="24" rx="6" fill="#00E785" fill-opacity="0.15"/><path d="M7 5h10v3H10.5v3h5.5v3H10.5v5H7V5z" fill="#00E785"/><circle cx="17" cy="16.5" r="2.5" fill="#00E785"/></svg>`,
+    stats: "★ 4.9 • 500K+ Users",
+    desc: "Complete daily surveys, test new apps, play games, and get instant payouts via PayPal, crypto, or gift cards.",
+    cta: "Get App & Bonus",
+    href: "https://freecash.com/",
+  },
+  {
+    title: "Swagbucks Daily Perks",
+    category: "Daily Rewards & Spin",
+    badge: "Daily Spin",
+    brandColor: "#00AEEF",
+    badgeColor: "color:#00AEEF; background:rgba(0,174,239,0.1); border-color:rgba(0,174,239,0.3);",
+    iconSvg: `<svg viewBox="0 0 24 24" width="24" height="24" fill="none"><rect width="24" height="24" rx="6" fill="#00AEEF" fill-opacity="0.15"/><path d="M8 8.5C8 6.57 9.57 5 11.5 5h1c1.93 0 3.5 1.57 3.5 3.5v1.2a3.5 3.5 0 0 1-2 3.15 3.5 3.5 0 0 1 2 3.15v1.5c0 1.93-1.57 3.5-3.5 3.5h-1C9.57 21 8 19.43 8 17.5v-1" stroke="#00AEEF" stroke-width="2.2" stroke-linecap="round"/><path d="M11 9h2.5M10 17h3.5M10 13h3.5" stroke="#00AEEF" stroke-width="1.8" stroke-linecap="round"/></svg>`,
+    stats: "★ 4.8 • 1M+ Users",
+    desc: "Earn daily rewards and spin-to-win prizes by completing short polls, web searches, and brand offers.",
+    cta: "Play & Spin Now",
+    href: "https://www.swagbucks.com/",
+  },
+  {
+    title: "Binance Web3 Airdrop Hub",
+    category: "Crypto & Airdrops",
+    badge: "Verified Drop",
+    brandColor: "#F3BA2F",
+    badgeColor: "color:#F3BA2F; background:rgba(243,186,47,0.1); border-color:rgba(243,186,47,0.3);",
+    iconSvg: `<svg viewBox="0 0 24 24" width="24" height="24" fill="#F3BA2F"><path d="M16.624 13.9202l2.7175 2.7154-7.353 7.353-7.353-7.352 2.7175-2.7164 4.6355 4.6595 4.6356-4.6595zm4.6366-4.6366L24 12l-2.7154 2.7164L18.5682 12l2.6924-2.7164zm-9.273 0l2.7164 2.6924-2.7164 2.7174L9.272 12l2.7154-2.7164zm-9.273 0L5.4095 12l-2.6924 2.6924L0 12l2.7164-2.7164zM11.9897.0102l7.3523 7.3303-2.7174 2.7154-4.6355-4.6355-4.6356 4.6595-2.7174-2.7164L11.9897.0102z"/></svg>`,
+    stats: "★ 4.9 • 2M+ Users",
+    desc: "Participate in verified decentralized token drops, zero-gas quests, and early ecosystem grant campaigns.",
+    cta: "Claim Free Tokens",
+    href: "https://www.binance.com/",
+  },
+  {
+    title: "Toloka AI Micro-Tasks",
+    category: "Micro-Tasks & AI",
+    badge: "Fast Payout",
+    brandColor: "#FF334B",
+    badgeColor: "color:#FF334B; background:rgba(255,51,75,0.1); border-color:rgba(255,51,75,0.3);",
+    iconSvg: `<svg viewBox="0 0 24 24" width="24" height="24" fill="none"><path d="M12 2L4 6.5v11L12 22l8-4.5v-11L12 2z" stroke="#FF334B" stroke-width="2" fill="#FF334B" fill-opacity="0.12"/><path d="M8 8.5h8M12 8.5v7" stroke="#FF334B" stroke-width="2.5" stroke-linecap="round"/></svg>`,
+    stats: "★ 4.7 • 300K+ Users",
+    desc: "Perform quick online micro-tasks including image tagging, content verification, and AI training with direct withdrawals.",
+    cta: "Start Micro Tasks",
+    href: "https://toloka.ai/",
+  },
+];
+
+const VIDEOS = [
+  {
+    title: "Prompt Engineering Full Course",
+    embedUrl: "https://www.youtube.com/embed/YhRfgYH_AoU?si=rPV1LqNrTkhffLbo",
+    tag: "Trending Now",
+    desc: "Complete masterclass on prompt engineering, system instructions, and LLM reasoning.",
+    cta: "Watch Full Video",
+    href: DIRECT_LINKS[1],
+  },
+  {
+    title: "Practical AI Prompting Strategies",
+    embedUrl: "https://www.youtube.com/embed/B6d8e3r96gQ?si=dJkPpckswkmd2RPO",
+    tag: "Staff Pick",
+    desc: "Breakthrough AI workflows, chain-of-thought methods, and real-world prompting tips.",
+    cta: "Watch Full Video",
+    href: DIRECT_LINKS[2],
+  },
+  {
+    title: "Future-Proof AI Career Skills",
+    embedUrl: "https://www.youtube.com/embed/p09yRj47kNM?si=d0D3lJ7mHwII3lUV",
+    tag: "High Yield",
+    desc: "Essential AI competencies, high-value prompt design, and digital productivity frameworks.",
+    cta: "Watch Full Video",
+    href: DIRECT_LINKS[0],
+  },
+  {
+    title: "Advanced Prompting & RAG Masterclass",
+    embedUrl: "https://www.youtube.com/embed/n287tR0dHHs?si=oureukUiSbH0uc9Y",
+    tag: "Top Tutorial",
+    desc: "Deep-dive showcase on structuring multi-modal prompts, automated pipelines, and agent workflows.",
+    cta: "Watch Full Video",
+    href: DIRECT_LINKS[1],
+  },
+];
+
+const PERKS = [
+  {
+    title: "$25 Instant Welcome Bonus",
+    badge: "Instant Cashout",
+    icon: "$",
+    desc: "Create a free verified account to claim your starter credit balance immediately.",
+    cta: "Claim $25 Bonus",
+    href: DIRECT_LINKS[2],
+  },
+  {
+    title: "VIP All-Access Pass",
+    badge: "Priority Access",
+    icon: "★",
+    desc: "Bypass standard queues and get direct access to premium AI models and prompt packs.",
+    cta: "Unlock VIP Pass",
+    href: DIRECT_LINKS[0],
+  },
+  {
+    title: "Secret 800+ AI Prompt Vault",
+    badge: "Master Vault",
+    icon: "✦",
+    desc: "Complete commercial bundle covering cinematic lighting, photorealism, and UI kits.",
+    cta: "Open Prompt Vault",
+    href: DIRECT_LINKS[1],
+  },
+  {
+    title: "High-Yield Earning Portal",
+    badge: "Automated Earning",
+    icon: "▲",
+    desc: "Instant access to traffic monetization tools, creator deals, and revenue-share platforms.",
+    cta: "Launch Portal",
+    href: DIRECT_LINKS[2],
+  },
+];
+
+const FAQS = [
+  {
+    q: "What kind of links and offers are featured on this page?",
+    a: "This page showcases a curated mix of AI tools, educational resources, and third-party sponsored advertisements/affiliate deals powered by external ad networks (such as Monetag and Adsterra). Some outbound links route through promotional advertising gateways before arriving at destination offers.",
+  },
+  {
+    q: "Does proCraft guarantee the destinations or claims of third-party links?",
+    a: "No. As explicitly stated in our Ad Disclaimer, we do NOT guarantee that clicking any button or link will take you to the original product page. Promotional terms, trial credits, and software claims are controlled entirely by external third parties. proCraft assumes no liability for third-party websites or services.",
+  },
+  {
+    q: "How can I protect my personal data when browsing external offers?",
+    a: "We strongly advise exercising standard digital diligence: always verify the destination domain in your browser address bar, and never enter financial details, credit card numbers, passwords, or sensitive personal data on unfamiliar third-party websites without independent verification.",
+  },
+  {
+    q: "Why does proCraft feature sponsored ads and partner links?",
+    a: "Sponsorships and ad networks enable us to maintain, curate, and provide our 800+ Midjourney, FLUX, and ChatGPT prompt database 100% free of charge to creators worldwide without charging subscription fees or locking resources behind a paywall.",
+  },
+  {
+    q: "Are popunder ads or vignette screens controlled by proCraft?",
+    a: "No. Advertising scripts on this page may trigger on-click popunder windows or interstitial sponsor pages served dynamically by certified third-party ad networks. proCraft does not host or distribute third-party executable software.",
+  },
+  {
+    q: "What should I do if I encounter an inappropriate, broken, or suspicious ad?",
+    a: "We actively monitor user safety. If an external ad redirects to suspicious content or causes an inconvenience, please reach out via our Contact page with details. We promptly review and blacklist problematic ad placements.",
+  },
+  {
+    q: "How can a verified AI tool or startup advertise directly with proCraft?",
+    a: "If you represent an AI company or creative software and wish to book a direct, transparent sponsorship banner or featured deal without ad network intermediaries, reach out directly via our Contact page.",
+  },
+];
+
+// Populate Elements
+const heroBtn = document.getElementById('heroCta');
+if (heroBtn) {
+  heroBtn.href = DIRECT_LINKS[0];
+  heroBtn.target = '_blank';
+  heroBtn.rel = 'noopener noreferrer sponsored';
+  heroBtn.onclick = function() {
+    this.href = getNextDirectLink();
+  };
+}
+
+// 1. Featured Cards
+const cardsContainer = document.getElementById('featuredCardsGrid');
+CARDS.forEach((c) => {
+  const art = document.createElement('article');
+  art.className = 'card';
+  art.innerHTML = `
+    <div class="frame">
+      <img src="${c.image}" alt="${c.title}" loading="lazy">
+      <span class="card-badge" style="font-family:'Bricolage Grotesque', sans-serif; font-weight:800;">${c.badge}</span>
+    </div>
+    <div class="body">
+      <h3 style="font-family:'Bricolage Grotesque', sans-serif; font-weight:800;">${c.title}</h3>
+      <p class="desc" style="font-family:'Bricolage Grotesque', sans-serif;">${c.desc}</p>
+      <a class="btn" style="font-family:'Bricolage Grotesque', sans-serif; font-weight:700;" href="${c.href}" target="_blank" rel="noopener sponsored"><span class="btn-inner"><span>${c.cta || 'Open Link'}</span> ↗</span></a>
+    </div>
+  `;
+  const btn = art.querySelector('a.btn');
+  setupTwoClickButton(btn, c.href);
+  cardsContainer.appendChild(art);
+});
+
+// 2. Partner Deals
+const partnersContainer = document.getElementById('partnerDealsGrid');
+PARTNERS.forEach((p) => {
+  const div = document.createElement('div');
+  div.className = 'app-card';
+  div.innerHTML = `
+    <div>
+      <div class="app-top">
+        <div style="width:44px; height:44px; border-radius:14px; display:grid; place-items:center; background:${p.brandColor}18; border:1px solid ${p.brandColor}35;">
+          ${p.iconSvg}
+        </div>
+        <span class="app-badge" style="display:inline-block; font-size:12px; font-weight:600; padding:4px 12px; border-radius:9999px; background:rgba(38,38,38,0.9); color:#d4d4d4; border:1px solid rgba(64,64,64,0.7); letter-spacing:0.025em; font-family:'Bricolage Grotesque', sans-serif;">${p.badge}</span>
+      </div>
+      <div style="display:flex; align-items:center; gap:8px; margin-bottom:6px; font-family:'Bricolage Grotesque', sans-serif;">
+        <span style="font-size:.72rem; color:var(--muted); text-transform:uppercase; font-weight:800; letter-spacing:.06em;">${p.category}</span>
+        <span style="font-size:.75rem; font-weight:800; color:#f59e0b;">★ ${p.rating}</span>
+      </div>
+      <h3 style="font-family:'Bricolage Grotesque', sans-serif; font-size:1.1rem; font-weight:800; color:var(--ink); margin-bottom:8px; letter-spacing:-.02em;">${p.title}</h3>
+      <p class="app-desc" style="font-family:'Bricolage Grotesque', sans-serif; line-height:1.55; margin-bottom:20px; opacity:0.85;">${p.desc}</p>
+    </div>
+    <a class="btn" style="font-family:'Bricolage Grotesque', sans-serif; font-weight:700;" href="${p.href}" target="_blank" rel="noopener sponsored"><span class="btn-inner"><span>${p.cta}</span> ↗</span></a>
+  `;
+  const btn = div.querySelector('a.btn');
+  setupTwoClickButton(btn, p.href);
+  partnersContainer.appendChild(div);
+});
+
+// 3. Apps
+const appsContainer = document.getElementById('appsGrid');
+APPS.forEach((a) => {
+  const div = document.createElement('div');
+  div.className = 'app-card';
+  div.innerHTML = `
+    <div>
+      <div class="app-top">
+        <div style="width:44px; height:44px; border-radius:14px; display:grid; place-items:center; background:${a.brandColor}18; border:1px solid ${a.brandColor}35;">
+          ${a.iconSvg}
+        </div>
+        <span class="app-badge" style="font-family:'Bricolage Grotesque', sans-serif; ${a.badgeColor}; font-weight:800;">${a.badge}</span>
+      </div>
+      <div style="font-family:'Bricolage Grotesque', sans-serif; font-size:.72rem; color:var(--muted); text-transform:uppercase; font-weight:800; letter-spacing:.05em; margin-bottom:4px;">${a.category}</div>
+      <h3 style="font-family:'Bricolage Grotesque', sans-serif; font-size:1.05rem; font-weight:800; color:var(--ink); margin-bottom:6px;">${a.title}</h3>
+      <div class="app-stats" style="font-family:'Bricolage Grotesque', sans-serif; font-weight:700; margin-bottom:8px;">${a.stats}</div>
+      <p class="app-desc" style="font-family:'Bricolage Grotesque', sans-serif; line-height:1.55; margin-bottom:20px; opacity:0.85;">${a.desc}</p>
+    </div>
+    <a class="btn" style="font-family:'Bricolage Grotesque', sans-serif; font-weight:700;" href="${a.href}" target="_blank" rel="noopener sponsored"><span class="btn-inner"><span>${a.cta}</span> ↗</span></a>
+  `;
+  const btn = div.querySelector('a.btn');
+  setupTwoClickButton(btn, a.href);
+  appsContainer.appendChild(div);
+});
+
+// 4. Videos (Embedded 16:9 Players)
+const videosContainer = document.getElementById('videoGrid');
+VIDEOS.forEach((v) => {
+  const card = document.createElement('div');
+  card.className = 'video-card';
+  card.innerHTML = `
+    <div class="video-frame">
+      <iframe src="${v.embedUrl}" title="${v.title}" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+    </div>
+    <div class="video-body">
+      <div>
+        <div style="display:flex; justify-content:space-between; align-items:center; gap:8px; margin-bottom:6px;">
+          <h3 style="font-size:1.05rem; font-weight:800; color:var(--ink);">${v.title}</h3>
+          <span style="font-size:.7rem; font-weight:700; text-transform:uppercase; padding:3px 10px; border-radius:999px; background:rgba(120,120,120,0.08); border:1px solid var(--line);">${v.tag}</span>
+        </div>
+        <p style="font-size:.82rem; color:var(--muted); line-height:1.5;">${v.desc}</p>
+      </div>
+      <a class="btn" href="${v.href}" target="_blank" rel="noopener sponsored"><span class="btn-inner"><span>${v.cta}</span> ↗</span></a>
+    </div>
+  `;
+  const btn = card.querySelector('a.btn');
+  setupTwoClickButton(btn, v.href);
+  videosContainer.appendChild(card);
+});
+
+// 5. Perks
+const perksContainer = document.getElementById('perksGrid');
+PERKS.forEach((pk) => {
+  const div = document.createElement('div');
+  div.className = 'app-card';
+  div.innerHTML = `
+    <div>
+      <div class="app-top">
+        <div class="app-icon">${pk.icon}</div>
+        <span class="app-badge">${pk.badge}</span>
+      </div>
+      <h3>${pk.title}</h3>
+      <p class="app-desc">${pk.desc}</p>
+    </div>
+    <a class="btn" href="${pk.href}" target="_blank" rel="noopener sponsored"><span class="btn-inner"><span>${pk.cta}</span> &rarr;</span></a>
+  `;
+  const btn = div.querySelector('a.btn');
+  setupTwoClickButton(btn, pk.href);
+  perksContainer.appendChild(div);
+});
+
+// 6. FAQ Accordion
+const faqContainer = document.getElementById('faqAccordion');
+FAQS.forEach((f, idx) => {
+  const item = document.createElement('div');
+  item.className = `faq-box ${idx === 0 ? 'active' : ''}`;
+  item.innerHTML = `
+    <button type="button" class="faq-q">
+      <span>${f.q}</span>
+      <span class="faq-icon">&#9660;</span>
+    </button>
+    <div class="faq-a">${f.a}</div>
+  `;
+  item.querySelector('.faq-q').addEventListener('click', () => {
+    item.classList.toggle('active');
+  });
+  faqContainer.appendChild(item);
+});
+
+// Theme Toggle
+const themeBtn = document.getElementById('themeToggleBtn');
+themeBtn.addEventListener('click', () => {
+  const cur = document.documentElement.getAttribute('data-theme');
+  const next = cur === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', next);
+});
 </script>
 </body>
 </html>

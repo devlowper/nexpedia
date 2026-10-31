@@ -27,7 +27,7 @@ export async function generateMetadata({ params }: LayoutProps): Promise<Metadat
       .trim();
 
     // 50-60 chars title
-    const title = `${cleanName} — AI Prompt | proCraft`;
+    const title = `${cleanName} | AI Prompt | proCraft`;
 
     // 150-160 chars description
     let rawDesc = prompt.description || prompt.what_this_prompt_does || `Discover the best ${prompt.category?.name || 'AI'} prompt for Midjourney, ChatGPT, FLUX & Stable Diffusion. Copy ready-to-use prompt on proCraft.`;
@@ -52,13 +52,13 @@ export async function generateMetadata({ params }: LayoutProps): Promise<Metadat
         type: 'article',
         images: imgUrl
           ? [
-              {
-                url: imgUrl,
-                width: 1024,
-                height: 1024,
-                alt: cleanName,
-              },
-            ]
+            {
+              url: imgUrl,
+              width: 1024,
+              height: 1024,
+              alt: cleanName,
+            },
+          ]
           : undefined,
       },
       twitter: {
@@ -70,7 +70,7 @@ export async function generateMetadata({ params }: LayoutProps): Promise<Metadat
     };
   } catch {
     return {
-      title: 'AI Prompt Details — proCraft',
+      title: 'AI Prompt Details | ProCraft',
       description: 'Explore high-quality AI art prompts for Midjourney, ChatGPT, FLUX, and Stable Diffusion on proCraft.',
     };
   }

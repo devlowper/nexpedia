@@ -10,9 +10,10 @@ import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { getApiBaseUrl } from '@/lib/apiClient';
 import { AIDirectoryHero } from '@/components/ai-directory/AIDirectoryHero';
+import { AIDirectoryFAQ } from '@/components/ai-directory/AIDirectorySEO';
 import { SponsoredCard } from '@/components/ads/SponsoredCard';
-import { AdsterraBanner } from '@/components/ads/AdsterraBanner';
-import { triggerMonetagSmartlink } from '@/lib/monetagAd';
+import { AdsterraBanner, AdsterraResponsiveBanner } from '@/components/ads/AdsterraBanner';
+import { triggerMonetagSmartlink, handleTwoClickAd, TwoClickLink } from '@/lib/monetagAd';
 
 
 
@@ -171,13 +172,15 @@ const ToolCard = ({ tool }: { tool: AITool }) => {
 
         {/* Footer Row (Details and Visit Site buttons) */}
         <div className="flex gap-2.5 mt-4 pt-4 border-t border-border relative z-10 w-full">
-          <Link 
-            href={`/ai-directory/${tool.slug}`}
-            onClick={() => triggerMonetagSmartlink()}
+          <TwoClickLink 
+            customAdUrl="https://uplcm.com/4/12155084"
+            originalHref={`/ai-directory/${tool.slug}`}
+            isInternal={true}
+            entityId={tool.slug}
             className="flex-1 py-2 rounded-lg bg-black/5 dark:bg-white/5 border border-border text-primary text-xs font-semibold text-center hover:bg-black/10 dark:hover:bg-white/10 transition-colors"
           >
             Details
-          </Link>
+          </TwoClickLink>
           {tool.websiteUrl && (
             <a 
               href={tool.websiteUrl}
@@ -400,6 +403,8 @@ function AIDirectoryContent() {
       />
 
       <ProductHuntMarquee />
+
+
 
       {loading ? (
         <div className="space-y-12">
@@ -679,15 +684,15 @@ function AIDirectoryContent() {
                   </div>
                 </ScrollReveal>
 
-                {/* Sponsored Card & Adsterra Banners: 2 categories por por */}
+                {/* Sponsored Card & Adsterra Banners: 2 categories por por (728x90 desktop, 300x250 mobile) */}
                 {(index + 1) % 2 === 0 && (
                   <div className="w-full flex flex-col items-center gap-6 my-6">
                     <ScrollReveal variant="slide-up" duration={0.5} className="w-full">
                       <SponsoredCard variant="directory" />
                     </ScrollReveal>
-                    <div className="w-full flex flex-wrap items-center justify-center gap-4">
-                      <AdsterraBanner format="320x50" />
-                      <AdsterraBanner format="320x50" />
+                    <div className="w-full flex flex-col items-center justify-center gap-4">
+                      <AdsterraResponsiveBanner showLabel={true} />
+                      <AdsterraResponsiveBanner showLabel={true} />
                     </div>
                   </div>
                 )}
@@ -733,6 +738,9 @@ function AIDirectoryContent() {
           )}
         </div>
       )}
+
+      {/* ── Free AI Tools Directory FAQ (Merged SEO Guide) ── */}
+      <AIDirectoryFAQ />
 
       {/* Bottom Adsterra Banner Units (320x50) */}
       <div className="w-full flex flex-wrap items-center justify-center gap-4 my-10 px-4">

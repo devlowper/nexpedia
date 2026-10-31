@@ -1,16 +1,17 @@
 "use client";
 
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Sparkles, ChevronDown, ChevronUp, Eye, Crown, Layers, Heart } from "lucide-react";
+import { Sparkles, Loader2, Eye, Crown, Layers, Heart } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Prompt, cardVariants, cleanTitle, getPromptTools, getCategoryStyle } from "@/components/prompts/PromptCard";
 import { useAuth } from "@/hooks/useAuth";
 import { formatViewCount } from "@/lib/utils";
 
-// ── Config constants (mirrors backend) ────────────────────────────────────────
-const LATEST_DEFAULT_VISIBLE = 4;
+// ── Config constants ──────────────────────────────────────────────────────────
+const LATEST_INITIAL_VISIBLE = 4;
+const LATEST_BATCH_SIZE = 4;
 
 interface LatestPromptCardProps {
   prompt: Prompt;
@@ -213,21 +214,43 @@ interface LatestPromptsSectionProps {
 }
 
 export function LatestPromptsSection({ prompts, loading }: LatestPromptsSectionProps) {
-  const [expanded, setExpanded] = useState(false);
-  const expandRef = useRef<HTMLDivElement>(null);
+  const [visibleCount, setVisibleCount] = useState<number>(LATEST_INITIAL_VISIBLE);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
+  const sentinelRef = useRef<HTMLDivElement>(null);
 
-  const hasMore = prompts.length > LATEST_DEFAULT_VISIBLE;
+  // Sync visibleCount when prompts change
+  useEffect(() => {
+    setVisibleCount(LATEST_INITIAL_VISIBLE);
+  }, [prompts]);
 
-  // Smooth scroll when expanding to keep user oriented
-  const handleExpand = () => {
-    setExpanded(true);
-  };
+  const hasMore = visibleCount < prompts.length;
 
-  const handleCollapse = () => {
-    setExpanded(false);
-    // Scroll back to section heading
-    expandRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
-  };
+  useEffect(() => {
+    if (!hasMore || loading) return;
+
+    const sentinel = sentinelRef.current;
+    if (!sentinel) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const first = entries[0];
+        if (first.isIntersecting && !isLoadingMore) {
+          setIsLoadingMore(true);
+          setTimeout(() => {
+            setVisibleCount((prev) => Math.min(prev + LATEST_BATCH_SIZE, prompts.length));
+            setIsLoadingMore(false);
+          }, 300);
+        }
+      },
+      {
+        rootMargin: "250px", // Pre-trigger so cards feel seamlessly loaded as user scrolls
+        threshold: 0.1,
+      }
+    );
+
+    observer.observe(sentinel);
+    return () => observer.disconnect();
+  }, [hasMore, loading, prompts.length, isLoadingMore]);
 
   // ── Loading state: hide entirely until we know there are latest prompts ──
   if (loading) return null;
@@ -236,7 +259,7 @@ export function LatestPromptsSection({ prompts, loading }: LatestPromptsSectionP
   if (prompts.length === 0) return null;
 
   return (
-    <section className="space-y-6 pt-2 pb-10" ref={expandRef}>
+    <section className="space-y-6 pt-2 pb-10">
       {/* ── Section Header ── */}
       <div className="flex flex-col md:flex-row md:items-end justify-between border-b border-border/50 pb-4 gap-3">
         <div className="flex items-center gap-3">
@@ -258,66 +281,31 @@ export function LatestPromptsSection({ prompts, loading }: LatestPromptsSectionP
         {/* Card count badge */}
         <span className="self-start md:self-auto inline-flex items-center gap-1.5 text-xs font-semibold text-accent bg-accent/10 border border-accent/25 px-3 py-1 rounded-lg">
           <Sparkles size={11} />
-          {prompts.length} prompt{prompts.length !== 1 ? "s" : ""}
+          {visibleCount < prompts.length
+            ? `Showing ${visibleCount} of ${prompts.length}`
+            : `${prompts.length} prompt${prompts.length !== 1 ? "s" : ""}`}
         </span>
       </div>
 
-      {/* ── Cards Grid ── */}
-      {!loading && (
-        <>
-          {/* Always-visible cards (first 4) */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
-            {prompts.slice(0, LATEST_DEFAULT_VISIBLE).map((p, i) => (
-              <LatestPromptCard key={p.slug ?? p._id} prompt={p} index={i} />
-            ))}
+      {/* ── Cards Grid (Scroll-To-Load / Infinite Scroll) ── */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
+        {prompts.slice(0, visibleCount).map((p, i) => (
+          <LatestPromptCard
+            key={p.slug ?? p._id ?? `latest-${i}`}
+            prompt={p}
+            index={i % LATEST_BATCH_SIZE}
+          />
+        ))}
+      </div>
+
+      {/* ── Infinite Scroll Sentinel & Loading Indicator ── */}
+      {hasMore && (
+        <div ref={sentinelRef} className="w-full flex items-center justify-center py-6">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-accent/10 border border-accent/25 text-accent text-xs font-semibold shadow-xs animate-pulse">
+            <Loader2 size={14} className="animate-spin" />
+            <span>Loading more fresh prompts...</span>
           </div>
-
-          {/* Expandable extra cards */}
-          <AnimatePresence>
-            {expanded && prompts.length > LATEST_DEFAULT_VISIBLE && (
-              <motion.div
-                key="extra-cards"
-                initial={{ opacity: 0, height: 0, overflow: "hidden" }}
-                animate={{ opacity: 1, height: "auto", overflow: "visible" }}
-                exit={{ opacity: 0, height: 0, overflow: "hidden" }}
-                transition={{ duration: 0.45, ease: "easeInOut" }}
-              >
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 pt-5">
-                  {prompts.slice(LATEST_DEFAULT_VISIBLE).map((p, i) => (
-                    <LatestPromptCard
-                      key={p.slug ?? p._id}
-                      prompt={p}
-                      index={LATEST_DEFAULT_VISIBLE + i}
-                    />
-                  ))}
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-
-          {/* ── See more / Show less button ── */}
-          {hasMore && (
-            <div className="flex justify-center pt-2">
-              {!expanded ? (
-                <button
-                  onClick={handleExpand}
-                  className="group flex items-center gap-2 px-6 py-2.5 rounded-full text-sm font-semibold text-accent bg-accent/10 hover:bg-accent/20 border border-accent/25 hover:border-accent/40 transition-all duration-200 shadow-sm"
-                >
-                  <ChevronDown size={16} className="group-hover:translate-y-0.5 transition-transform" />
-                  See {prompts.length - LATEST_DEFAULT_VISIBLE} more
-                </button>
-              ) : (
-                <button
-                  onClick={handleCollapse}
-                  className="group flex items-center gap-2 px-6 py-2.5 rounded-full text-sm font-semibold text-accent bg-accent/10 hover:bg-accent/20 border border-accent/25 hover:border-accent/40 transition-all duration-200 shadow-sm"
-                >
-                  <ChevronUp size={16} className="group-hover:-translate-y-0.5 transition-transform" />
-                  Show less
-                </button>
-              )}
-            </div>
-          )}
-        </>
+        </div>
       )}
     </section>
   );

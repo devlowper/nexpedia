@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="referrer" content="no-referrer-when-downgrade">
+  <title>Advertisement</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    html, body {
+      background: transparent;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    #ad-wrapper {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    iframe {
+      border: 0 !important;
+      outline: none !important;
+    }
+  </style>
+</head>
+<body>
+  <div id="ad-wrapper">
+    <script type="text/javascript">
+      (function() {
+        try {
+          const params = new URLSearchParams(window.location.search);
+          const key = params.get('key') || '5d110b3033a83acb645822e998ca0bd7';
+          const width = parseInt(params.get('w') || '728', 10);
+          const height = parseInt(params.get('h') || '90', 10);
+
+          window.atOptions = {
+            'key': key,
+            'format': 'iframe',
+            'height': height,
+            'width': width,
+            'params': {}
+          };
+
+          document.write(
+            '<scr' + 'ipt type="text/javascript" src="//www.highperformanceformat.com/' +
+            encodeURIComponent(key) +
+            '/invoke.js"></scr' + 'ipt>'
+          );
+        } catch (err) {
+          console.error('[Adsterra Frame] Init error:', err);
+        }
+      })();
+    </script>
+  </div>
+</body>
+</html>
+

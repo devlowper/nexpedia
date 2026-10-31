@@ -17,7 +17,7 @@ export function Footer() {
     <footer className="bg-[#FCFCFC] dark:bg-[#0A0A0A] border-t border-gray-100 dark:border-zinc-900 pt-16 pb-8 mt-20">
       <div className="max-w-7xl mx-auto px-4 md:px-8">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-12 mb-16">
-          
+
           {/* Left Column (Brand & Newsletter) */}
           <div className="md:col-span-5 flex flex-col items-start">
             <Link href="/" className="inline-block mb-6 group transition-opacity hover:opacity-90" title="proCraft | Prompt Library">
@@ -38,23 +38,23 @@ export function Footer() {
                 className="hidden dark:block h-8 w-auto object-contain"
               />
             </Link>
-            
+
             <h3 className="font-bold text-2xl md:text-3xl mb-2 text-black dark:text-white">
               Stay on top of your creativity
             </h3>
             <p className="text-gray-500 dark:text-gray-400 mb-6 text-sm">
               No spam. Just simple advice for staying inspired.
             </p>
-            
+
             <form className="flex w-full max-w-md items-center bg-gray-100 dark:bg-zinc-900 rounded-full p-1 border border-gray-200 dark:border-zinc-800">
-              <input 
-                type="email" 
-                placeholder="Enter email address" 
+              <input
+                type="email"
+                placeholder="Enter email address"
                 className="flex-1 bg-transparent border-none outline-none px-4 text-sm text-black dark:text-white placeholder:text-gray-500"
                 required
               />
-              <button 
-                type="submit" 
+              <button
+                type="submit"
                 className="bg-[#111111] dark:bg-white text-white dark:text-black text-sm font-medium px-6 py-2 rounded-full hover:bg-black/80 dark:hover:bg-gray-100 transition-colors shadow-[0_4px_14px_0_rgba(0,0,0,0.2)] dark:shadow-[0_4px_14px_0_rgba(255,255,255,0.1)]"
               >
                 Subscribe
@@ -74,24 +74,8 @@ export function Footer() {
                 {[
                   { name: 'Prompt Library', path: '/prompt-library' },
                   { name: 'AI Directory', path: '/ai-directory' },
-                  { name: 'Img to Prompt', path: '/image-to-prompt' }
-                ].map((item) => (
-                  <li key={item.name}>
-                    <Link href={item.path} className="text-gray-500 dark:text-gray-400 text-sm hover:text-black dark:hover:text-white transition-colors">{item.name}</Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* Pages */}
-            <div>
-              <h4 className="font-semibold text-black dark:text-white mb-6 text-sm">Pages</h4>
-              <ul className="space-y-4">
-                {[
-                  { name: 'About', path: '/about' },
-                  { name: 'Blog', path: '/blog' },
+                  { name: 'Img to Prompt', path: '/image-to-prompt' },
                   { name: 'Pricing', path: '/pricing', badge: 'Free' },
-                  { name: 'Advertise', path: '/ads' },
                 ].map((item) => (
                   <li key={item.name}>
                     <Link
@@ -110,6 +94,27 @@ export function Footer() {
               </ul>
             </div>
 
+            {/* Pages */}
+            <div>
+              <h4 className="font-semibold text-black dark:text-white mb-6 text-sm">Pages</h4>
+              <ul className="space-y-4">
+                {[
+                  { name: 'About', path: '/about' },
+                  { name: 'Blog', path: '/blog' },
+                  { name: 'Advertise', path: '/ads' },
+                ].map((item) => (
+                  <li key={item.name}>
+                    <Link
+                      href={item.path}
+                      className="text-gray-500 dark:text-gray-400 text-sm hover:text-black dark:hover:text-white transition-colors"
+                    >
+                      {item.name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
             {/* Support */}
             <div>
               <h4 className="font-semibold text-black dark:text-white mb-6 text-sm">Support</h4>
@@ -119,7 +124,7 @@ export function Footer() {
                   if (item === 'Contact') href = '/contact';
                   if (item === 'Privacy Policy') href = '/privacy';
                   if (item === 'Terms & Conditions') href = '/terms';
-                  
+
                   return (
                     <li key={item}>
                       <Link href={href} className="text-gray-500 dark:text-gray-400 text-sm hover:text-black dark:hover:text-white transition-colors">{item}</Link>
@@ -135,7 +140,7 @@ export function Footer() {
         {/* Bottom Section */}
         <div className="border-t border-gray-200 dark:border-zinc-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-6">
           <p className="text-gray-500 dark:text-gray-400 text-sm">
-            © {new Date().getFullYear()} proCraft | AI Prompt Library & Directory. All rights reserved.
+            © {new Date().getFullYear()} ProCraft | AI Prompt Library & Directory. All rights reserved.
           </p>
           <div className="flex gap-3">
             <a

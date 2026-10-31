@@ -36,7 +36,13 @@ export const metadata: Metadata = {
     "ai tools directory",
     "image to prompt",
     "best ai prompts",
-    "ai prompt generator"
+    "ai prompt generator",
+    "free ai prompts",
+    "free ai tools directory",
+    "ai prompts collection",
+    "procraft ai",
+    "procraft prompts",
+    "copy and paste ai prompts"
   ],
   authors: [{ name: "proCraft Team", url: APP_URL }],
   creator: "proCraft",
@@ -175,39 +181,121 @@ export default function RootLayout({
                   }
                 } catch(e) {}
 
-                // 4. Popunder protection on UI elements (hamburger, navbar, modals, inputs)
+                // 4. Bulletproof Ads-Free Navigation Shield (Desktop & Mobile)
                 var origOpen = window.open;
                 var blockPopupsUntil = 0;
-                var armGuard = function(e) {
-                  var t = e.target;
-                  if (t && t.closest && (
-                    t.closest('#navbar-hamburger-btn') ||
-                    t.closest('[data-ads-free="true"]') ||
-                    t.closest('nav') ||
-                    t.closest('button') ||
-                    t.closest('input')
-                  )) {
-                    blockPopupsUntil = Date.now() + 600;
-                  }
+                var isNavInteracting = false;
+
+                // Configure Monetag / Ad network exclusion globals
+                window.onClickExcludes = ['nav', 'header', 'a', 'button', '[data-ads-free="true"]', '#navbar-hamburger-btn', '[data-mobile-drawer="true"]', '[data-nav-item="true"]'];
+
+                window.__armAdsFree = function(durationMs) {
+                  blockPopupsUntil = Date.now() + (durationMs || 3000);
+                  isNavInteracting = true;
+                  setTimeout(function() { isNavInteracting = false; }, durationMs || 3000);
                 };
+
+                var isAdUrl = function(u) {
+                  var s = String(u || '').toLowerCase();
+                  return s.indexOf('uplcm.com') !== -1 ||
+                         s.indexOf('al5sm.com') !== -1 ||
+                         s.indexOf('nap5k.com') !== -1 ||
+                         s.indexOf('n6wxm.com') !== -1 ||
+                         s.indexOf('adsterra') !== -1 ||
+                         s.indexOf('propeller') !== -1 ||
+                         s.indexOf('monetag') !== -1 ||
+                         s.indexOf('clksite') !== -1 ||
+                         s.indexOf('adk2') !== -1;
+                };
+
+                var armGuard = function(e) {
+                  try {
+                    var t = e.target;
+                    if (t && t.closest && (
+                      t.closest('nav') ||
+                      t.closest('[data-ads-free="true"]') ||
+                      t.closest('#navbar-hamburger-btn') ||
+                      t.closest('[data-mobile-drawer="true"]') ||
+                      t.closest('[data-nav-item="true"]') ||
+                      t.closest('button') ||
+                      t.closest('input')
+                    )) {
+                      window.__armAdsFree(3000);
+                    }
+                  } catch(err) {}
+                };
+
                 window.addEventListener('pointerdown', armGuard, { capture: true, passive: true });
                 window.addEventListener('touchstart', armGuard, { capture: true, passive: true });
                 window.addEventListener('mousedown', armGuard, { capture: true, passive: true });
                 window.addEventListener('click', armGuard, { capture: true, passive: true });
 
+                // Dummy window object returned when ad popunder is blocked:
+                // Returning a mock window with closed=false prevents ad scripts from detecting
+                // popup blocking and therefore prevents them from executing their fallback redirect!
+                var makeFakeWindow = function() {
+                  return {
+                    closed: false,
+                    focus: function() {},
+                    blur: function() {},
+                    close: function() { this.closed = true; },
+                    postMessage: function() {},
+                    document: { write: function() {}, open: function() {}, close: function() {} },
+                    location: { href: '', replace: function() {}, assign: function() {} }
+                  };
+                };
+
                 window.open = function(url, target, features) {
-                  if (url && (
-                    String(url).indexOf('accounts.google.com') !== -1 ||
-                    String(url).indexOf('firebase') !== -1 ||
-                    String(url).indexOf('uplcm.com') !== -1
-                  )) {
-                    return origOpen.apply(this, arguments);
+                  var urlStr = String(url || '');
+                  // If user is navigating or interacting with nav bar / inputs:
+                  if (Date.now() < blockPopupsUntil || isNavInteracting || isAdUrl(urlStr)) {
+                    // ONLY allow real user authentication popups (Google OAuth / Firebase)
+                    if (urlStr.indexOf('accounts.google.com') !== -1 || urlStr.indexOf('firebaseapp.com') !== -1) {
+                      return origOpen.apply(this, arguments);
+                    }
+                    // Return fake window to safely neutralize popunder fallback redirects
+                    return makeFakeWindow();
                   }
-                  if (Date.now() < blockPopupsUntil) {
-                    return null;
-                  }
+
+                  // Outside of navigation interactions, allow standard browser action
                   return origOpen.apply(this, arguments);
                 };
+
+                // Prevent synthetic clicks on ad anchors during navigation
+                var origAnchorClick = HTMLAnchorElement.prototype.click;
+                HTMLAnchorElement.prototype.click = function() {
+                  if (Date.now() < blockPopupsUntil || isNavInteracting) {
+                    var href = (this.getAttribute('href') || '').toLowerCase();
+                    if (isAdUrl(href)) {
+                      return;
+                    }
+                  }
+                  return origAnchorClick.apply(this, arguments);
+                };
+
+                // Guard location.assign and location.replace against rogue ad redirects
+                try {
+                  var origAssign = window.location.assign;
+                  if (typeof origAssign === 'function') {
+                    window.location.assign = function(u) {
+                      if (isAdUrl(u) && (Date.now() < blockPopupsUntil || isNavInteracting)) {
+                        console.warn('Blocked rogue nav redirect (assign):', u);
+                        return;
+                      }
+                      return origAssign.apply(window.location, arguments);
+                    };
+                  }
+                  var origReplace = window.location.replace;
+                  if (typeof origReplace === 'function') {
+                    window.location.replace = function(u) {
+                      if (isAdUrl(u) && (Date.now() < blockPopupsUntil || isNavInteracting)) {
+                        console.warn('Blocked rogue nav redirect (replace):', u);
+                        return;
+                      }
+                      return origReplace.apply(window.location, arguments);
+                    };
+                  }
+                } catch(e) {}
               }
             `,
           }}
