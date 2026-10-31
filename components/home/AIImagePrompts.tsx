@@ -31,7 +31,7 @@ export function AIImagePrompts() {
   }, []);
 
   return (
-    <section className="w-full bg-base py-20 px-4 border-t border-border">
+    <section className="w-full bg-base py-20 px-4 border-t border-border cv-auto">
       <div className="max-w-7xl mx-auto flex flex-col items-center">
 
         {/* Header */}
@@ -42,8 +42,8 @@ export function AIImagePrompts() {
           >
             Trendy AI Image Prompts & Img to Prompt
           </h2>
-          <p className="text-black/60 dark:text-white/60 text-sm max-w-xl mx-auto italic">
-            Get inspired by trendy prompts and best image to prompt recipes. Copy prompts with one click and create stunning visuals.
+          <p className="text-black/60 dark:text-white/60 text-sm md:text-base max-w-3xl mx-auto leading-relaxed">
+            Explore the latest trending AI image prompts, viral photo editing styles, and creative AI art ideas. Discover ready-to-use prompts for ChatGPT, Gemini, Midjourney, Nano Banana, and FLUX. Copy your favorite prompts instantly or use Image to Prompt to transform any reference image into detailed, powerful AI prompts. Get inspired and create stunning AI-generated visuals with ProCraft.
           </p>
         </div>
 

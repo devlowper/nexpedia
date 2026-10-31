@@ -1,7 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import { motion, useReducedMotion } from "framer-motion";
+import React, { useEffect, useRef, useState } from "react";
 
 interface TileConfig {
   id: string;
@@ -207,23 +206,21 @@ const TILE_CONFIGS: TileConfig[] = [
 ];
 
 export function FloatingIcons() {
-  const shouldReduceMotion = useReducedMotion();
-  const [mouseOffset, setMouseOffset] = useState({ x: 0, y: 0 });
-  const [isMobile, setIsMobile] = useState(() =>
-    typeof window !== 'undefined' ? window.innerWidth < 768 : false
-  );
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
     const checkMobile = () => {
       setIsMobile(window.innerWidth < 768);
     };
     checkMobile();
-    window.addEventListener("resize", checkMobile);
+    window.addEventListener("resize", checkMobile, { passive: true });
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
+  // Performance-optimized direct DOM parallax (Zero React state re-renders)
   useEffect(() => {
-    if (shouldReduceMotion) return;
+    if (isMobile) return;
 
     let rafId: number;
     let targetX = 0;
@@ -232,15 +229,18 @@ export function FloatingIcons() {
     let currentY = 0;
 
     const handleMouseMove = (e: MouseEvent) => {
-      // Normalize to range [-1, 1]
       targetX = (e.clientX / window.innerWidth) * 2 - 1;
       targetY = (e.clientY / window.innerHeight) * 2 - 1;
     };
 
     const updateParallax = () => {
-      currentX += (targetX - currentX) * 0.08;
-      currentY += (targetY - currentY) * 0.08;
-      setMouseOffset({ x: currentX, y: currentY });
+      currentX += (targetX - currentX) * 0.05;
+      currentY += (targetY - currentY) * 0.05;
+
+      if (containerRef.current) {
+        containerRef.current.style.setProperty("--mouse-x", currentX.toFixed(3));
+        containerRef.current.style.setProperty("--mouse-y", currentY.toFixed(3));
+      }
       rafId = requestAnimationFrame(updateParallax);
     };
 
@@ -251,12 +251,18 @@ export function FloatingIcons() {
       window.removeEventListener("mousemove", handleMouseMove);
       cancelAnimationFrame(rafId);
     };
-  }, [shouldReduceMotion]);
+  }, [isMobile]);
 
   return (
     <div
+      ref={containerRef}
       aria-hidden="true"
       className="absolute inset-0 pointer-events-none select-none overflow-hidden z-[1]"
+      style={{
+        // Default CSS custom property fallback
+        ['--mouse-x' as any]: '0',
+        ['--mouse-y' as any]: '0',
+      }}
     >
       {TILE_CONFIGS.map((tile) => {
         if (isMobile && !tile.mobileVisible) {
@@ -265,14 +271,8 @@ export function FloatingIcons() {
 
         const size = isMobile && tile.mobileSize ? tile.mobileSize : tile.size;
         const logoSize = Math.round(size * 0.52);
-
-        // Smooth rounded square corner radius (e.g. 18px - 22px depending on size)
         const borderRadius = Math.round(size * 0.26);
-
-        // Parallax factor: up to 10px
-        const maxParallax = (size / 80) * 10;
-        const parallaxX = shouldReduceMotion ? 0 : mouseOffset.x * maxParallax;
-        const parallaxY = shouldReduceMotion ? 0 : mouseOffset.y * maxParallax;
+        const maxParallax = (size / 80) * 8;
 
         const posStyle: React.CSSProperties = isMobile && tile.mobilePosition
           ? {
@@ -291,36 +291,21 @@ export function FloatingIcons() {
         const floatRot = isMobile ? tile.floatRotate * 0.6 : tile.floatRotate;
 
         return (
-          <motion.div
+          <div
             key={tile.id}
             className="absolute will-change-transform"
             style={{
               ...posStyle,
               width: size,
               height: size,
-              x: parallaxX,
-              y: parallaxY,
-              opacity: tile.isFar ? 0.9 : 1,
-            }}
-            animate={
-              shouldReduceMotion
-                ? { rotate: tile.tilt }
-                : {
-                    y: [0, -floatY, 0, floatY, 0],
-                    rotate: [
-                      tile.tilt,
-                      tile.tilt + floatRot,
-                      tile.tilt,
-                      tile.tilt - floatRot,
-                      tile.tilt,
-                    ],
-                  }
-            }
-            transition={{
-              duration: tile.floatDuration,
-              repeat: Infinity,
-              ease: "easeInOut",
-              delay: tile.floatDelay,
+              opacity: tile.isFar ? 0.85 : 1,
+              // Hardware-accelerated GPU floating keyframe animation
+              animation: `gpuTileFloat ${tile.floatDuration}s ease-in-out ${tile.floatDelay}s infinite`,
+              transform: `translate(calc(var(--mouse-x, 0) * ${maxParallax}px), calc(var(--mouse-y, 0) * ${maxParallax}px)) rotate(${tile.tilt}deg)`,
+              // Custom CSS properties for keyframe interpolation
+              ['--tile-tilt' as any]: `${tile.tilt}deg`,
+              ['--tile-float-y' as any]: `${floatY}px`,
+              ['--tile-float-rot' as any]: `${floatRot}deg`,
             }}
           >
             {/* Smooth Rounded Square 3D Glass Container */}
@@ -333,7 +318,7 @@ export function FloatingIcons() {
                 boxShadow: `
                   inset 0 1.5px 0.5px rgba(255, 255, 255, 0.65),
                   inset 0 -1px 1px rgba(0, 0, 0, 0.06),
-                  0 12px 24px ${tile.shadowColor}
+                  0 10px 20px ${tile.shadowColor}
                 `,
               }}
             >
@@ -348,13 +333,14 @@ export function FloatingIcons() {
                 }}
               />
 
-              {/* Logo from /public/logos/ at ~52% size */}
+              {/* Logo from /public/logos/ */}
               <img
                 src={tile.logo}
                 alt={tile.name}
                 width={logoSize}
                 height={logoSize}
-                loading="eager"
+                loading="lazy"
+                decoding="async"
                 draggable={false}
                 className="relative z-10 object-contain select-none"
                 style={{
@@ -364,7 +350,7 @@ export function FloatingIcons() {
                 }}
               />
             </div>
-          </motion.div>
+          </div>
         );
       })}
     </div>

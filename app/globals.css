@@ -802,3 +802,33 @@ div[id*="google_ads_iframe"][style*="top: 0"] {
   color: #111827 !important;
 }
 
+/* =========================================================================
+   High-Performance GPU Keyframe Animations & Offscreen Containment
+   ========================================================================= */
+@keyframes heroHorizonPulse {
+  0%, 100% {
+    opacity: 0.08;
+    transform: translate(-50%, -50%) scaleX(0.85);
+  }
+  50% {
+    opacity: 0.18;
+    transform: translate(-50%, -50%) scaleX(1.1);
+  }
+}
+
+@keyframes gpuTileFloat {
+  0%, 100% {
+    transform: translate(calc(var(--mouse-x, 0) * 6px), calc(var(--mouse-y, 0) * 6px + 0px)) rotate(var(--tile-tilt, 0deg));
+  }
+  50% {
+    transform: translate(calc(var(--mouse-x, 0) * 6px), calc(var(--mouse-y, 0) * 6px - var(--tile-float-y, 6px))) rotate(calc(var(--tile-tilt, 0deg) + var(--tile-float-rot, 1deg)));
+  }
+}
+
+/* Offscreen Performance Containment (Bypasses off-screen rendering until near viewport) */
+.cv-auto {
+  content-visibility: auto;
+  contain-intrinsic-size: 1px 750px;
+}
+
+

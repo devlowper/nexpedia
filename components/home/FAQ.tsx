@@ -140,7 +140,7 @@ export function FAQ() {
   };
 
   return (
-    <section className="w-full bg-[#FCFCFC] dark:bg-[#0A0A0A] py-16 px-4 md:px-8 border-t border-black/5 dark:border-white/5 transition-colors relative overflow-hidden">
+    <section className="w-full bg-[#FCFCFC] dark:bg-[#0A0A0A] py-16 px-4 md:px-8 border-t border-black/5 dark:border-white/5 transition-colors relative overflow-hidden cv-auto">
       {/* ── FAQPage Structured Data (Homepage Overall) ── */}
       <script
         type="application/ld+json"

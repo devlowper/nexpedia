@@ -44,14 +44,14 @@ export function ImageToPromptSection() {
         const found = PRESET_MODELS.find(m => m.id === savedModelId);
         if (found) setSelectedVisionModel(found);
       }
-    } catch (e) {}
+    } catch (e) { }
   }, []);
 
   const handleSelectVisionModel = (model: VisionModel) => {
     setSelectedVisionModel(model);
     try {
       localStorage.setItem('procraft_selected_vision_model', model.id);
-    } catch (e) {}
+    } catch (e) { }
   };
   const [isDragging, setIsDragging] = useState(false);
   const [activeParams, setActiveParams] = useState<string[]>(['--ar 16:9', '--v 6.1']);
@@ -237,16 +237,12 @@ export function ImageToPromptSection() {
           </div>
         </div>
 
-        <h2 
-          className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-primary dark:text-white text-center leading-tight tracking-tight mb-3"
+        <h2
+          className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-primary dark:text-white text-center leading-tight tracking-tight mb-6 sm:mb-8"
           style={{ fontFamily: '"Bricolage Grotesque", var(--font-bricolage), sans-serif' }}
         >
           Recreate Any Image <span className="text-[#EA4C89]">Into a Prompt</span>
         </h2>
-
-        <p className="text-muted dark:text-white/80 text-center text-sm sm:text-base max-w-xl mb-8 leading-relaxed font-medium">
-          Upload or drag & drop any image. Our Vision AI reverse-engineers the exact lighting, camera angle, artist style, and composition so you can generate the exact same artwork.
-        </p>
 
         {/* Error Alert */}
         {error && (
@@ -281,8 +277,8 @@ export function ImageToPromptSection() {
                 onDrop={handleDrop}
                 onClick={() => fileInputRef.current?.click()}
                 className={`relative w-full min-h-[300px] sm:min-h-[320px] border-2 border-dashed rounded-3xl flex flex-col items-center justify-center p-8 text-center cursor-pointer transition-all duration-200 group ${isDragging
-                    ? 'border-[#EA4C89] bg-[#EA4C89]/5 scale-[0.99]'
-                    : 'border-black/15 dark:border-white/15 hover:border-[#EA4C89]/60 hover:bg-black/[0.02] dark:hover:bg-white/[0.02]'
+                  ? 'border-[#EA4C89] bg-[#EA4C89]/5 scale-[0.99]'
+                  : 'border-black/15 dark:border-white/15 hover:border-[#EA4C89]/60 hover:bg-black/[0.02] dark:hover:bg-white/[0.02]'
                   }`}
               >
                 {/* 3 File Cards Vector Icon (.png, .jpg, .webp) in #EA4C89 */}
@@ -341,7 +337,7 @@ export function ImageToPromptSection() {
             <textarea
               value={customNote}
               onChange={(e) => setCustomNote(e.target.value)}
-              placeholder="e.g., Focus on lighting and textures, cinematic mood, 8k resolution, photorealistic..."
+              placeholder="Focus on lighting and textures, cinematic mood, 8k resolution, photorealistic..."
               rows={3}
               className="w-full rounded-2xl p-4 text-xs sm:text-sm bg-black/[0.02] dark:bg-white/[0.03] border border-black/10 dark:border-white/10 text-primary dark:text-white placeholder:text-black/30 dark:placeholder:text-white/30 focus:outline-none focus:border-[#EA4C89] transition-colors resize-none shadow-sm"
             />
@@ -386,7 +382,7 @@ export function ImageToPromptSection() {
         {/* Output Result Section with 3 Options: Main, Style & Negative */}
         {generatedPrompt && promptResult && (
           <div className="w-full mt-8 p-6 sm:p-8 rounded-3xl border border-black/10 dark:border-white/10 bg-white dark:bg-[#18191a] shadow-xl animate-in fade-in slide-in-from-bottom-2 duration-300">
-            
+
             {/* Header */}
             <div className="flex flex-wrap items-center justify-between gap-3 mb-5 pb-4 border-b border-black/5 dark:border-white/10">
               <div className="flex items-center gap-2">
@@ -430,11 +426,10 @@ export function ImageToPromptSection() {
                     key={tab.id}
                     type="button"
                     onClick={() => setActiveTab(tab.id as any)}
-                    className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-xl text-xs font-semibold transition-all ${
-                      isActive
+                    className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-xl text-xs font-semibold transition-all ${isActive
                         ? 'bg-black dark:bg-white text-white dark:text-black shadow-xs'
                         : 'bg-black/5 dark:bg-white/5 text-muted hover:text-primary hover:bg-black/10 dark:hover:bg-white/10'
-                    }`}
+                      }`}
                   >
                     <Icon size={12} />
                     {tab.label}
@@ -445,7 +440,7 @@ export function ImageToPromptSection() {
 
             {/* The 3 Option Cards */}
             <div className="space-y-3.5">
-              
+
               {/* Option 1: Main Prompt */}
               {(activeTab === 'all' || activeTab === 'main') && (
                 <div className="rounded-2xl border border-indigo-500/20 bg-indigo-500/[0.03] dark:bg-indigo-500/[0.05] p-4 transition-all">
@@ -536,8 +531,8 @@ export function ImageToPromptSection() {
                     type="button"
                     onClick={() => toggleParam(p)}
                     className={`px-3 py-1 rounded-xl text-xs font-mono transition-all ${isActive
-                        ? 'bg-[#EA4C89]/15 border border-[#EA4C89] text-[#EA4C89] font-bold'
-                        : 'bg-black/5 dark:bg-white/5 border border-transparent text-black/60 dark:text-white/60 hover:border-black/20 dark:hover:border-white/20'
+                      ? 'bg-[#EA4C89]/15 border border-[#EA4C89] text-[#EA4C89] font-bold'
+                      : 'bg-black/5 dark:bg-white/5 border border-transparent text-black/60 dark:text-white/60 hover:border-black/20 dark:hover:border-white/20'
                       }`}
                   >
                     {p}

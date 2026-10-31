@@ -29,7 +29,7 @@ export function ScrollReveal({
   id,
 }: ScrollRevealProps) {
   const ref = useRef<HTMLDivElement>(null);
-  const isInView = useInView(ref, { once, margin: "-50px" });
+  const isInView = useInView(ref, { once, margin: "100px" });
 
   const variants = {
     fade: {

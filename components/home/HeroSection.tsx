@@ -137,13 +137,12 @@ export function HeroSection() {
         {/* 2. Soft Pink Arc with gentle rose sunrise bloom (replaces dark glow) */}
         <PinkArc />
 
-        {/* 3. Subtle Clean Horizon Line */}
-        <motion.div
-          animate={{
-            opacity: [0.08, 0.18, 0.08],
-            scaleX: [0.85, 1.1, 0.85],
+        {/* 3. Subtle Clean Horizon Line (Pure CSS GPU animation to keep JS thread idle) */}
+        <div
+          style={{
+            animation: 'heroHorizonPulse 9s ease-in-out infinite',
+            willChange: 'transform, opacity',
           }}
-          transition={{ duration: 9, repeat: Infinity, ease: "easeInOut" }}
           className="absolute top-[48%] left-1/2 -translate-x-1/2 -translate-y-1/2 w-[85%] max-w-4xl h-[1px] bg-gradient-to-r from-transparent via-black/10 dark:via-white/15 to-transparent"
         />
       </div>
@@ -153,11 +152,8 @@ export function HeroSection() {
 
       <div className="relative z-10 flex flex-col items-center w-full max-w-5xl mx-auto pt-10 pointer-events-none">
         {/* ── Badge ── */}
-        <motion.div
-          initial={{ opacity: 0, y: -20, scale: 0.95 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-          className="glass-card pointer-events-auto cursor-default"
+        <div
+          className="glass-card pointer-events-auto cursor-default animate-fade-in"
           style={{
             display: 'flex',
             alignItems: 'center',
@@ -179,17 +175,12 @@ export function HeroSection() {
               textTransform: 'uppercase'
             }}
           >
-            Curated AI Prompt Library
+            Best AI Prompt Library & AI Directory
           </span>
-        </motion.div>
+        </div>
 
-        {/* ── Heading ── */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-          className="text-center w-full flex flex-col items-center"
-        >
+        {/* ── Heading (Immediate Paint for fast LCP & High Lighthouse Score) ── */}
+        <div className="text-center w-full flex flex-col items-center">
           <h1
             className="font-bricolage"
             style={{
@@ -212,24 +203,21 @@ export function HeroSection() {
               imagination.
             </span>
           </h1>
-        </motion.div>
+        </div>
 
-        {/* ── Subtitle ── */}
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-          className="max-w-[320px] sm:max-w-[650px] mx-auto mb-10 sm:mb-14"
+        {/* ── Subtitle (Immediate Paint) ── */}
+        <p
+          className="max-w-[340px] sm:max-w-[760px] mx-auto mb-10 sm:mb-14"
           style={{
             color: 'var(--text-muted)',
             textAlign: 'center',
-            fontSize: 'clamp(0.95rem, 2vw, 1.25rem)',
-            lineHeight: 1.55,
+            fontSize: 'clamp(0.95rem, 2vw, 1.15rem)',
+            lineHeight: 1.6,
             fontWeight: 400,
           }}
         >
-          The ultimate AI prompt library and image to prompt workspace. Discover the best and trendy prompts for Midjourney, ChatGPT, FLUX, and creative workflows.
-        </motion.p>
+          Discover the best AI prompts, explore powerful AI tools, and unlock your creativity. Access ready-to-use prompts for ChatGPT, Gemini, Claude, DeepSeek, Midjourney, Nano Banana, FLUX, and other popular AI platforms. Explore our AI directory to find the right tools, spark new ideas, and turn your imagination into reality with ProCraft.
+        </p>
 
         {/* ── Search Bar Area ── */}
         <motion.div
@@ -319,41 +307,29 @@ export function HeroSection() {
               />
             </div>
 
-            {/* Search/Explore button */}
-            <motion.button
-              whileHover={{ scale: 1.03 }}
-              whileTap={{ scale: 0.97 }}
-              onClick={(e) => {
-                e.stopPropagation();
-                handleSearch();
-              }}
-              className="gradient-pink relative overflow-hidden group/btn"
-              style={{
-                color: '#fff',
-                border: 'none',
-                borderRadius: '999px',
-                height: '56px',
-                padding: '0 32px',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '8px',
-                fontWeight: 600,
-                fontSize: '1.05rem',
-                cursor: 'pointer',
-                flexShrink: 0,
-                boxShadow: '0 4px 15px rgba(255, 51, 102, 0.3)',
-              }}
-            >
-              {/* Button Hover effect */}
-              <div className="absolute inset-0 bg-white/20 translate-y-[100%] group-hover/btn:translate-y-0 transition-transform duration-300 ease-out" />
-
-              <span className="relative z-10 flex items-center gap-2">
-                Explore
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" className="transition-transform group-hover/btn:translate-x-1">
-                  <path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              </span>
-            </motion.button>
+            {/* 3D Black Search/Explore button (#2D2B2C) */}
+            <div className="relative p-[2px] rounded-full bg-gradient-to-t from-[#1b1a1b] to-[#454244] hover:from-[#232122] hover:to-[#555254] shadow-[0_4px_16px_rgba(0,0,0,0.4)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.6)] active:scale-[0.98] transition-all select-none shrink-0">
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleSearch();
+                }}
+                aria-label="Search and explore prompts"
+                className="group/btn relative px-7 sm:px-8 h-[50px] sm:h-[52px] rounded-full bg-[#2D2B2C] hover:bg-[#383536] text-white font-bricolage font-bold text-sm sm:text-base tracking-normal transition-colors flex items-center justify-center gap-2 cursor-pointer border-none outline-none"
+                style={{
+                  backgroundColor: '#2D2B2C',
+                  color: '#ffffff',
+                }}
+              >
+                <span className="relative z-10 flex items-center gap-2 text-white font-bold">
+                  Explore
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" className="transition-transform group-hover/btn:translate-x-1">
+                    <path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                </span>
+              </button>
+            </div>
           </div>
 
           {/* Live Search Results Dropdown */}

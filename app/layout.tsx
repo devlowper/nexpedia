@@ -20,26 +20,41 @@ const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "https://procraft.site";
 export const metadata: Metadata = {
   metadataBase: new URL(APP_URL),
   title: {
-    default: "ProCraft | Prompt Library & Directory",
+    default: "ProCraft | Best AI Prompt Library & AI Directory",
     template: "%s | ProCraft",
   },
   description:
-    "Discover 800+ curated AI prompts and verified tools for Midjourney, ChatGPT, FLUX & Stable Diffusion. Copy ready-to-use prompts with 1-click on ProCraft.",
+    "Discover the best AI prompts, explore 5000+ verified AI tools, and unlock your creativity with ProCraft. Access ready-to-use prompts for ChatGPT, Gemini, Claude, DeepSeek, Midjourney, Nano Banana, and FLUX.",
   keywords: [
-    "prompt library",
-    "proCraft",
-    "procraft",
-    "midjourney prompts",
-    "chatgpt prompts",
-    "flux prompts",
-    "stable diffusion prompts",
+    "best ai prompt library",
+    "ai prompt library",
+    "ai directory",
+    "best ai directory",
+    "best ai tools",
     "ai tools directory",
-    "image to prompt",
-    "best ai prompts",
-    "ai prompt generator",
     "free ai prompts",
-    "free ai tools directory",
-    "ai prompts collection",
+    "ready to use ai prompts",
+    "chatgpt prompts",
+    "midjourney prompts",
+    "flux prompts",
+    "nano banana prompts",
+    "gemini prompts",
+    "claude prompts",
+    "deepseek prompts",
+    "stable diffusion prompts",
+    "trending ai prompt styles",
+    "trending ai image prompts",
+    "creative ai art prompts",
+    "photo editing prompts",
+    "best ai prompts for work and creativity",
+    "popular ai prompt categories",
+    "image to prompt",
+    "image to prompt converter",
+    "ai image generation prompts",
+    "ai prompts for productivity",
+    "ai prompts for coding",
+    "ai prompts for marketing",
+    "procraft",
     "procraft ai",
     "procraft prompts",
     "copy and paste ai prompts"
@@ -70,9 +85,9 @@ export const metadata: Metadata = {
     ],
   },
   openGraph: {
-    title: "ProCraft | Prompt Library & Directory",
+    title: "ProCraft | Best AI Prompt Library & AI Directory",
     description:
-      "Discover 800+ curated AI prompts and verified tools for Midjourney, ChatGPT, FLUX & Stable Diffusion. Copy ready-to-use prompts with 1-click on ProCraft.",
+      "Discover the best AI prompts, explore 5000+ verified AI tools, and unlock your creativity with ProCraft. Ready-to-use prompts for ChatGPT, Gemini, Claude, DeepSeek, Midjourney, Nano Banana, and FLUX.",
     url: APP_URL,
     siteName: "ProCraft",
     locale: "en_US",
@@ -82,15 +97,15 @@ export const metadata: Metadata = {
         url: "https://cdn.procraft.site/create-premium-speaker-grid-advertisements.avif",
         width: 1024,
         height: 1024,
-        alt: "ProCraft | Prompt Library & Directory",
+        alt: "ProCraft | Best AI Prompt Library & AI Directory",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "ProCraft | Prompt Library & Directory",
+    title: "ProCraft | Best AI Prompt Library & AI Directory",
     description:
-      "Discover 800+ curated AI prompts and verified tools for Midjourney, ChatGPT, FLUX & Stable Diffusion. Copy ready-to-use prompts with 1-click on ProCraft.",
+      "Discover the best AI prompts, explore 5000+ verified AI tools, and unlock your creativity with ProCraft. Ready-to-use prompts for ChatGPT, Gemini, Claude, DeepSeek, Midjourney, Nano Banana, and FLUX.",
     creator: "@procraft",
     images: ["https://cdn.procraft.site/create-premium-speaker-grid-advertisements.avif"],
   },
@@ -137,10 +152,15 @@ export default function RootLayout({
         <meta name="theme-color" content="#ff3366" />
 
 
-        {/* Google AdSense Script via Next.js Script to avoid SSR hydration conflicts */}
+        {/* Preconnect & DNS-prefetch for critical resources */}
+        <link rel="preconnect" href="https://images.unsplash.com" crossOrigin="anonymous" />
+        <link rel="dns-prefetch" href="https://images.unsplash.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+
+        {/* Google AdSense Script: lazyOnload so it never blocks FCP, LCP, or initial page interactivity */}
         <Script
           id="google-adsense"
-          strategy="afterInteractive"
+          strategy="lazyOnload"
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2157567865928309"
           crossOrigin="anonymous"
         />
@@ -152,34 +172,40 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{
             __html: `
               if (typeof window !== 'undefined') {
-                // 1. Unregister lingering service workers immediately
-                if ('serviceWorker' in navigator) {
-                  navigator.serviceWorker.getRegistrations().then(function(registrations) {
-                    for (var i = 0; i < registrations.length; i++) {
-                      registrations[i].unregister();
-                    }
-                  });
-                }
-                // 2. Clear caches that might hold popunder scripts
-                if ('caches' in window) {
-                  caches.keys().then(function(keys) {
-                    keys.forEach(function(k) { caches.delete(k); });
-                  });
-                }
-                // 3. Clear ad network storage
-                try {
-                  var adKeys = ['monetag', 'adsterra', 'vignette', 'popunder', '_ym'];
-                  for (var k in localStorage) {
-                    for (var a = 0; a < adKeys.length; a++) {
-                      if (k.toLowerCase().indexOf(adKeys[a]) !== -1) localStorage.removeItem(k);
-                    }
+                // Defer background cleanup so it does not block FCP or main thread
+                var runCleanup = function() {
+                  if ('serviceWorker' in navigator) {
+                    navigator.serviceWorker.getRegistrations().then(function(regs) {
+                      for (var i = 0; i < (regs || []).length; i++) {
+                        regs[i].unregister();
+                      }
+                    }).catch(function() {});
                   }
-                  for (var sk in sessionStorage) {
-                    for (var b = 0; b < adKeys.length; b++) {
-                      if (sk.toLowerCase().indexOf(adKeys[b]) !== -1) sessionStorage.removeItem(sk);
-                    }
+                  if ('caches' in window) {
+                    caches.keys().then(function(keys) {
+                      (keys || []).forEach(function(k) { caches.delete(k); });
+                    }).catch(function() {});
                   }
-                } catch(e) {}
+                  try {
+                    var adKeys = ['monetag', 'adsterra', 'vignette', 'popunder', '_ym'];
+                    for (var k in localStorage) {
+                      for (var a = 0; a < adKeys.length; a++) {
+                        if (k.toLowerCase().indexOf(adKeys[a]) !== -1) localStorage.removeItem(k);
+                      }
+                    }
+                    for (var sk in sessionStorage) {
+                      for (var b = 0; b < adKeys.length; b++) {
+                        if (sk.toLowerCase().indexOf(adKeys[b]) !== -1) sessionStorage.removeItem(sk);
+                      }
+                    }
+                  } catch(e) {}
+                };
+
+                if ('requestIdleCallback' in window) {
+                  requestIdleCallback(runCleanup);
+                } else {
+                  setTimeout(runCleanup, 1500);
+                }
 
                 // 4. Bulletproof Ads-Free Navigation Shield (Desktop & Mobile)
                 var origOpen = window.open;
@@ -329,7 +355,7 @@ export default function RootLayout({
                   "url": APP_URL,
                   "name": "proCraft",
                   "alternateName": ["proCraft AI", "procraft.site"],
-                  "description": "Best AI Prompt Library and Tools Directory for creators.",
+                  "description": "Best AI Prompt Library & AI Directory. Access ready-to-use prompts for ChatGPT, Gemini, Claude, DeepSeek, Midjourney, Nano Banana, and FLUX.",
                   "publisher": { "@id": `${APP_URL}/#organization` },
                   "potentialAction": {
                     "@type": "SearchAction",

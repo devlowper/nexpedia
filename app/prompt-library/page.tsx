@@ -241,12 +241,12 @@ function PromptLibraryContent() {
 
       {/* ── Hero header ── */}
       <div className="flex flex-col items-center text-center mb-10 gap-3 relative z-10">
-        <span className="text-[10px] font-bold tracking-[0.25em] text-muted uppercase">Prompt Library</span>
-        <h1 className="text-4xl md:text-5xl font-bold text-primary tracking-tight">
-          Browse <span className="text-accent">All Prompts</span>
-        </h1>
-        <p className="text-muted text-base max-w-xl">
-          Discover expert-crafted prompts for every use case — copy, customise, and supercharge your AI workflow.
+        <span className="text-[10px] font-bold tracking-[0.25em] text-muted uppercase">AI Prompt Library</span>
+        <h2 className="text-3xl md:text-5xl font-bold text-primary tracking-tight">
+          Explore <span className="text-accent">All AI Prompts</span>
+        </h2>
+        <p className="text-muted text-sm md:text-base max-w-3xl leading-relaxed">
+          Discover the best AI prompts for ChatGPT, Gemini, Claude, Midjourney, Nano Banana, and FLUX. Explore ready-to-use prompts for AI image generation, creative writing, photo editing, and productivity. Copy, customize, and create better results with ProCraft.
         </p>
       </div>
 

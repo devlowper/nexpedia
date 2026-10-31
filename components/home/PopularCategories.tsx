@@ -228,7 +228,7 @@ export function PopularCategories({
           setGrouped(json.data);
         }
       })
-      .catch(() => {});
+      .catch(() => { });
 
     return () => {
       isMounted = false;
@@ -237,28 +237,27 @@ export function PopularCategories({
 
   return (
     <section
-      className={`w-full transition-colors ${
-        embedded
-          ? "py-8 sm:py-12 bg-transparent"
-          : "bg-base py-16 sm:py-20 px-4 sm:px-6 lg:px-8 border-t border-border"
-      } ${className}`}
+      className={`w-full transition-colors ${embedded
+        ? "py-8 sm:py-12 bg-transparent"
+        : "bg-base py-16 sm:py-20 px-4 sm:px-6 lg:px-8 border-t border-border cv-auto"
+        } ${className}`}
     >
       <div className={embedded ? "w-full" : "max-w-7xl mx-auto"}>
         {/* Section Header */}
         <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8 sm:mb-10 gap-4">
           <div>
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-accent/10 border border-accent/20 text-accent text-xs font-semibold uppercase tracking-wider mb-3">
-              <Sparkles className="w-3.5 h-3.5" />
-              <span>Explore Categories</span>
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-black/10 dark:border-white/10 bg-black/[0.03] dark:bg-white/[0.04] text-black/80 dark:text-white/90 text-xs font-semibold uppercase tracking-wider mb-3">
+              <Sparkles className="w-3.5 h-3.5 text-black/60 dark:text-white/60" />
+              <span>Explore Best Prompt Categories</span>
             </div>
             <h2
               className="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-primary font-bricolage"
               style={{ fontFamily: '"Bricolage Grotesque", var(--font-bricolage), sans-serif' }}
             >
-              Popular Categories
+              Popular AI Prompt Categories
             </h2>
-            <p className="text-muted text-sm sm:text-base max-w-xl mt-1.5">
-              Curated prompt collections tailored for Midjourney, FLUX, ChatGPT, and modern creative workflows.
+            <p className="text-muted text-sm sm:text-base max-w-3xl mt-1.5 leading-relaxed">
+              Explore popular AI prompt categories featuring expertly crafted prompts for AI image generation, photo editing, digital art, creative writing, and productivity.
             </p>
           </div>
 

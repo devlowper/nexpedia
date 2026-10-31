@@ -2,8 +2,8 @@
 
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { 
-  Search, Sparkles, X, ArrowRight, TrendingUp, Zap, Star, ShieldCheck, 
+import {
+  Search, Sparkles, X, ArrowRight, TrendingUp, Zap, Star, ShieldCheck,
   Flame, LayoutGrid, CheckCircle2, SlidersHorizontal
 } from 'lucide-react';
 
@@ -115,7 +115,7 @@ export function AIDirectoryHero({
         />
 
         {/* Subtle Tech Architectural Grid with Radial Fade */}
-        <div 
+        <div
           className="absolute inset-0 text-black/[0.04] dark:text-white/[0.03] opacity-60"
           style={{
             backgroundImage: `
@@ -161,15 +161,15 @@ export function AIDirectoryHero({
               delay: idx * 0.8,
             }}
           >
-            <div 
+            <div
               className="p-2 sm:p-2.5 rounded-2xl bg-white/70 dark:bg-zinc-900/80 backdrop-blur-xl border border-black/10 dark:border-white/10 shadow-[0_12px_28px_rgba(0,0,0,0.12)] dark:shadow-[0_12px_28px_rgba(0,0,0,0.4)] flex items-center gap-2.5"
             >
               <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-black/5 dark:bg-white/5 p-1.5 flex items-center justify-center border border-black/5 dark:border-white/10">
-                <img 
-                  src={tool.logo} 
-                  alt={tool.name} 
-                  className="w-full h-full object-contain" 
-                  loading="eager" 
+                <img
+                  src={tool.logo}
+                  alt={tool.name}
+                  className="w-full h-full object-contain"
+                  loading="eager"
                 />
               </div>
               <div className="hidden lg:block pr-1.5">
@@ -183,20 +183,17 @@ export function AIDirectoryHero({
 
       {/* ── Main Content Container ── */}
       <div className="relative z-10 flex flex-col items-center w-full max-w-4xl mx-auto px-4 text-center">
-        
+
         {/* Animated Top Pill Badge */}
         <motion.div
           initial={{ opacity: 0, y: -16, scale: 0.95 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-          className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-accent/10 dark:bg-accent/15 border border-accent/25 shadow-sm mb-6 cursor-default backdrop-blur-md"
+          className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-black/10 dark:border-white/10 bg-black/[0.03] dark:bg-white/[0.04] text-black/80 dark:text-white/90 text-[11px] sm:text-xs font-semibold uppercase tracking-wider mb-6 cursor-default backdrop-blur-md"
         >
-          <span className="relative flex h-2 w-2">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-75" />
-            <span className="relative inline-flex rounded-full h-2 w-2 bg-accent" />
-          </span>
-          <span className="text-[11px] sm:text-xs font-bold uppercase tracking-wider text-accent">
-            Curated Directory • Over 500+ Verified AI Tools
+          <span className="w-1.5 h-1.5 rounded-full bg-black/40 dark:bg-white/40" />
+          <span>
+            Best AI Directory • Over 5000+ Verified AI Tools
           </span>
         </motion.div>
 
@@ -220,8 +217,8 @@ export function AIDirectoryHero({
           transition={{ duration: 0.7, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
           className="text-muted text-sm sm:text-base md:text-lg max-w-2xl mx-auto leading-relaxed mb-8 px-2"
         >
-          Supercharge your workflow. Find, compare, and bookmark top-tier image generators, 
-          video engines, writing assistants, and code tools curated for creators.
+          Explore the best AI tools directory featuring 5000+ AI tools for image generation, video creation, writing, coding, and productivity.
+          Discover powerful AI software, compare features, explore free AI tools, and find the best solutions to simplify your workflow with ProCraft.
         </motion.p>
 
         {/* ── Modern Glassmorphic Search Bar ── */}
@@ -231,12 +228,11 @@ export function AIDirectoryHero({
           transition={{ duration: 0.7, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
           className="w-full max-w-xl mx-auto mb-5"
         >
-          <div 
-            className={`relative flex items-center w-full rounded-full transition-all duration-300 backdrop-blur-xl ${
-              isFocused 
-                ? 'bg-white/95 dark:bg-zinc-900/95 ring-2 ring-accent/40 shadow-[0_0_35px_rgba(255,45,120,0.22)] border-accent/40' 
-                : 'bg-white/80 dark:bg-zinc-900/80 border border-black/10 dark:border-white/15 shadow-xl hover:border-black/20 dark:hover:border-white/25'
-            }`}
+          <div
+            className={`relative flex items-center w-full rounded-full transition-all duration-300 backdrop-blur-xl ${isFocused
+              ? 'bg-white/95 dark:bg-zinc-900/95 ring-2 ring-accent/40 shadow-[0_0_35px_rgba(255,45,120,0.22)] border-accent/40'
+              : 'bg-white/80 dark:bg-zinc-900/80 border border-black/10 dark:border-white/15 shadow-xl hover:border-black/20 dark:hover:border-white/25'
+              }`}
           >
             {/* Left Icon with subtle animation */}
             <div className="pl-4 pr-2 text-accent flex items-center justify-center">
@@ -255,7 +251,7 @@ export function AIDirectoryHero({
               onChange={(e) => setSearchQuery(e.target.value)}
               onFocus={() => setIsFocused(true)}
               onBlur={() => setIsFocused(false)}
-              placeholder="Search 500+ AI tools (e.g. 'Midjourney', 'Video editing', 'Code')..."
+              placeholder="Search 5000+ AI tools ('Coding', 'Video editing', ' Productivity')..."
               className="flex-1 bg-transparent border-none outline-none py-3.5 px-2 text-sm text-primary placeholder:text-muted/70 font-medium"
             />
 
@@ -271,15 +267,18 @@ export function AIDirectoryHero({
               </button>
             )}
 
-            {/* Right Badge / Search Action Button */}
-            <div className="pr-2">
-              <button
-                type="button"
-                className="px-4 py-2 rounded-full bg-accent text-black font-bold text-xs flex items-center gap-1.5 hover:bg-accent-hover transition-all hover:scale-105 shadow-md active:scale-95"
-              >
-                <Search size={13} />
-                <span className="hidden sm:inline">Search</span>
-              </button>
+            {/* Right Badge / Search Action Button - 3D Black */}
+            <div className="pr-1.5 shrink-0">
+              <div className="relative p-[1.5px] rounded-full bg-gradient-to-t from-[#1b1a1b] to-[#454244] hover:from-[#232122] hover:to-[#555254] shadow-[0_3px_12px_rgba(0,0,0,0.35)] hover:shadow-[0_6px_18px_rgba(0,0,0,0.5)] active:scale-[0.97] transition-all select-none">
+                <button
+                  type="button"
+                  className="px-4 sm:px-5 py-2 rounded-full bg-[#2D2B2C] hover:bg-[#383536] text-white font-bricolage font-bold text-xs flex items-center gap-1.5 transition-colors cursor-pointer border-none outline-none"
+                  style={{ backgroundColor: '#2D2B2C', color: '#ffffff' }}
+                >
+                  <Search size={13} className="text-white" />
+                  <span className="hidden sm:inline">Search</span>
+                </button>
+              </div>
             </div>
           </div>
         </motion.div>
@@ -299,11 +298,10 @@ export function AIDirectoryHero({
               key={chip.label}
               type="button"
               onClick={() => setSearchQuery(chip.query)}
-              className={`text-[11px] font-medium px-2.5 py-1 rounded-full border transition-all ${
-                searchQuery.toLowerCase() === chip.query.toLowerCase()
-                  ? 'bg-accent text-black border-accent font-bold shadow-sm'
-                  : 'bg-black/5 dark:bg-white/5 border-black/5 dark:border-white/10 text-muted hover:text-primary hover:border-accent/30'
-              }`}
+              className={`text-[11px] font-medium px-2.5 py-1 rounded-full border transition-all ${searchQuery.toLowerCase() === chip.query.toLowerCase()
+                ? 'bg-accent text-black border-accent font-bold shadow-sm'
+                : 'bg-black/5 dark:bg-white/5 border-black/5 dark:border-white/10 text-muted hover:text-primary hover:border-accent/30'
+                }`}
             >
               {chip.label}
             </button>

@@ -65,7 +65,7 @@ export function ModelAwareWorkflows() {
   };
 
   return (
-    <section className="w-full bg-base dark:bg-[#0a0a0a] py-24 px-4 md:px-8 border-t border-black/5 dark:border-white/5 font-sans overflow-hidden relative">
+    <section className="w-full bg-base dark:bg-[#0a0a0a] py-24 px-4 md:px-8 border-t border-black/5 dark:border-white/5 font-sans overflow-hidden relative cv-auto">
       <div className="max-w-7xl mx-auto flex flex-col lg:flex-row gap-16 items-center">
 
         {/* Left Content */}
@@ -76,23 +76,29 @@ export function ModelAwareWorkflows() {
           </div>
 
           <h2
-            className="text-4xl md:text-5xl lg:text-[64px] font-extrabold text-primary dark:text-white leading-[1.05] tracking-tight"
+            className="text-3xl sm:text-4xl md:text-5xl lg:text-[54px] font-extrabold text-primary dark:text-white leading-[1.1] tracking-tight"
             style={{ fontFamily: '"Bricolage Grotesque", var(--font-bricolage), sans-serif' }}
           >
-            Supercharge Your Workflow with<br />
-            <span className="text-[#EA4C89]">Top AI Models</span>
+            Supercharge Your Workflow with the<br />
+            <span className="text-[#EA4C89]">Best AI Tools & Models</span>
           </h2>
 
-          <p className="text-black/60 dark:text-white/70 text-lg md:text-xl leading-relaxed max-w-lg">
-            Explore powerful AI tools, compare their features and capabilities, and discover the perfect solutions to simplify your work, boost productivity, and bring your ideas to life.
+          <p className="text-black/60 dark:text-white/70 text-base md:text-lg leading-relaxed max-w-xl">
+            Explore the best AI tools and models in our AI directory. Compare features, discover powerful AI solutions, and find the right tools for content creation, image generation, productivity, coding, and everyday tasks.
           </p>
 
           <div className="flex flex-col sm:flex-row items-center gap-4 mt-2 w-full sm:w-auto">
             <Link
               href="/ai-directory"
-              className="w-full sm:w-auto bg-[#EA4C89] hover:bg-[#d43a76] text-white font-bold text-sm px-8 py-4 rounded-full transition-colors flex items-center justify-center gap-2 shadow-[0_4px_20px_rgba(234,76,137,0.35)]"
+              className="w-full sm:w-auto relative group cursor-pointer select-none p-[2px] rounded-full bg-gradient-to-t from-[#1b1a1b] to-[#454244] hover:from-[#232122] hover:to-[#555254] shadow-[0_4px_16px_rgba(0,0,0,0.35)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.5)] active:scale-[0.98] transition-all"
             >
-              Explore AI Directory <ArrowRight size={16} />
+              <span
+                className="w-full sm:w-auto py-3.5 px-8 rounded-full bg-[#2D2B2C] group-hover:bg-[#383536] text-white font-bricolage font-bold text-sm tracking-normal transition-colors flex items-center justify-center gap-2"
+                style={{ backgroundColor: '#2D2B2C', color: '#ffffff' }}
+              >
+                <span>Explore AI Directory</span>
+                <ArrowRight size={16} className="group-hover:translate-x-0.5 transition-transform" />
+              </span>
             </Link>
             <Link
               href="/prompt-library"
@@ -121,7 +127,7 @@ export function ModelAwareWorkflows() {
 
         {/* Right Media Area - Grid Cards */}
         <div className="lg:w-1/2 relative w-full flex justify-center items-center mt-12 lg:mt-0">
-          <motion.div 
+          <motion.div
             variants={containerVariants}
             initial="hidden"
             whileInView="visible"

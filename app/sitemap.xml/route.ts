@@ -24,6 +24,7 @@ export async function GET() {
   const staticPages = [
     { url: '', priority: '1.0', changefreq: 'daily' },
     { url: '/prompt-library', priority: '0.95', changefreq: 'daily' },
+    { url: '/prompt-library/explore', priority: '0.90', changefreq: 'daily' },
     { url: '/ai-directory', priority: '0.90', changefreq: 'daily' },
     { url: '/image-to-prompt', priority: '0.85', changefreq: 'weekly' },
     { url: '/agent-builder', priority: '0.80', changefreq: 'weekly' },

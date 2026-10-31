@@ -22,6 +22,34 @@ export interface BlogPost {
 
 export const BLOG_POSTS: BlogPost[] = [
   {
+    slug: 'how-to-prompt-gpt-image-2-5',
+    title: 'How to Prompt GPT Image 2.5: A Practical Guide to Generating, Editing, and Keeping Everything Else Intact',
+    seoTitle: 'How to Prompt GPT Image 2.5: Editing, References, Text and Examples | ProCraft',
+    metaDescription: 'Learn how to write GPT Image 2.5 prompts that generate cleaner images and edit precisely without breaking faces, products, text, or layout. Copy-paste examples included.',
+    focusKeyword: 'GPT Image 2.5',
+    secondaryKeywords: [
+      'ChatGPT Images 2.5',
+      'GPT Image 2.5 prompts',
+      'Flare vs Sunburst',
+      'AI image editing prompts',
+      'reference image prompts',
+      'transparent background AI',
+      'image to prompt'
+    ],
+    coverImage: {
+      url: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=1200&auto=format&fit=crop&q=85',
+      alt: 'How to Prompt GPT Image 2.5: Generating, Editing, and Keeping Everything Else Intact'
+    },
+    category: 'Prompt Engineering',
+    publishedAt: 'Oct 31, 2026',
+    readTime: '9 min read',
+    author: {
+      name: 'ProCraft Team',
+      role: 'AI Prompt Engineering Team'
+    },
+    excerpt: 'Most people write image prompts as if they are describing a painting. GPT Image 2.5 rewards writing prompts like a creative brief: what to make, what to change, and what must stay intact.'
+  },
+  {
     slug: 'image-to-prompt-tips-and-tricks',
     title: 'Image to Prompt Tips and Tricks: How to Get Better AI Prompts from Any Image',
     seoTitle: 'Image to Prompt Tips & Tricks for Better AI Art (2026)',

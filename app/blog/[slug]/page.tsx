@@ -7,6 +7,7 @@ import { ArrowLeft, Clock, Calendar } from 'lucide-react';
 import { getBlogPostBySlug, BLOG_POSTS } from '@/lib/blogData';
 import ImageToPromptPostContent from '@/components/blog/posts/ImageToPromptPostContent';
 import PromptEngineeringGuidePostContent from '@/components/blog/posts/PromptEngineeringGuidePostContent';
+import GPTImagePromptGuidePostContent from '@/components/blog/posts/GPTImagePromptGuidePostContent';
 import { AdsterraBanner, AdsterraResponsiveBanner, AdsterraNativeBanner } from '@/components/ads/AdsterraBanner';
 
 interface PageProps {
@@ -50,7 +51,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       siteName: 'proCraft',
       locale: 'en_US',
       type: 'article',
-      publishedTime: post.slug === 'prompt-engineering-guide' ? '2026-10-26T00:00:00.000Z' : '2026-10-24T00:00:00.000Z',
+      publishedTime: post.slug === 'how-to-prompt-gpt-image-2-5'
+        ? '2026-10-31T00:00:00.000Z'
+        : post.slug === 'prompt-engineering-guide'
+        ? '2026-10-26T00:00:00.000Z'
+        : '2026-10-24T00:00:00.000Z',
       authors: [post.author.name],
       images: [
         {
@@ -82,7 +87,11 @@ export default async function BlogPostPage({ params }: PageProps) {
   const imageUrl = post.coverImage.url.startsWith('http')
     ? post.coverImage.url
     : `${siteUrl}${post.coverImage.url}`;
-  const publishDateIso = post.slug === 'prompt-engineering-guide' ? '2026-10-26T00:00:00.000Z' : '2026-10-24T00:00:00.000Z';
+  const publishDateIso = post.slug === 'how-to-prompt-gpt-image-2-5'
+    ? '2026-10-31T00:00:00.000Z'
+    : post.slug === 'prompt-engineering-guide'
+    ? '2026-10-26T00:00:00.000Z'
+    : '2026-10-24T00:00:00.000Z';
 
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -188,6 +197,7 @@ export default async function BlogPostPage({ params }: PageProps) {
         {/* Article Body Content */}
         {post.slug === 'image-to-prompt-tips-and-tricks' && <ImageToPromptPostContent />}
         {post.slug === 'prompt-engineering-guide' && <PromptEngineeringGuidePostContent />}
+        {post.slug === 'how-to-prompt-gpt-image-2-5' && <GPTImagePromptGuidePostContent />}
 
         {/* Bottom Article Ads */}
         <div className="w-full flex flex-col items-center mt-12 pt-8 border-t border-black/10 dark:border-white/10">

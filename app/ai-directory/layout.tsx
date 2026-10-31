@@ -2,30 +2,34 @@ import type { Metadata } from 'next';
 import Script from 'next/script';
 
 export const metadata: Metadata = {
-  title: 'AI Tools Directory | Best AI Apps & Models',
+  title: 'Best AI Directory • Over 5000+ Verified AI Tools | ProCraft',
   description:
-    'Discover curated AI tools, image generators, and productivity models in the ProCraft AI Directory.',
+    'Explore the best AI tools directory featuring 5000+ AI tools for image generation, video creation, writing, coding, and productivity. Compare features, explore free AI tools, and find the best solutions on ProCraft.',
   keywords: [
-    'ai directory',
-    'proCraft',
+    'best ai directory',
+    'over 5000+ verified ai tools',
+    'ai tools directory',
+    'creative ai tools',
     'best ai tools',
+    'best ai models',
     'ai image generators',
+    'ai video creation',
+    'ai coding assistants',
+    'ai writing tools',
+    'ai productivity tools',
     'free ai tools directory',
     'best free ai tools',
-    'ai tools list',
-    'free ai websites',
-    'ai tools for creators',
     'useful ai websites',
     'discover ai tools',
-    'free ai resources',
+    'procraft ai directory',
   ],
   alternates: {
     canonical: '/ai-directory',
   },
   openGraph: {
-    title: 'AI Tools Directory | Best AI Apps & Models | ProCraft',
+    title: 'Best AI Directory • Over 5000+ Verified AI Tools | ProCraft',
     description:
-      'Discover curated AI tools, image generators, and productivity models in the ProCraft AI Directory.',
+      'Explore the best AI tools directory featuring 5000+ AI tools for image generation, video creation, writing, coding, and productivity. Compare features and find the best solutions on ProCraft.',
     url: '/ai-directory',
   },
 };

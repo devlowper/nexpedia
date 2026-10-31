@@ -66,10 +66,15 @@ export default function BlogList() {
 
                 <Link
                   href={`/blog/${post.slug}`}
-                  className="font-bold text-accent group-hover:underline flex items-center gap-1.5 transition-all group-hover:translate-x-1"
+                  className="relative p-[1.5px] rounded-full bg-gradient-to-t from-[#1b1a1b] to-[#454244] hover:from-[#232122] hover:to-[#555254] shadow-[0_3px_12px_rgba(0,0,0,0.35)] hover:shadow-[0_6px_18px_rgba(0,0,0,0.5)] active:scale-[0.97] transition-all select-none shrink-0 inline-block group/btn"
                 >
-                  Read Article
-                  <ArrowRight size={14} />
+                  <span
+                    className="px-4 py-2 rounded-full bg-[#2D2B2C] group-hover/btn:bg-[#383536] text-white font-bricolage font-bold text-xs flex items-center gap-1.5 transition-colors"
+                    style={{ backgroundColor: '#2D2B2C', color: '#ffffff' }}
+                  >
+                    <span>Read Article</span>
+                    <ArrowRight size={13} className="group-hover/btn:translate-x-0.5 transition-transform" />
+                  </span>
                 </Link>
               </div>
             </div>

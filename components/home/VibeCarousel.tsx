@@ -137,9 +137,9 @@ export function VibeCarousel() {
 
       {/* Header */}
       <div className="w-full flex flex-col items-center mb-12 z-10 relative px-4 text-center">
-        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold text-accent bg-accent/10 border border-accent/20 mb-3">
-          <Sparkles size={12} />
-          <span>Trending Styles</span>
+        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-black/10 dark:border-white/10 bg-black/[0.03] dark:bg-white/[0.04] text-black/80 dark:text-white/90 text-xs font-semibold tracking-wide mb-3">
+          <Sparkles size={13} className="text-accent" />
+          <span>Trending AI Prompt Styles</span>
         </div>
         <h2 className="section-title font-bricolage text-[clamp(2.2rem,4.5vw,3.8rem)] font-extrabold tracking-[-0.03em] text-black dark:text-white">
           Explore{' '}
@@ -148,9 +148,9 @@ export function VibeCarousel() {
           </span>
         </h2>
         <p 
-          className="vibe-carousel-subtitle text-sm md:text-base mt-2 max-w-lg font-medium text-[#626263] dark:text-white/80"
+          className="vibe-carousel-subtitle text-sm md:text-base mt-2 max-w-2xl font-medium text-[#626263] dark:text-white/80 leading-relaxed"
         >
-          Master the art of AI prompting across top creative aesthetics and models.
+          Explore trending AI image styles, creative photo editing prompts, and popular AI art styles. Discover inspiring prompts to create stunning AI-generated images with ChatGPT, Midjourney, Nano Banana, and other AI tools.
         </p>
       </div>
 
@@ -219,9 +219,15 @@ export function VibeCarousel() {
                         </div>
                         <Link
                           href={`/prompt-library/${item.slug}`}
-                          className="w-full flex items-center justify-center gap-2 bg-accent hover:opacity-90 text-white font-semibold text-xs py-3 rounded-xl transition-all shadow-md shadow-accent/20"
+                          className="w-full relative group cursor-pointer select-none p-[2px] rounded-xl bg-gradient-to-t from-[#1b1a1b] to-[#454244] hover:from-[#232122] hover:to-[#555254] shadow-[0_4px_14px_rgba(0,0,0,0.35)] hover:shadow-[0_6px_20px_rgba(0,0,0,0.5)] active:scale-[0.98] transition-all block"
                         >
-                          Explore Prompt <ArrowRight size={14} />
+                          <span
+                            className="w-full py-2.5 px-4 rounded-[10px] bg-[#2D2B2C] group-hover:bg-[#383536] text-white font-bricolage font-bold text-xs tracking-normal transition-colors flex items-center justify-center gap-2"
+                            style={{ backgroundColor: '#2D2B2C', color: '#ffffff' }}
+                          >
+                            <span>Explore Prompt</span>
+                            <ArrowRight size={14} className="group-hover:translate-x-0.5 transition-transform" />
+                          </span>
                         </Link>
                       </div>
                     </motion.div>
@@ -263,9 +269,15 @@ export function VibeCarousel() {
                         <div className="pt-6 border-t border-black/10 dark:border-border">
                           <Link
                             href={`/prompt-library/${item.slug}`}
-                            className="inline-flex items-center gap-2 bg-accent hover:opacity-90 text-white font-semibold text-sm px-5 py-2.5 rounded-xl transition-all shadow-md shadow-accent/20 hover:gap-3"
+                            className="inline-flex relative group cursor-pointer select-none p-[2px] rounded-xl bg-gradient-to-t from-[#1b1a1b] to-[#454244] hover:from-[#232122] hover:to-[#555254] shadow-[0_4px_14px_rgba(0,0,0,0.35)] hover:shadow-[0_6px_20px_rgba(0,0,0,0.5)] active:scale-[0.98] transition-all"
                           >
-                            Explore Prompt <ArrowRight size={16} />
+                            <span
+                              className="px-6 py-2.5 rounded-[10px] bg-[#2D2B2C] group-hover:bg-[#383536] text-white font-bricolage font-bold text-sm tracking-normal transition-colors flex items-center gap-2"
+                              style={{ backgroundColor: '#2D2B2C', color: '#ffffff' }}
+                            >
+                              <span>Explore Prompt</span>
+                              <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
+                            </span>
                           </Link>
                         </div>
                       </div>

@@ -8,7 +8,7 @@ import {
 
 export function AIPromptWorkspace() {
   return (
-    <section className="w-full bg-base dark:bg-[#0a0a0a] py-24 px-4 md:px-8 border-t border-black/5 dark:border-white/5 font-sans overflow-hidden relative">
+    <section className="w-full bg-base dark:bg-[#0a0a0a] py-24 px-4 md:px-8 border-t border-black/5 dark:border-white/5 font-sans overflow-hidden relative cv-auto">
       {/* Clean Background (No pink glow) */}
 
       <div className="max-w-7xl mx-auto flex flex-col lg:flex-row gap-16 items-center">
@@ -17,7 +17,7 @@ export function AIPromptWorkspace() {
         <div className="lg:w-1/2 flex flex-col items-start gap-8 z-10">
           <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-[var(--brand-solid)]/30 text-black/80 dark:text-white/90 text-[13px] font-medium tracking-wide">
             <Layers size={14} className="text-[var(--brand-solid)]" />
-            Curated AI Prompt Library
+            Best AI Prompt Library & AI Directory
           </div>
 
           <h2
@@ -28,13 +28,22 @@ export function AIPromptWorkspace() {
             <span className="text-[var(--brand-solid)]">Craft Trendy AI Art.</span>
           </h2>
 
-          <p className="text-black/60 dark:text-white/70 text-lg md:text-xl leading-relaxed max-w-lg">
-            proCraft gives you instant access to the best prompt library and image to prompt inspirations for Midjourney, ChatGPT, FLUX, and AI workflows.
+          <p className="text-black/60 dark:text-white/70 text-base md:text-lg leading-relaxed max-w-xl">
+            Discover the best AI prompts in our AI prompt library. Explore trending AI image prompts, creative AI art prompts, and AI image generation ideas. Find ready to use ChatGPT prompts, Midjourney prompts, and Nano Banana prompts.
           </p>
 
           <div className="flex flex-col sm:flex-row items-center gap-4 mt-2 w-full sm:w-auto">
-            <Link href="/prompt-library" className="w-full sm:w-auto bg-[var(--brand-solid)] hover:opacity-90 text-white font-bold text-sm px-8 py-4 rounded-full transition-all flex items-center justify-center gap-2 shadow-lg shadow-black/10 dark:shadow-black/30">
-              Explore Prompt Library <ArrowRight size={16} />
+            <Link
+              href="/prompt-library"
+              className="w-full sm:w-auto relative group cursor-pointer select-none p-[2px] rounded-full bg-gradient-to-t from-[#1b1a1b] to-[#454244] hover:from-[#232122] hover:to-[#555254] shadow-[0_4px_16px_rgba(0,0,0,0.35)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.5)] active:scale-[0.98] transition-all"
+            >
+              <span
+                className="w-full sm:w-auto py-3.5 px-8 rounded-full bg-[#2D2B2C] group-hover:bg-[#383536] text-white font-bricolage font-bold text-sm tracking-normal transition-colors flex items-center justify-center gap-2"
+                style={{ backgroundColor: '#2D2B2C', color: '#ffffff' }}
+              >
+                <span>Explore Prompt Library</span>
+                <ArrowRight size={16} className="group-hover:translate-x-0.5 transition-transform" />
+              </span>
             </Link>
             <Link href="/ai-directory" className="w-full sm:w-auto bg-transparent hover:bg-black/5 dark:hover:bg-white/5 border border-black/10 dark:border-white/20 text-primary dark:text-white font-bold text-sm px-8 py-4 rounded-full transition-colors flex items-center justify-center">
               Browse AI Directory
@@ -61,12 +70,14 @@ export function AIPromptWorkspace() {
         {/* Right Media Area - Image and Floating Tags */}
         <div className="lg:w-1/2 relative w-full flex justify-center items-center mt-12 lg:mt-0 min-h-[500px]">
 
-          {/* Main Image (Clean neutral shadow without pink glow) */}
+          {/* Main Image (Optimized 29KB WebP with lazy loading & clean shadow) */}
           <div className="relative z-10 w-[90%] max-w-[550px] aspect-square rounded-2xl overflow-hidden border border-black/10 dark:border-white/10 shadow-2xl shadow-black/10 dark:shadow-black/50">
-            <Image 
-              src="/neon-laptop.jpg" 
+            <Image
+              src="/neon-laptop.webp"
               alt="AI Workspace"
               fill
+              loading="lazy"
+              sizes="(max-width: 768px) 90vw, 550px"
               className="object-cover object-center"
             />
           </div>

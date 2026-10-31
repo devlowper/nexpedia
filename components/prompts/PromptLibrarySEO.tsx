@@ -19,36 +19,51 @@ export function PromptLibrarySEOIntro() {
         {/* Top Badge */}
         <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-accent/10 border border-accent/25 text-accent text-xs font-bold uppercase tracking-wider mb-5 shadow-sm">
           <Sparkles className="w-3.5 h-3.5" />
-          <span>Curated Creator Database</span>
+          <span>Free AI Prompt Library & Creator Database</span>
         </div>
 
         {/* Headline */}
         <h2 className="font-bricolage text-2xl sm:text-3xl md:text-4xl font-extrabold text-primary dark:text-white tracking-tight leading-tight mb-5">
-          The Definitive <span className="bg-gradient-to-r from-accent via-pink-400 to-rose-400 bg-clip-text text-transparent">Free Prompt Library</span> for High-End AI Workflows
+          Your Ultimate <span className="bg-gradient-to-r from-accent via-pink-400 to-rose-400 bg-clip-text text-transparent">AI Prompt Library</span> for Creative Workflows
         </h2>
 
         {/* Exact Core SEO Paragraph */}
         <p className="prompt-seo-intro-desc text-neutral-800 dark:text-neutral-300 text-sm sm:text-base md:text-lg leading-relaxed max-w-3xl mb-8 font-normal">
-          Welcome to ProCraft&apos;s <strong className="text-neutral-900 dark:text-white font-semibold">free prompt library</strong>, the definitive <strong className="text-neutral-900 dark:text-white font-semibold">online prompt library</strong> created for digital artists, designers, and creators worldwide. Our comprehensive <strong className="text-neutral-900 dark:text-white font-semibold">AI prompt database</strong> gives you instant access to thousands of verified <strong className="text-neutral-900 dark:text-white font-semibold">ready made AI prompts</strong> optimized for Midjourney, FLUX, ChatGPT, and Stable Diffusion. Whether you are exploring our curated <strong className="text-neutral-900 dark:text-white font-semibold">AI art prompt library</strong>, finding studio shots in our <strong className="text-neutral-900 dark:text-white font-semibold">photography prompt library</strong>, or discovering our <strong className="text-neutral-900 dark:text-white font-semibold">image generation prompt library</strong>, copy battle-tested prompt recipes with a single click and create without limits.
+          Welcome to ProCraft, your destination for the best free AI prompts and creative inspiration. Explore thousands of ready-to-use AI prompts for Midjourney, FLUX, ChatGPT, Gemini, Claude, Nano Banana, and Stable Diffusion. Discover AI art prompts, photography prompts, image generation ideas, and creative workflows. Copy, customize, and use powerful prompts to turn your ideas into stunning results.
         </p>
 
-        {/* Feature Highlights Pills */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 w-full max-w-3xl pt-6 border-t border-black/5 dark:border-white/10">
-          <div className="flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl bg-black/[0.03] dark:bg-white/[0.04] border border-black/5 dark:border-white/10 text-xs font-semibold text-neutral-800 dark:text-white/90">
-            <CheckCircle2 className="w-3.5 h-3.5 text-accent flex-none" />
-            <span>1-Click Copy Ready</span>
+        {/* Feature Highlights Cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5 w-full max-w-3xl pt-6 border-t border-black/5 dark:border-white/10">
+          <div className="flex flex-col items-center text-center p-3.5 rounded-2xl bg-black/[0.02] dark:bg-white/[0.03] border border-black/5 dark:border-white/10">
+            <div className="flex items-center justify-center gap-1.5 mb-1">
+              <CheckCircle2 className="w-4 h-4 text-accent flex-none" />
+              <span className="text-xs sm:text-sm font-bold text-neutral-900 dark:text-white">One-Click Copy</span>
+            </div>
+            <span className="text-[11px] text-neutral-600 dark:text-neutral-400">Ready-to-use AI prompts</span>
           </div>
-          <div className="flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl bg-black/[0.03] dark:bg-white/[0.04] border border-black/5 dark:border-white/10 text-xs font-semibold text-neutral-800 dark:text-white/90">
-            <Sparkles className="w-3.5 h-3.5 text-accent flex-none" />
-            <span>FLUX & Midjourney</span>
+
+          <div className="flex flex-col items-center text-center p-3.5 rounded-2xl bg-black/[0.02] dark:bg-white/[0.03] border border-black/5 dark:border-white/10">
+            <div className="flex items-center justify-center gap-1.5 mb-1">
+              <Sparkles className="w-4 h-4 text-accent flex-none" />
+              <span className="text-xs sm:text-sm font-bold text-neutral-900 dark:text-white">Multiple AI Models</span>
+            </div>
+            <span className="text-[11px] text-neutral-600 dark:text-neutral-400">FLUX, Midjourney & ChatGPT</span>
           </div>
-          <div className="flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl bg-black/[0.03] dark:bg-white/[0.04] border border-black/5 dark:border-white/10 text-xs font-semibold text-neutral-800 dark:text-white/90">
-            <Camera className="w-3.5 h-3.5 text-accent flex-none" />
-            <span>Studio Lighting</span>
+
+          <div className="flex flex-col items-center text-center p-3.5 rounded-2xl bg-black/[0.02] dark:bg-white/[0.03] border border-black/5 dark:border-white/10">
+            <div className="flex items-center justify-center gap-1.5 mb-1">
+              <Camera className="w-4 h-4 text-accent flex-none" />
+              <span className="text-xs sm:text-sm font-bold text-neutral-900 dark:text-white">Creative Photography</span>
+            </div>
+            <span className="text-[11px] text-neutral-600 dark:text-neutral-400">Professional AI photo prompts</span>
           </div>
-          <div className="flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl bg-black/[0.03] dark:bg-white/[0.04] border border-black/5 dark:border-white/10 text-xs font-semibold text-neutral-800 dark:text-white/90">
-            <Palette className="w-3.5 h-3.5 text-accent flex-none" />
-            <span>100% Free Forever</span>
+
+          <div className="flex flex-col items-center text-center p-3.5 rounded-2xl bg-black/[0.02] dark:bg-white/[0.03] border border-black/5 dark:border-white/10">
+            <div className="flex items-center justify-center gap-1.5 mb-1">
+              <Palette className="w-4 h-4 text-accent flex-none" />
+              <span className="text-xs sm:text-sm font-bold text-neutral-900 dark:text-white">Free AI Prompts</span>
+            </div>
+            <span className="text-[11px] text-neutral-600 dark:text-neutral-400">Explore free prompt collections</span>
           </div>
         </div>
       </div>
